@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 
 class AuthField extends StatelessWidget {
@@ -17,7 +18,9 @@ class AuthField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
+        hintStyle: const TextStyle(color: AppPallete.label2Color, fontSize: 18),
       ),
+      style: const TextStyle(color: AppPallete.label3Color, fontSize: 18),
       validator: (value) {
         if (value!.isEmpty) {
           return "$hintText is missing";
