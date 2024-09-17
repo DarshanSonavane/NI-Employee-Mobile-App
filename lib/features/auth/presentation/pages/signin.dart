@@ -5,6 +5,7 @@ import 'package:employee_ni_service/features/auth/presentation/widgets/auth_fiel
 import 'package:employee_ni_service/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:employee_ni_service/features/auth/presentation/widgets/rich_text.dart';
 import 'package:employee_ni_service/features/auth/presentation/widgets/set_reset_password_widget.dart';
+import 'package:employee_ni_service/features/set_reset_password/presentation/pages/set_reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/common/widgets/loader.dart';
@@ -68,7 +69,6 @@ class _SigninScreenState extends State<SigninScreen> {
                       AuthField(
                         hintText: Constants.password,
                         controller: passwordController,
-                        isObscureText: true,
                       ),
                       const SizedBox(height: 15),
                       AuthGradientButton(
@@ -86,7 +86,14 @@ class _SigninScreenState extends State<SigninScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      const SetResetPasswordWidget(),
+                      SetResetPasswordWidget(
+                        onPressedSetResetPassword: () {
+                          Navigator.push(
+                            context,
+                            SetResetPassword.route(),
+                          );
+                        },
+                      ),
                       const SizedBox(height: 40),
                       RichTextWidget(
                         onPressedTermAndCondition: () {},

@@ -4,15 +4,20 @@ final sl = GetIt.instance;
 
 Future<void> initDependecies() async {
   sl.registerSingleton<Logger>(Logger());
+
+  _initDioClient();
   _initLogin();
+  _initSetResetPassword();
 }
 
-void _initLogin() {
-  //network
+void _initDioClient() {
+  // Register DioClient once, as it is used in both features
   sl.registerSingleton<DioClient>(
     DioClient(),
   );
+}
 
+void _initLogin() {
   //service
   sl.registerSingleton<LoginApiService>(
     LoginApiServiceImpl(),
@@ -31,5 +36,27 @@ void _initLogin() {
   //Bloc
   sl.registerFactory<SignInBloc>(
     () => SignInBloc(userLogin: sl()),
+  );
+}
+
+void _initSetResetPassword() {
+  //Repository
+  sl.registerSingleton<SetResetPasswordRepository>(
+    SetResetPasswordRepositoryImpl(),
+  );
+
+  //service
+  sl.registerSingleton<SetResetPasswordService>(
+    SetResetPasswordServiceImpl(),
+  );
+
+  //UseCase
+  sl.registerSingleton<SetResetPasswordUsecase>(
+    SetResetPasswordUsecase(),
+  );
+
+  //Bloc
+  sl.registerFactory<SetResetPasswordBloc>(
+    () => SetResetPasswordBloc(setResetPasswordUsecase: sl()),
   );
 }

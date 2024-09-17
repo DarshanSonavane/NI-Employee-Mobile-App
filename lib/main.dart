@@ -1,5 +1,6 @@
 import 'package:employee_ni_service/core/app_theme/app_theme.dart';
 import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc.dart';
+import 'package:employee_ni_service/features/set_reset_password/presentation/bloc/set_reset_password_bloc.dart';
 import 'package:employee_ni_service/features/splash/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +15,10 @@ void main() async {
       providers: [
         BlocProvider(
           create: (_) => sl<SignInBloc>(),
-        )
+        ),
+        BlocProvider(
+          create: (_) => sl<SetResetPasswordBloc>(),
+        ),
       ],
       child: const MyApp(),
     ),

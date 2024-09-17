@@ -3,7 +3,11 @@ import 'package:employee_ni_service/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class SetResetPasswordWidget extends StatelessWidget {
-  const SetResetPasswordWidget({super.key});
+  final VoidCallback onPressedSetResetPassword;
+  const SetResetPasswordWidget({
+    super.key,
+    required this.onPressedSetResetPassword,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +22,15 @@ class SetResetPasswordWidget extends StatelessWidget {
               endIndent: 10, // Space between the line and text
             ),
           ),
-          const Text(
-            Constants.setResetPasswordLabel,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
-              color: AppPallete.labelColor, // Match the text color
+          GestureDetector(
+            onTap: onPressedSetResetPassword,
+            child: const Text(
+              Constants.setResetPasswordLabel,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                color: AppPallete.labelColor, // Match the text color
+              ),
             ),
           ),
           Expanded(
