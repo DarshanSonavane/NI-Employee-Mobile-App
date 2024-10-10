@@ -1,12 +1,10 @@
-class LoginRequestParams {
-  final String customerCode;
-  final String type;
-  final String password;
+import 'package:employee_ni_service/features/auth/domain/entities/user.dart';
 
+class LoginRequestParams extends User {
   LoginRequestParams({
-    required this.customerCode,
-    required this.type,
-    required this.password,
+    required super.customerCode,
+    required super.type,
+    required super.password,
   });
 
   Map<String, dynamic> toMap() {

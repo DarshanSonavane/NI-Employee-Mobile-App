@@ -5,6 +5,7 @@ import 'package:employee_ni_service/core/network/dio_client.dart';
 
 import '../../../../service_locator_dependecies.dart';
 import '../models/login_request_params.dart';
+import '../models/login_response_params.dart';
 
 abstract class LoginApiService {
   Future<Either> loginWithEmailPassword(LoginRequestParams loginReq);
@@ -16,8 +17,8 @@ class LoginApiServiceImpl extends LoginApiService {
     try {
       var response =
           await sl<DioClient>().post(ApiUrls.login, data: loginReq.toMap());
-
-      return Right(response);
+      var loginResponse = LoginResponseParams.fromJson(response.data['data']);
+      return Right(loginResponse);
     } on DioException catch (e) {
       return left(e.message);
     }

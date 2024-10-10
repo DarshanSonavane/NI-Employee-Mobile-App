@@ -4,10 +4,17 @@ final sl = GetIt.instance;
 
 Future<void> initDependecies() async {
   sl.registerSingleton<Logger>(Logger());
+  final hiveInitService = HiveService();
+  await hiveInitService.init();
 
   _initDioClient();
   _initLogin();
   _initSetResetPassword();
+  _initHiveService();
+}
+
+void _initHiveService() {
+  sl.registerLazySingleton<HiveStorageService>(() => HiveStorageService());
 }
 
 void _initDioClient() {

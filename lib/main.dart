@@ -1,15 +1,18 @@
 import 'package:employee_ni_service/core/app_theme/app_theme.dart';
+import 'package:employee_ni_service/features/auth/data/models/login_response_params.dart';
 import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc.dart';
 import 'package:employee_ni_service/features/set_reset_password/presentation/bloc/set_reset_password_bloc.dart';
 import 'package:employee_ni_service/features/splash/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'core/constants/constants.dart';
 import 'service_locator_dependecies.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependecies();
+  await Hive.openBox<LoginResponseParams>('loginBox');
   runApp(
     MultiBlocProvider(
       providers: [

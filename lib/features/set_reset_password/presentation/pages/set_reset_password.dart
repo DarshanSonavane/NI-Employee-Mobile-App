@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/features/auth/presentation/pages/signin.dart';
 import 'package:employee_ni_service/features/set_reset_password/presentation/widgets/notes_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +6,7 @@ import '../../../../core/app_theme/app_pallete.dart';
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/show_snackbar.dart';
-import '../../../auth/presentation/widgets/auth_field.dart';
+import '../../../../core/common/widgets/auth_field.dart';
 import '../../../auth/presentation/widgets/auth_gradient_button.dart';
 import '../bloc/set_reset_password_bloc.dart';
 
@@ -53,7 +54,12 @@ class _SetResetPasswordState extends State<SetResetPassword> {
           listener: (context, state) {
             if (state is SetResetPasswordFailure) {
               showSnackBar(context, state.message);
-            } else if (state is SetResetPasswordSuccess) {}
+            } else if (state is SetResetPasswordSuccess) {
+              Navigator.push(
+                context,
+                SigninScreen.route(),
+              );
+            }
           },
           builder: (context, state) {
             if (state is SetResetPasswordLoading) {

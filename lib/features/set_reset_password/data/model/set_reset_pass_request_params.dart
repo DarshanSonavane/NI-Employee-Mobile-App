@@ -1,10 +1,9 @@
-class SetResetPassRequestParams {
-  final String customerCode;
-  final String password;
+import 'package:employee_ni_service/features/set_reset_password/domain/entities/set_reset_password_entity.dart';
 
+class SetResetPassRequestParams extends SetResetPasswordEntity {
   SetResetPassRequestParams({
-    required this.customerCode,
-    required this.password,
+    required super.customerCode,
+    required super.password,
   });
 
   Map<String, dynamic> toMap() {

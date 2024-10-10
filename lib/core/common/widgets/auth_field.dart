@@ -19,6 +19,7 @@ class _AuthFieldState extends State<AuthField> {
   bool _isObscure = true;
   @override
   Widget build(BuildContext context) {
+    bool isPasswordField = widget.hintText.toLowerCase().contains('password');
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
@@ -27,7 +28,7 @@ class _AuthFieldState extends State<AuthField> {
           color: AppPallete.label2Color,
           fontSize: 18,
         ),
-        suffixIcon: widget.hintText.toLowerCase().contains('password')
+        suffixIcon: isPasswordField
             ? Padding(
                 padding: const EdgeInsets.only(right: 10.0),
                 child: IconButton(
@@ -51,7 +52,7 @@ class _AuthFieldState extends State<AuthField> {
         }
         return null;
       },
-      obscureText: _isObscure,
+      obscureText: isPasswordField ? _isObscure : false,
     );
   }
 }

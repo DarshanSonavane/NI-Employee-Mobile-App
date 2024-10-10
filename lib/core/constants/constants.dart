@@ -13,6 +13,12 @@ class Constants {
   static const labelRichText4 = 'Privacy Policy';
   static const setResetPasswordLabel = 'Set / Reset Password';
   static const appTitle = 'NI Employee';
+  static const appBarHome = 'Home';
+  static const appBarProfile = 'Profile';
+  static const complaints = 'Complaints';
+  static const service = 'Service';
+  static const calibration = 'Calibration';
+  static const profile = 'Profile';
   static const notesSetResetPasswordScreen =
       "Note:-Password to have at least 8 characters, "
       "at least one uppercase letter, at least one lowercase letter,"

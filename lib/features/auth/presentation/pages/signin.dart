@@ -1,17 +1,24 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/constants/constants.dart';
+import 'package:employee_ni_service/features/auth/data/models/login_response_params.dart';
 import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc.dart';
-import 'package:employee_ni_service/features/auth/presentation/widgets/auth_field.dart';
+import 'package:employee_ni_service/core/common/widgets/auth_field.dart';
 import 'package:employee_ni_service/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:employee_ni_service/features/auth/presentation/widgets/rich_text.dart';
 import 'package:employee_ni_service/features/auth/presentation/widgets/set_reset_password_widget.dart';
+import 'package:employee_ni_service/features/dashboard/dashboard.dart';
 import 'package:employee_ni_service/features/set_reset_password/presentation/pages/set_reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/common/widgets/loader.dart';
+import '../../../../core/database/hive_storage_service.dart';
 import '../../../../core/utils/show_snackbar.dart';
+import '../../../../service_locator_dependecies.dart';
 
 class SigninScreen extends StatefulWidget {
+  static route() => MaterialPageRoute(
+        builder: (context) => const SigninScreen(),
+      );
   const SigninScreen({super.key});
 
   @override
@@ -37,10 +44,14 @@ class _SigninScreenState extends State<SigninScreen> {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: BlocConsumer<SignInBloc, SignInState>(
-            listener: (context, state) {
+            listener: (context, state) async {
               if (state is SignInFailure) {
                 showSnackBar(context, state.message);
-              } else if (state is SignInSuccess) {}
+              } else if (state is SignInSuccess) {
+                _handleSignInSuccess(context, state.user);
+                // final hiveStorageService = sl<HiveStorageService>();
+                // var fetchuser = hiveStorageService.getUser();
+              }
             },
             builder: (context, state) {
               if (state is SignInLoading) {
@@ -109,4 +120,16 @@ class _SigninScreenState extends State<SigninScreen> {
       ),
     );
   }
+}
+
+void _handleSignInSuccess(
+  BuildContext context,
+  LoginResponseParams user,
+) async {
+  await sl<HiveStorageService>().saveUser(user);
+  if (!context.mounted) return;
+  Navigator.push(
+    context,
+    DashboardScreen.route(),
+  );
 }
