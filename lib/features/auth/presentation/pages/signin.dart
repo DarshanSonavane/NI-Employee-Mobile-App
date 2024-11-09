@@ -6,7 +6,7 @@ import 'package:employee_ni_service/core/common/widgets/auth_field.dart';
 import 'package:employee_ni_service/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:employee_ni_service/features/auth/presentation/widgets/rich_text.dart';
 import 'package:employee_ni_service/features/auth/presentation/widgets/set_reset_password_widget.dart';
-import 'package:employee_ni_service/features/dashboard/dashboard.dart';
+import 'package:employee_ni_service/features/dashboard/pages/dashboard.dart';
 import 'package:employee_ni_service/features/set_reset_password/presentation/pages/set_reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,8 +49,6 @@ class _SigninScreenState extends State<SigninScreen> {
                 showSnackBar(context, state.message);
               } else if (state is SignInSuccess) {
                 _handleSignInSuccess(context, state.user);
-                // final hiveStorageService = sl<HiveStorageService>();
-                // var fetchuser = hiveStorageService.getUser();
               }
             },
             builder: (context, state) {
@@ -127,6 +125,7 @@ void _handleSignInSuccess(
   LoginResponseParams user,
 ) async {
   await sl<HiveStorageService>().saveUser(user);
+
   if (!context.mounted) return;
   Navigator.push(
     context,

@@ -2,6 +2,8 @@ class Constants {
   static const noConnectionErrorMessage = 'Not connected to a network';
   static const appLogo = 'assets/png_image/nilogo.png';
   static const gifLogo = 'assets/gif_image/ni_splash.gif';
+  static const mapIcon = 'assets/png_image/mapicon.png';
+  static const locationIcon = 'assets/png_image/locationicon.png';
   static const login = 'Login';
   static const submit = 'Submit';
   static const password = 'Password';

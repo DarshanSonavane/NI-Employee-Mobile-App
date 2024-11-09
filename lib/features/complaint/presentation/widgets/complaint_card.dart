@@ -1,0 +1,178 @@
+import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
+import 'package:employee_ni_service/features/complaint/presentation/widgets/set_text_normal.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../../../../core/common/widgets/build_legends.dart';
+import 'animated_fab.dart';
+import 'set_heading_text.dart';
+
+class ComplaintCard extends StatefulWidget {
+  final String? name;
+  final String? customerCode;
+  final String? date;
+  final String? fuelType;
+  final String? location;
+  final String? state;
+  final String? complaintType;
+  final String? additionalRequest;
+  final String? feedback;
+  final String? status;
+
+  const ComplaintCard({
+    required this.name,
+    required this.customerCode,
+    required this.date,
+    required this.fuelType,
+    required this.location,
+    required this.state,
+    required this.complaintType,
+    required this.additionalRequest,
+    required this.feedback,
+    required this.status,
+    super.key,
+  });
+
+  @override
+  State<ComplaintCard> createState() => _ComplaintCardState();
+}
+
+class _ComplaintCardState extends State<ComplaintCard> {
+  String setDateFormat(String dateString) {
+    final DateTime parsedDate = DateTime.parse(dateString);
+    final DateFormat formatter = DateFormat('dd-MMM-yyyy');
+    return formatter.format(parsedDate);
+  }
+
+  setComplaintStatus(String? status) {
+    if (status == '1') {
+      return const BuildLegends("Open", AppPallete.pieCharOpen);
+    } else if (status == '2') {
+      return const BuildLegends("Assigned", AppPallete.pieCharInProcess);
+    } else {
+      return const BuildLegends("Closed", AppPallete.pieCharInProcess);
+    }
+  }
+
+  setFuelType(String? fuelType) {
+    if (fuelType == '1') {
+      return const BuildLegends("Diesel", AppPallete.errorColor);
+    } else {
+      return const BuildLegends("Petrol", AppPallete.gradientColor);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final scalingFactor = screenWidth < 600 ? 0.75 : 1.0;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Card(
+        color: AppPallete.backgroundColor,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(25.0 * scalingFactor),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.name!,
+                          style: TextStyle(
+                            color: AppPallete.label3Color,
+                            fontSize: 22 * scalingFactor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 16 * scalingFactor),
+                        Row(
+                          children: [
+                            setComplaintStatus(widget.status),
+                            SizedBox(width: 8 * scalingFactor),
+                            setFuelType(widget.fuelType),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        setTextNormal(
+                            'Code : ${widget.customerCode}', scalingFactor),
+                        SizedBox(height: 4 * scalingFactor),
+                        setTextNormal(
+                            setDateFormat(widget.date!.substring(0, 10)),
+                            scalingFactor),
+                        SizedBox(height: 4 * scalingFactor),
+                        setTextNormal('${widget.location!}, ${widget.state}',
+                            scalingFactor),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8 * scalingFactor),
+              const Divider(),
+              SizedBox(height: 8 * scalingFactor),
+              setHeadingText(
+                Icons.report_problem,
+                widget.complaintType.toString().trim(),
+                "Complaint Type : ",
+                scalingFactor,
+              ),
+              SizedBox(height: 8 * scalingFactor),
+              setHeadingText(
+                Icons.more,
+                widget.additionalRequest.toString().trim(),
+                "Additional Request : ",
+                scalingFactor,
+              ),
+              SizedBox(height: 8 * scalingFactor),
+              setHeadingText(
+                Icons.feedback,
+                widget.feedback.toString().trim(),
+                "Feedback : ",
+                scalingFactor,
+              ),
+              SizedBox(height: 8 * scalingFactor),
+              Visibility(
+                visible: widget.status != '0',
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: AnimatedFabMenu(
+                    onAssignTap: () {
+                      debugPrint('Assign tapped');
+                    },
+                    onCloseTap: () {
+                      debugPrint('Close tapped');
+                    },
+                    onTakeAction: () {
+                      debugPrint('Take action tapped');
+                    },
+                    status: "2",
+                    userStatus: "1",
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

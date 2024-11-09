@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../calibration/calibration_screen.dart';
-import '../../complaint/complaint_screen.dart';
-import '../../home/home_screen.dart';
+import '../../complaint/presentation/pages/complaint_screen.dart';
+import '../../home/presentation/pages/home_screen.dart';
 import '../../profile/profile_screen.dart';
 import '../../service_request/service_request.dart';
 import '../provider/dashboard_state.dart';

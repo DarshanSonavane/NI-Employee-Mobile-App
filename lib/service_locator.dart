@@ -11,6 +11,26 @@ Future<void> initDependecies() async {
   _initLogin();
   _initSetResetPassword();
   _initHiveService();
+  _initDashBoardDetails();
+  _initGetComplaintList();
+}
+
+void _initDashBoardDetails() {
+  sl.registerSingleton<GetHomeDetailsApiService>(
+    GetHomeDetailsApiServiceImpl(),
+  );
+
+  sl.registerSingleton<FetchHomeRepository>(
+    FetchDashboardDataRepositoryImpl(),
+  );
+
+  sl.registerSingleton<FetchHomeData>(
+    FetchHomeData(),
+  );
+
+  sl.registerFactory<HomeBloc>(
+    () => HomeBloc(fetchHomeData: sl()),
+  );
 }
 
 void _initHiveService() {
@@ -21,6 +41,27 @@ void _initDioClient() {
   // Register DioClient once, as it is used in both features
   sl.registerSingleton<DioClient>(
     DioClient(),
+  );
+}
+
+void _initGetComplaintList() {
+  //service
+  sl.registerSingleton<GetComplaintDetailApiService>(
+    GetComplaintDetailsApiServiceImpl(),
+  );
+
+  //Repository
+  sl.registerSingleton<FetchComplaintRepository>(
+    FetchComplaintRepositoryImpl(),
+  );
+  //UseCases
+  sl.registerSingleton<FetchComplaintData>(
+    FetchComplaintData(),
+  );
+
+  //Bloc
+  sl.registerFactory<ComplaintBloc>(
+    () => ComplaintBloc(fetchComplaintData: sl()),
   );
 }
 

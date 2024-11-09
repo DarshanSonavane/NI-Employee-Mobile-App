@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/features/auth/presentation/pages/signin.dart';
 import 'package:flutter/material.dart';
 import '../../../core/app_theme/app_pallete.dart';
 
@@ -12,11 +13,15 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Text(
-        title,
-        style: const TextStyle(
-          color: AppPallete.label3Color,
-          fontWeight: FontWeight.bold,
+      title: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: Text(
+          title,
+          key: ValueKey<String>(title),
+          style: const TextStyle(
+            color: AppPallete.label3Color,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       actions: [
@@ -25,7 +30,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           child: IconButton(
             color: AppPallete.gradientColor,
             onPressed: () {
-              debugPrint("Logout");
+              Navigator.push(
+                context,
+                SigninScreen.route(),
+              );
             },
             icon: const Icon(
               Icons.logout,
