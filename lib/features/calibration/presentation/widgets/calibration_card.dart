@@ -3,44 +3,40 @@ import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
 import 'package:employee_ni_service/features/complaint/presentation/widgets/show_take_action_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/common/widgets/animated_fab.dart';
 import '../../../../core/common/widgets/build_legends.dart';
+import '../../../../core/common/widgets/set_heading_text.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/database/hive_storage_service.dart';
 import '../../../../service_locator_dependecies.dart';
-import '../../../../core/common/widgets/animated_fab.dart';
-import '../../../../core/common/widgets/set_heading_text.dart';
 
-class ComplaintCard extends StatefulWidget {
+class CalibrationCard extends StatefulWidget {
   final String? name;
   final String? customerCode;
   final String? date;
   final String? fuelType;
   final String? location;
   final String? state;
-  final String? complaintType;
-  final String? additionalRequest;
-  final String? feedback;
   final String? status;
+  final String? assignedTo;
 
-  const ComplaintCard({
+  const CalibrationCard({
     required this.name,
     required this.customerCode,
     required this.date,
     required this.fuelType,
     required this.location,
     required this.state,
-    required this.complaintType,
-    required this.additionalRequest,
-    required this.feedback,
     required this.status,
+    required this.assignedTo,
     super.key,
   });
 
   @override
-  State<ComplaintCard> createState() => _ComplaintCardState();
+  State<CalibrationCard> createState() => _CalibrationCardState();
 }
 
-class _ComplaintCardState extends State<ComplaintCard> {
+class _CalibrationCardState extends State<CalibrationCard> {
   final hiveStorageService = sl<HiveStorageService>();
   String setDateFormat(String dateString) {
     final DateTime parsedDate = DateTime.parse(dateString);
@@ -142,46 +138,38 @@ class _ComplaintCardState extends State<ComplaintCard> {
               const Divider(),
               SizedBox(height: 8 * scalingFactor),
               setHeadingText(
-                Icons.report_problem,
-                widget.complaintType.toString().trim(),
-                Constants.complaintTypeHeader,
+                Icons.person,
+                widget.assignedTo.toString().trim(),
+                Constants.assignedTo,
                 scalingFactor,
               ),
               SizedBox(height: 8 * scalingFactor),
-              setHeadingText(
-                Icons.more,
-                widget.additionalRequest.toString().trim(),
-                Constants.additionReqHeader,
-                scalingFactor,
-              ),
-              SizedBox(height: 8 * scalingFactor),
-              setHeadingText(
-                Icons.feedback,
-                widget.feedback.toString().trim(),
-                Constants.feedbackHeader,
-                scalingFactor,
-              ),
-              SizedBox(height: 8 * scalingFactor),
-              Visibility(
-                visible: widget.status != '0',
-                child: Align(
+              if (widget.state != '0')
+                Align(
                   alignment: Alignment.bottomRight,
                   child: AnimatedFabMenu(
-                    onAssignTap: () {
-                      debugPrint('Assign tapped');
-                    },
-                    onCloseTap: () {
-                      debugPrint('Close tapped');
-                    },
-                    onTakeAction: () {
-                      showTakeActionDialog(context);
+                    onGenerateSend: () {
+                      debugPrint('Generate and send tapped');
                     },
                     status: widget.status!,
                     userStatus: fetchUserStatus(),
-                    heroTag: 'unique_hero_tag_1',
+                    heroTag:
+                        'unique_hero_tag_2', // unique heroTag for state != '0'
+                  ),
+                )
+              else
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: AnimatedFabMenu(
+                    onCloseTap: () {
+                      debugPrint('Close tapped');
+                    },
+                    status: widget.status!,
+                    userStatus: fetchUserStatus(),
+                    heroTag:
+                        'unique_hero_tag_3', // unique heroTag for state == '0'
                   ),
                 ),
-              ),
             ],
           ),
         ),

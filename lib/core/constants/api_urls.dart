@@ -4,4 +4,5 @@ class ApiUrls {
   static const updateCustomerPassword = '${baseUrl}update-customer-password';
   static const getHomeDetails = '${baseUrl}get-admin-dashboard-details';
   static const getComplaintDetails = '${baseUrl}get-all-complaints';
+  static const getCalibrationDetails = '${baseUrl}get-calibration-request-list';
 }

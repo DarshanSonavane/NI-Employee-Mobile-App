@@ -13,6 +13,7 @@ Future<void> initDependecies() async {
   _initHiveService();
   _initDashBoardDetails();
   _initGetComplaintList();
+  _initGetCalibrationList();
 }
 
 void _initDashBoardDetails() {
@@ -41,6 +42,27 @@ void _initDioClient() {
   // Register DioClient once, as it is used in both features
   sl.registerSingleton<DioClient>(
     DioClient(),
+  );
+}
+
+void _initGetCalibrationList() {
+  //service
+  sl.registerSingleton<GetCalibrationDetailApiService>(
+    GetCalibrationDetailsApiServiceImpl(),
+  );
+
+  //Repository
+  sl.registerSingleton<FetchCalibrationRepository>(
+    FetchCalibrationRepositoryImpl(),
+  );
+  //UseCases
+  sl.registerSingleton<FetchCalibrationData>(
+    FetchCalibrationData(),
+  );
+
+  //Bloc
+  sl.registerFactory<CalibrationBloc>(
+    () => CalibrationBloc(fetchCalibrationData: sl()),
   );
 }
 

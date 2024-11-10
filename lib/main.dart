@@ -1,6 +1,7 @@
 import 'package:employee_ni_service/core/app_theme/app_theme.dart';
 import 'package:employee_ni_service/features/auth/data/models/login_response_params.dart';
 import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc.dart';
+import 'package:employee_ni_service/features/calibration/presentation/bloc/calibration_bloc.dart';
 import 'package:employee_ni_service/features/complaint/presentation/bloc/complaint_bloc.dart';
 import 'package:employee_ni_service/features/dashboard/provider/dashboard_state.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
@@ -31,6 +32,9 @@ void main() async {
         ),
         BlocProvider(
           create: (_) => sl<ComplaintBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<CalibrationBloc>(),
         ),
       ],
       child: MultiProvider(

@@ -125,7 +125,6 @@ void _handleSignInSuccess(
   LoginResponseParams user,
 ) async {
   await sl<HiveStorageService>().saveUser(user);
-
   if (!context.mounted) return;
   Navigator.push(
     context,

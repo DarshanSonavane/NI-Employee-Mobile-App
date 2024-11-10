@@ -12,7 +12,6 @@ class SplashScreen extends StatelessWidget {
   Future<bool> _checkIfLoggedIn() async {
     final hiveStorageService = sl<HiveStorageService>();
     var fetchuser = hiveStorageService.getUser();
-    debugPrint("FetchUser: $fetchuser");
     return fetchuser != null ? true : false;
   }
 

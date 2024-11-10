@@ -21,6 +21,28 @@ class Constants {
   static const service = 'Service';
   static const calibration = 'Calibration';
   static const profile = 'Profile';
+  static const open = 'Open';
+  static const close = 'Closed';
+  static const assigned = 'Assigned';
+  static const diesel = 'Diesel';
+  static const petrol = 'Petrol';
+  static const enterComments = 'Enter your comments here...';
+  static const statusComplaint = 'Status of complaint :';
+  static const takeAction = 'Please select below options and add a comment ';
+  static const complaintTypeHeader = "Complaint Type : ";
+  static const additionReqHeader = "Additional Request : ";
+  static const feedbackHeader = "Feedback : ";
+  static const assignedTo = "Assigned To : ";
+  static const activeComplaints = 'Active Complaints';
+  static const closedComplaints = 'Closed Complaints';
+  static const activeCalibration = 'Active Calibration';
+  static const closedCalibrations = 'Closed Calibration';
+  static const noOpenComplaints = 'No Open complaints';
+  static const noClosedComplaints = 'No Close complaints';
+  static const noActiveCalibration = 'No Active calibrations';
+  static const noClosedCalibration = 'No Close calibrations';
+  static const noCalibrationAvailable = 'No calibrations available';
+  static const noComplaintsAvailable = 'No complaints available';
   static const notesSetResetPasswordScreen =
       "Note:-Password to have at least 8 characters, "
       "at least one uppercase letter, at least one lowercase letter,"

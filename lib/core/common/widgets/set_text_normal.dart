@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/app_theme/app_pallete.dart';
+import '../../app_theme/app_pallete.dart';
 
 Text setTextNormal(
   String value,
