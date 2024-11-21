@@ -167,9 +167,7 @@ class _ComplaintCardState extends State<ComplaintCard> {
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: AnimatedFabMenu(
-                    onAssignTap: () {
-                      debugPrint('Assign tapped');
-                    },
+                    onAssignTap: () {},
                     onCloseTap: () {
                       debugPrint('Close tapped');
                     },
@@ -178,7 +176,7 @@ class _ComplaintCardState extends State<ComplaintCard> {
                     },
                     status: widget.status!,
                     userStatus: fetchUserStatus(),
-                    heroTag: 'unique_hero_tag_1',
+                    tag: '_complaints',
                   ),
                 ),
               ),

@@ -3,7 +3,7 @@ import 'package:employee_ni_service/core/constants/constants.dart';
 import 'package:employee_ni_service/features/auth/data/models/login_response_params.dart';
 import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc.dart';
 import 'package:employee_ni_service/core/common/widgets/auth_field.dart';
-import 'package:employee_ni_service/features/auth/presentation/widgets/auth_gradient_button.dart';
+import 'package:employee_ni_service/core/common/widgets/auth_gradient_button.dart';
 import 'package:employee_ni_service/features/auth/presentation/widgets/rich_text.dart';
 import 'package:employee_ni_service/features/auth/presentation/widgets/set_reset_password_widget.dart';
 import 'package:employee_ni_service/features/dashboard/pages/dashboard.dart';
@@ -82,6 +82,10 @@ class _SigninScreenState extends State<SigninScreen> {
                       const SizedBox(height: 15),
                       AuthGradientButton(
                         buttonText: Constants.login,
+                        startColor: AppPallete.buttonColor,
+                        endColor: AppPallete.gradientColor,
+                        width: 395,
+                        height: 55,
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             context.read<SignInBloc>().add(

@@ -13,10 +13,9 @@ void showTakeActionDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return Dialog(
-        backgroundColor: Colors.white, // White background for the dialog
+        backgroundColor: AppPallete.backgroundColor,
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(12), // Rounded corners for the dialog
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Container(
           width: MediaQuery.of(context).size.width * 0.8, // 80% screen width

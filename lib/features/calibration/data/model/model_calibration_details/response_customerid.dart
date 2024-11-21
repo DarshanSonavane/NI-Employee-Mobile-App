@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:employee_ni_service/features/calibration/domain/entities/customer_id.dart';
+import 'package:employee_ni_service/features/calibration/domain/entities/calibration_details_entity/customer_id.dart';
 
 class ResponseCustomerid extends CustomerId {
   ResponseCustomerid({
@@ -23,7 +23,7 @@ class ResponseCustomerid extends CustomerId {
 
   factory ResponseCustomerid.fromMap(Map<String, dynamic> map) {
     return ResponseCustomerid(
-      sId: map['sId'] != null ? map['sId'] as String : null,
+      sId: map['_id'] != null ? map['_id'] as String : null,
       customerCode:
           map['customerCode'] != null ? map['customerCode'] as String : null,
       customerName:
@@ -46,7 +46,7 @@ class ResponseCustomerid extends CustomerId {
       stateCode: map['stateCode'] != null ? map['stateCode'] as String : null,
       machineModel:
           map['machineModel'] != null ? map['machineModel'] as String : null,
-      iV: map['iV'] != null ? map['iV'] as int : null,
+      iV: map['__v'] != null ? map['__v'] as int : null,
     );
   }
 

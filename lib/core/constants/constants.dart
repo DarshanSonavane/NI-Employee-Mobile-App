@@ -47,4 +47,8 @@ class Constants {
       "Note:-Password to have at least 8 characters, "
       "at least one uppercase letter, at least one lowercase letter,"
       " at least one digit, and at least one special character.";
+  static const addMachine = 'Add Machine';
+  static const cylinderDetails = 'Cylinder Details';
+  static const cylinderDetailsUpdated = 'Cylinder Details Updated Successfully';
+  static const calibrationDeletedMessage = 'Calibration Deleted Successfully';
 }

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:employee_ni_service/features/calibration/domain/entities/employee_id.dart';
+import 'package:employee_ni_service/features/calibration/domain/entities/calibration_details_entity/employee_id.dart';
 
 class ResponseEmployeeid extends EmployeeId {
   ResponseEmployeeid({
@@ -22,7 +22,7 @@ class ResponseEmployeeid extends EmployeeId {
 
   factory ResponseEmployeeid.fromMap(Map<String, dynamic> map) {
     return ResponseEmployeeid(
-      sId: map['sId'] != null ? map['sId'] as String : null,
+      sId: map['_id'] != null ? map['_id'] as String : null,
       updatedAt: map['updatedAt'] != null ? map['updatedAt'] as String : null,
       createdAt: map['createdAt'] != null ? map['createdAt'] as String : null,
       isActive: map['isActive'] != null ? map['isActive'] as String : null,
@@ -37,7 +37,7 @@ class ResponseEmployeeid extends EmployeeId {
       middleName:
           map['middleName'] != null ? map['middleName'] as String : null,
       firstName: map['firstName'] != null ? map['firstName'] as String : null,
-      iV: map['iV'] != null ? map['iV'] as int : null,
+      iV: map['__v'] != null ? map['__v'] as int : null,
       password: map['password'] != null ? map['password'] as String : null,
     );
   }

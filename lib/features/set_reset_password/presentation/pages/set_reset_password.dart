@@ -7,7 +7,7 @@ import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/show_snackbar.dart';
 import '../../../../core/common/widgets/auth_field.dart';
-import '../../../auth/presentation/widgets/auth_gradient_button.dart';
+import '../../../../core/common/widgets/auth_gradient_button.dart';
 import '../bloc/set_reset_password_bloc.dart';
 
 class SetResetPassword extends StatefulWidget {
@@ -104,6 +104,10 @@ class _SetResetPasswordState extends State<SetResetPassword> {
                       const SizedBox(height: 15),
                       AuthGradientButton(
                         buttonText: Constants.submit,
+                        startColor: AppPallete.buttonColor,
+                        endColor: AppPallete.gradientColor,
+                        width: 395,
+                        height: 55,
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             context.read<SetResetPasswordBloc>().add(

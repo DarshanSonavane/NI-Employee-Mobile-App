@@ -50,20 +50,59 @@ void _initGetCalibrationList() {
   sl.registerSingleton<GetCalibrationDetailApiService>(
     GetCalibrationDetailsApiServiceImpl(),
   );
+  sl.registerSingleton<GetCylinderDetailsApiService>(
+    GetCylinderDetailsApiServiceImpl(),
+  );
+  sl.registerSingleton<UpdateCylinderDetailsApiService>(
+    UpdateCylinderDetailsApiServiceImpl(),
+  );
+  sl.registerSingleton<DeleteCalibrationItemApiService>(
+    DeleteCalibrationItemApiServiceImpl(),
+  );
+  sl.registerSingleton<GenerateAndSendCalibrationItemApiService>(
+    GenerateAndSendCalibrationItemApiServiceImpl(),
+  );
 
   //Repository
   sl.registerSingleton<FetchCalibrationRepository>(
     FetchCalibrationRepositoryImpl(),
   );
+  sl.registerSingleton<FetchCylinderDetailsRepository>(
+    FetchCylinderRepositoryImpl(),
+  );
+  sl.registerSingleton<UpdateCylinderDetailsRepository>(
+    UpdateCylinderDetailsRepositoryImpl(),
+  );
+  sl.registerSingleton<DeleteCalibrationItemRepository>(
+    DeleteCalibrationItemRepositoryImpl(),
+  );
+  sl.registerSingleton<GenerateAndSendCalibrationRepository>(
+    GenerateAndSendCalibrationRepositoryImpl(),
+  );
   //UseCases
   sl.registerSingleton<FetchCalibrationData>(
     FetchCalibrationData(),
   );
+  sl.registerSingleton<FetchCylinderDetails>(
+    FetchCylinderDetails(),
+  );
+  sl.registerSingleton<UpdateCylinderDetailsUseCase>(
+    UpdateCylinderDetailsUseCase(),
+  );
+  sl.registerSingleton<DeleteCalibrationUsecase>(
+    DeleteCalibrationUsecase(),
+  );
+  sl.registerSingleton<GenerateAndSendCalibrationUsecase>(
+    GenerateAndSendCalibrationUsecase(),
+  );
 
   //Bloc
-  sl.registerFactory<CalibrationBloc>(
-    () => CalibrationBloc(fetchCalibrationData: sl()),
-  );
+  sl.registerFactory<CalibrationBloc>(() => CalibrationBloc(
+      fetchCalibrationData: sl(),
+      fetchCylinderDetails: sl(),
+      updateCylinderDetailsUseCase: sl(),
+      deleteCalibrationUsecase: sl(),
+      generateAndSendCalibrationUsecase: sl()));
 }
 
 void _initGetComplaintList() {

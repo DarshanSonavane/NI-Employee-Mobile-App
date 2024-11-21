@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:employee_ni_service/features/calibration/data/model/response_data.dart';
-import 'package:employee_ni_service/features/calibration/domain/entities/calibration_request_entity.dart';
+import 'package:employee_ni_service/features/calibration/data/model/model_calibration_details/response_data.dart';
+import 'package:employee_ni_service/features/calibration/domain/entities/calibration_details_entity/calibration_request_entity.dart';
 
 class ResponseCalibrationDetails extends CalibrationRequestEntity {
   ResponseCalibrationDetails({

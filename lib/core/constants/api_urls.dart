@@ -5,4 +5,9 @@ class ApiUrls {
   static const getHomeDetails = '${baseUrl}get-admin-dashboard-details';
   static const getComplaintDetails = '${baseUrl}get-all-complaints';
   static const getCalibrationDetails = '${baseUrl}get-calibration-request-list';
+  static const getCylinderDetails = '${baseUrl}get-cylinder-details';
+  static const updateCylinderDetails = '${baseUrl}update-cylinder-details';
+  static const deleteCalibrationItem = '${baseUrl}delete-calibration-request';
+  static const generateSendCalibrationItem =
+      '${baseUrl}generate-send-calibration';
 }

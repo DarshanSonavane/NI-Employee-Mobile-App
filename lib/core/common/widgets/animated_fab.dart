@@ -5,9 +5,10 @@ class AnimatedFabMenu extends StatefulWidget {
   final Function()? onCloseTap;
   final Function()? onTakeAction;
   final Function()? onGenerateSend;
+  final Function()? onDelete;
   final String status;
   final String userStatus;
-  final String heroTag;
+  final String tag;
 
   const AnimatedFabMenu({
     super.key,
@@ -15,9 +16,10 @@ class AnimatedFabMenu extends StatefulWidget {
     this.onCloseTap,
     this.onTakeAction,
     this.onGenerateSend,
+    this.onDelete,
     required this.status,
     required this.userStatus,
-    required this.heroTag,
+    required this.tag,
   });
 
   @override
@@ -34,29 +36,51 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu> {
   }
 
   List<Widget> _buildMenuOptions() {
-    if (widget.status == "1" && widget.userStatus == "0") {
+    final status = widget.status;
+    final userStatus = widget.userStatus;
+    final tag = widget.tag;
+
+    if (status == "1" && userStatus == "0" && tag == "_complaints") {
       return [
-        _buildMenuButton('Assign', widget.onAssignTap!),
-        _buildMenuButton('Close', widget.onCloseTap!),
-      ];
-    } else if (widget.status == "1" &&
-        widget.userStatus == "0" &&
-        widget.heroTag == "unique_hero_tag_2") {
-      return [
-        _buildMenuButton('Generate and send', widget.onGenerateSend!),
-        _buildMenuButton('Close', widget.onCloseTap!),
-      ];
-    } else if (widget.status == "2" && widget.userStatus == "0") {
-      return [
-        _buildMenuButton('Re-Assign', widget.onAssignTap!),
-        _buildMenuButton('Close', widget.onCloseTap!),
-      ];
-    } else if ((widget.status == "1" || widget.status == "2") &&
-        widget.userStatus != "0") {
-      return [
-        _buildMenuButton('Take Action', widget.onTakeAction!),
+        _buildMenuButton('Assign', widget.onAssignTap ?? () {}),
+        _buildMenuButton('Close', widget.onCloseTap ?? () {}),
       ];
     }
+
+    if (status == "2" && userStatus == "0" && tag == "_complaints") {
+      return [
+        _buildMenuButton('Re-Assign', widget.onAssignTap ?? () {}),
+        _buildMenuButton('Close', widget.onCloseTap ?? () {}),
+      ];
+    }
+
+    if ((status == "1" || status == "2") &&
+        userStatus != "0" &&
+        tag == "_complaints") {
+      return [
+        _buildMenuButton('Take Action', widget.onTakeAction ?? () {}),
+      ];
+    }
+
+    if (userStatus == "0" && status != "0" && tag == "_calibration") {
+      return [
+        _buildMenuButton('Generate and send', widget.onGenerateSend ?? () {}),
+        _buildMenuButton('Delete', widget.onDelete ?? () {}),
+      ];
+    }
+
+    if (status == "0" && userStatus == "0" && tag == "_calibration") {
+      return [
+        _buildMenuButton('Delete', widget.onDelete ?? () {}),
+      ];
+    }
+
+    if (status != "0" && userStatus != "0" && tag == "_calibration") {
+      return [
+        _buildMenuButton('Generate and send', widget.onGenerateSend ?? () {}),
+      ];
+    }
+
     return [];
   }
 
@@ -93,7 +117,7 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu> {
         if (_isMenuOpen) ..._buildMenuOptions(),
         // Main FAB
         FloatingActionButton.small(
-          heroTag: widget.heroTag,
+          heroTag: null,
           backgroundColor: _isMenuOpen ? Colors.green : Colors.purple,
           elevation: 3,
           onPressed: _toggleMenu,

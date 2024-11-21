@@ -1,6 +1,5 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
-import 'package:employee_ni_service/features/complaint/presentation/widgets/show_take_action_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/common/widgets/animated_fab.dart';
@@ -18,7 +17,10 @@ class CalibrationCard extends StatefulWidget {
   final String? location;
   final String? state;
   final String? status;
+  final String? calibrationId;
   final String? assignedTo;
+  final Function(String) onDelete;
+  final Function(String)? onGenerateAndSend;
 
   const CalibrationCard({
     required this.name,
@@ -29,6 +31,9 @@ class CalibrationCard extends StatefulWidget {
     required this.state,
     required this.status,
     required this.assignedTo,
+    required this.calibrationId,
+    required this.onDelete,
+    this.onGenerateAndSend,
     super.key,
   });
 
@@ -65,7 +70,6 @@ class _CalibrationCardState extends State<CalibrationCard> {
 
   String fetchUserStatus() {
     var fetchuser = hiveStorageService.getUser();
-    debugPrint("FetchUser ${fetchuser?.role}");
     return fetchuser!.role;
   }
 
@@ -144,32 +148,24 @@ class _CalibrationCardState extends State<CalibrationCard> {
                 scalingFactor,
               ),
               SizedBox(height: 8 * scalingFactor),
-              if (widget.state != '0')
-                Align(
+              Visibility(
+                visible: (fetchUserStatus() == '0') ||
+                    (fetchUserStatus() == '1' && widget.status != '0'),
+                child: Align(
                   alignment: Alignment.bottomRight,
                   child: AnimatedFabMenu(
                     onGenerateSend: () {
-                      debugPrint('Generate and send tapped');
+                      widget.onGenerateAndSend!(widget.calibrationId!);
+                    },
+                    onDelete: () {
+                      widget.onDelete(widget.calibrationId!);
                     },
                     status: widget.status!,
                     userStatus: fetchUserStatus(),
-                    heroTag:
-                        'unique_hero_tag_2', // unique heroTag for state != '0'
-                  ),
-                )
-              else
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: AnimatedFabMenu(
-                    onCloseTap: () {
-                      debugPrint('Close tapped');
-                    },
-                    status: widget.status!,
-                    userStatus: fetchUserStatus(),
-                    heroTag:
-                        'unique_hero_tag_3', // unique heroTag for state == '0'
+                    tag: '_calibration',
                   ),
                 ),
+              )
             ],
           ),
         ),

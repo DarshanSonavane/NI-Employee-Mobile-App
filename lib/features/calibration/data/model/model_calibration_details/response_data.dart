@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:employee_ni_service/features/calibration/data/model/response_customerid.dart';
+import 'package:employee_ni_service/features/calibration/data/model/model_calibration_details/response_customerid.dart';
 
-import '../../domain/entities/data.dart';
+import '../../../domain/entities/calibration_details_entity/data.dart';
 import 'response_employeeid.dart';
 
 class ResponseData extends Data {
@@ -19,7 +19,7 @@ class ResponseData extends Data {
 
   factory ResponseData.fromMap(Map<String, dynamic> map) {
     return ResponseData(
-      sId: map['sId'] != null ? map['sId'] as String : null,
+      sId: map['_id'] != null ? map['_id'] as String : null,
       customerId: map['customerId'] != null
           ? ResponseCustomerid.fromMap(
               map['customerId'] as Map<String, dynamic>)
@@ -33,7 +33,7 @@ class ResponseData extends Data {
       status: map['status'] != null ? map['status'] as String : null,
       createdAt: map['createdAt'] != null ? map['createdAt'] as String : null,
       updatedAt: map['updatedAt'] != null ? map['updatedAt'] as String : null,
-      iV: map['iV'] != null ? map['iV'] as int : null,
+      iV: map['__v'] != null ? map['__v'] as int : null,
     );
   }
 

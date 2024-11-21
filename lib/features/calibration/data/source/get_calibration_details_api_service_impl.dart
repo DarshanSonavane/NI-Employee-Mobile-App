@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:employee_ni_service/features/calibration/data/model/response_calibration_details.dart';
+import 'package:employee_ni_service/features/calibration/data/model/model_calibration_details/response_calibration_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/api_urls.dart';
@@ -19,7 +19,6 @@ class GetCalibrationDetailsApiServiceImpl
       var response = await sl<DioClient>().get(ApiUrls.getCalibrationDetails);
       var getCalibrationDetailsResponse =
           ResponseCalibrationDetails.fromMap(response.data);
-      debugPrint("ResponseCalibration ${getCalibrationDetailsResponse.data}");
       return Right(getCalibrationDetailsResponse);
     } on DioException catch (e) {
       debugPrint("errorMesssage ${e.message}");
