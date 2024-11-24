@@ -29,7 +29,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     );
 
     res.fold(
-      (failure) => emit(SignInFailure(failure.message)),
+      (failure) => emit(SignInFailure(failure)),
       (user) => emit(SignInSuccess(user)),
     );
   }

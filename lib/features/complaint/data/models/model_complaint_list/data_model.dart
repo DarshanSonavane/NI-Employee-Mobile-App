@@ -1,4 +1,4 @@
-import '../../domain/entities/data.dart';
+import '../../../domain/entities/complaint_list_entity/data.dart';
 import 'customer_id_model.dart';
 import 'customer_type_model.dart';
 

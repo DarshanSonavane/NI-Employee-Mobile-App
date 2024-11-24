@@ -1,4 +1,4 @@
-import '../../domain/entities/complaint_type.dart';
+import '../../../domain/entities/complaint_list_entity/complaint_type.dart';
 
 class ComplaintTypeModel extends ComplaintType {
   ComplaintTypeModel({

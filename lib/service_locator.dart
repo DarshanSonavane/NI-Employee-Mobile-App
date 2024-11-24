@@ -62,6 +62,9 @@ void _initGetCalibrationList() {
   sl.registerSingleton<GenerateAndSendCalibrationItemApiService>(
     GenerateAndSendCalibrationItemApiServiceImpl(),
   );
+  sl.registerSingleton<AddMachineDetailsApiService>(
+    AddMachineDetailsApiServiceImpl(),
+  );
 
   //Repository
   sl.registerSingleton<FetchCalibrationRepository>(
@@ -79,6 +82,9 @@ void _initGetCalibrationList() {
   sl.registerSingleton<GenerateAndSendCalibrationRepository>(
     GenerateAndSendCalibrationRepositoryImpl(),
   );
+  sl.registerSingleton<AddMachineDetailsRepository>(
+    AddMachineRespositoryImpl(),
+  );
   //UseCases
   sl.registerSingleton<FetchCalibrationData>(
     FetchCalibrationData(),
@@ -95,14 +101,19 @@ void _initGetCalibrationList() {
   sl.registerSingleton<GenerateAndSendCalibrationUsecase>(
     GenerateAndSendCalibrationUsecase(),
   );
+  sl.registerSingleton<AddMachineDetailsUsecase>(
+    AddMachineDetailsUsecase(),
+  );
 
   //Bloc
   sl.registerFactory<CalibrationBloc>(() => CalibrationBloc(
-      fetchCalibrationData: sl(),
-      fetchCylinderDetails: sl(),
-      updateCylinderDetailsUseCase: sl(),
-      deleteCalibrationUsecase: sl(),
-      generateAndSendCalibrationUsecase: sl()));
+        fetchCalibrationData: sl(),
+        fetchCylinderDetails: sl(),
+        updateCylinderDetailsUseCase: sl(),
+        deleteCalibrationUsecase: sl(),
+        generateAndSendCalibrationUsecase: sl(),
+        addMachineDetailsUseCase: sl(),
+      ));
 }
 
 void _initGetComplaintList() {
@@ -110,19 +121,41 @@ void _initGetComplaintList() {
   sl.registerSingleton<GetComplaintDetailApiService>(
     GetComplaintDetailsApiServiceImpl(),
   );
+  sl.registerSingleton<CloseComplaintItemApiService>(
+    CloseComplaintItemApiServiceImpl(),
+  );
+  sl.registerSingleton<GetEmployeeDetailApiService>(
+    GetEmployeeDetailsApiServiceImpl(),
+  );
 
   //Repository
   sl.registerSingleton<FetchComplaintRepository>(
     FetchComplaintRepositoryImpl(),
   );
+  sl.registerSingleton<CloseComplaintRepository>(
+    CloseComplaintRepositoryImpl(),
+  );
+  sl.registerSingleton<FetchEmployeeRepository>(
+    FetchEmployeeRepositoryImpl(),
+  );
   //UseCases
   sl.registerSingleton<FetchComplaintData>(
     FetchComplaintData(),
   );
+  sl.registerSingleton<CloseComplaintData>(
+    CloseComplaintData(),
+  );
+  sl.registerSingleton<FetchEmployeeData>(
+    FetchEmployeeData(),
+  );
 
   //Bloc
   sl.registerFactory<ComplaintBloc>(
-    () => ComplaintBloc(fetchComplaintData: sl()),
+    () => ComplaintBloc(
+      fetchComplaintData: sl(),
+      closeComplaintData: sl(),
+      fetchEmployeeData: sl(),
+    ),
   );
 }
 

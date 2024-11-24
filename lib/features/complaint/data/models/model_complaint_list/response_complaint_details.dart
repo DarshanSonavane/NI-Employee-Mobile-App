@@ -1,4 +1,4 @@
-import 'package:employee_ni_service/features/complaint/domain/entities/complaint_detail_entity.dart';
+import 'package:employee_ni_service/features/complaint/domain/entities/complaint_list_entity/complaint_detail_entity.dart';
 
 class ResponseComplaintDetails extends ComplaintDetailsEntity {
   ResponseComplaintDetails({

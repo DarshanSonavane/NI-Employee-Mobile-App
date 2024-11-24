@@ -133,6 +133,7 @@ class _ShowCylinderDetailsDialogState extends State<ShowCylinderDetailsDialog> {
           width: screenWidth > 600 ? 200 : 100,
           height: 55,
           onPressed: () {
+            Navigator.pop(context);
             final requestUpdateCylinderDetails = RequestUpdateCylinderDetails(
               sId: cylinderId,
               cO: coController.text,

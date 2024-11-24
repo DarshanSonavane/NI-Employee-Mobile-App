@@ -1,8 +1,8 @@
-class ResponseDeleteCalibrationItem {
+class CommonResponseCalibration {
   String? code;
   String? message;
 
-  ResponseDeleteCalibrationItem({
+  CommonResponseCalibration({
     required this.code,
     required this.message,
   });

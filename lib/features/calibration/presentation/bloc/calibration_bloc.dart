@@ -1,9 +1,12 @@
+import 'package:employee_ni_service/features/calibration/data/model/model_add_machine/request_add_machine_model.dart';
 import 'package:employee_ni_service/features/calibration/data/model/model_cylinder_details/response_cylinder_details.dart';
 import 'package:employee_ni_service/features/calibration/data/model/model_delete_calibration/request_delete_calibration_model.dart';
-import 'package:employee_ni_service/features/calibration/data/model/model_delete_calibration/response_delete_calibration_model.dart';
+import 'package:employee_ni_service/features/calibration/data/model/common_response_model/common_response_calibration_model.dart';
+import 'package:employee_ni_service/features/calibration/domain/usecases/add_machine_details_usecase.dart';
 import 'package:employee_ni_service/features/calibration/domain/usecases/delete_calibration_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/constants.dart';
 import '../../../../service_locator_dependecies.dart';
 import '../../data/model/model_calibration_details/response_calibration_details.dart';
 import '../../data/model/model_update_cylinder/request_update_cylinder_details.dart';
@@ -18,12 +21,14 @@ class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
   final FetchCalibrationData fetchCalibrationData;
   final FetchCylinderDetails fetchCylinderDetails;
   final UpdateCylinderDetailsUseCase updateCylinderDetailsUseCase;
+  final AddMachineDetailsUsecase addMachineDetailsUseCase;
   final DeleteCalibrationUsecase deleteCalibrationUsecase;
   final GenerateAndSendCalibrationUsecase generateAndSendCalibrationUsecase;
   CalibrationBloc(
       {required this.fetchCalibrationData,
       required this.fetchCylinderDetails,
       required this.updateCylinderDetailsUseCase,
+      required this.addMachineDetailsUseCase,
       required this.deleteCalibrationUsecase,
       required this.generateAndSendCalibrationUsecase})
       : super(CalibrationInitial()) {
@@ -31,6 +36,7 @@ class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
     on<GetAllCalibrationList>(_onFetchCalibrationDetails);
     on<GetCylinderDetails>(_onFetchCylinderDetails);
     on<UpdateCylinderDetails>(_onUpdateCylinderDetails);
+    on<AddMachineDetails>(_addMachineDetails);
     on<DeleteCalibrationItem>(_onDeleteCalibrationItems);
     on<GenerateAndSendCalibrationItem>(_onGenerateAndSendCalibrationItem);
   }
@@ -41,7 +47,7 @@ class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
   ) async {
     final res = await sl<FetchCalibrationData>().call();
     res.fold(
-      (l) => emit(CalibrationFailure(l.message)),
+      (l) => emit(CalibrationFailure(l)),
       (r) => emit(CalibrationSuccess<ResponseCalibrationDetails>(r)),
     );
   }
@@ -52,8 +58,9 @@ class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
   ) async {
     final res = await sl<FetchCylinderDetails>().call();
     res.fold(
-      (l) => emit(CalibrationFailure(l.message)),
-      (r) => emit(CalibrationSuccess<ResponseCylinderDetails>(r)),
+      (l) => emit(CalibrationFailure(l)),
+      (r) => emit(CalibrationSuccess<ResponseCylinderDetails>(r,
+          source: Constants.fetch)),
     );
   }
 
@@ -74,8 +81,9 @@ class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
       createdBy: event.cylinderDetails.createdBy,
     ));
     res.fold(
-      (l) => emit(CalibrationFailure(l.message)),
-      (r) => emit(CalibrationSuccess<ResponseCylinderDetails>(r)),
+      (l) => emit(CalibrationFailure(l)),
+      (r) => emit(CalibrationSuccess<ResponseCylinderDetails>(r,
+          source: Constants.update)),
     );
   }
 
@@ -88,8 +96,8 @@ class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
       calibrationId: event.calibrationId,
     ));
     res.fold(
-      (l) => emit(CalibrationFailure(l.message)),
-      (r) => emit(CalibrationSuccess<ResponseDeleteCalibrationModel>(r)),
+      (l) => emit(CalibrationFailure(l)),
+      (r) => emit(CalibrationSuccess<CommonResponseCalibrationModel>(r)),
     );
   }
 
@@ -102,8 +110,24 @@ class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
       calibrationId: event.calibrationId,
     ));
     res.fold(
-      (l) => emit(CalibrationFailure(l.message)),
-      (r) => emit(CalibrationSuccess<ResponseDeleteCalibrationModel>(r)),
+      (l) => emit(CalibrationFailure(l)),
+      (r) => emit(CalibrationSuccess<CommonResponseCalibrationModel>(r)),
+    );
+  }
+
+  void _addMachineDetails(
+    AddMachineDetails event,
+    Emitter<CalibrationState> emit,
+  ) async {
+    final res = await sl<AddMachineDetailsUsecase>().call(
+        params: RequestAddMachineModel(
+      machineType: event.requestAddMachineModel.machineType,
+      machineNumber: event.requestAddMachineModel.machineNumber,
+      customerCode: event.requestAddMachineModel.customerCode,
+    ));
+    res.fold(
+      (l) => emit(CalibrationFailure(l)),
+      (r) => emit(CalibrationSuccess<CommonResponseCalibrationModel>(r)),
     );
   }
 }

@@ -9,7 +9,8 @@ final class CalibrationLoader extends CalibrationState {}
 
 final class CalibrationSuccess<T> extends CalibrationState {
   final T data;
-  CalibrationSuccess(this.data);
+  final String? source;
+  CalibrationSuccess(this.data, {this.source});
 }
 
 final class CalibrationFailure extends CalibrationState {

@@ -21,3 +21,8 @@ final class GenerateAndSendCalibrationItem extends CalibrationEvent {
   final String calibrationId;
   GenerateAndSendCalibrationItem({required this.calibrationId});
 }
+
+final class AddMachineDetails extends CalibrationEvent {
+  final RequestAddMachineModel requestAddMachineModel;
+  AddMachineDetails({required this.requestAddMachineModel});
+}

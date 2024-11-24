@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:employee_ni_service/features/calibration/data/model/model_delete_calibration/request_delete_calibration_model.dart';
-import 'package:employee_ni_service/features/calibration/data/model/model_delete_calibration/response_delete_calibration_model.dart';
+import 'package:employee_ni_service/features/calibration/data/model/common_response_model/common_response_calibration_model.dart';
 
 import '../../../../core/constants/api_urls.dart';
 import '../../../../core/network/dio_client.dart';
@@ -22,7 +22,7 @@ class GenerateAndSendCalibrationItemApiServiceImpl
           ApiUrls.generateSendCalibrationItem,
           data: requesteDeleteCalibrationModel.toMap());
       var generateSendCalibrationItemResponse =
-          ResponseDeleteCalibrationModel.fromMap(response.data);
+          CommonResponseCalibrationModel.fromMap(response.data);
       return Right(generateSendCalibrationItemResponse);
     } on DioException catch (e) {
       return left(e.message);

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class SimpleDialogWithMessage extends StatelessWidget {
   final String message;
-  final Function() onCloseTap;
+  final Function() onTap;
   const SimpleDialogWithMessage(
-      {super.key, required this.message, required this.onCloseTap});
+      {super.key, required this.message, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class SimpleDialogWithMessage extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          onPressed: onCloseTap,
+          onPressed: onTap,
           child: const Text(
             'Close',
             style: TextStyle(color: AppPallete.gradientColor),

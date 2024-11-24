@@ -28,7 +28,7 @@ class SetResetPasswordBloc
     );
 
     res.fold(
-      (failure) => emit(SetResetPasswordFailure(failure.message)),
+      (failure) => emit(SetResetPasswordFailure(failure)),
       (user) => emit(SetResetPasswordSuccess()),
     );
   }

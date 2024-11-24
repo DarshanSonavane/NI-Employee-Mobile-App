@@ -48,7 +48,18 @@ class Constants {
       "at least one uppercase letter, at least one lowercase letter,"
       " at least one digit, and at least one special character.";
   static const addMachine = 'Add Machine';
+  static const machineNumber = 'Machine Number*';
+  static const selectMachine = "Select Machine";
+  static const addMachineDetails = 'Add Machine Details';
   static const cylinderDetails = 'Cylinder Details';
   static const cylinderDetailsUpdated = 'Cylinder Details Updated Successfully';
   static const calibrationDeletedMessage = 'Calibration Deleted Successfully';
+  static const machineDropDown = 'Please select a machine';
+  static const enterMachineNumber = 'Enter machine number';
+  static const enterCustomerCode = 'Enter customer code';
+  static const fetch = 'fetch';
+  static const update = 'update';
+  static const selectEmployeeError = 'Please select an employee';
+  static const selectEmployeeLabel = 'Select Employee*';
+  static const selectEmployee = 'Select an Employee';
 }

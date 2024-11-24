@@ -21,7 +21,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     final res = await sl<FetchHomeData>().call();
     res.fold(
-      (l) => emit(HomeBlocFailure(l.message)),
+      (l) => emit(HomeBlocFailure(l)),
       (r) => emit(HomeBlocSuccess(r)),
     );
   }

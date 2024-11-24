@@ -21,6 +21,9 @@ class ComplaintCard extends StatefulWidget {
   final String? additionalRequest;
   final String? feedback;
   final String? status;
+  final String? complaintId;
+  final Function(String)? onClose;
+  final Function(String)? onAssign;
 
   const ComplaintCard({
     required this.name,
@@ -33,6 +36,9 @@ class ComplaintCard extends StatefulWidget {
     required this.additionalRequest,
     required this.feedback,
     required this.status,
+    required this.complaintId,
+    this.onClose,
+    this.onAssign,
     super.key,
   });
 
@@ -167,9 +173,11 @@ class _ComplaintCardState extends State<ComplaintCard> {
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: AnimatedFabMenu(
-                    onAssignTap: () {},
+                    onAssignTap: () {
+                      widget.onAssign!(widget.complaintId!);
+                    },
                     onCloseTap: () {
-                      debugPrint('Close tapped');
+                      widget.onClose!(widget.complaintId!);
                     },
                     onTakeAction: () {
                       showTakeActionDialog(context);

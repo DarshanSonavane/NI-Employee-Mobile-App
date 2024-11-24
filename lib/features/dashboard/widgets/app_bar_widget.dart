@@ -1,6 +1,8 @@
 import 'package:employee_ni_service/features/auth/presentation/pages/signin.dart';
 import 'package:flutter/material.dart';
 import '../../../core/app_theme/app_pallete.dart';
+import '../../../core/database/hive_storage_service.dart';
+import '../../../service_locator_dependecies.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -29,18 +31,22 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(top: 4.0, right: 8.0),
           child: IconButton(
             color: AppPallete.gradientColor,
-            onPressed: () {
-              Navigator.push(
-                context,
-                SigninScreen.route(),
-              );
+            onPressed: () async {
+              await sl<HiveStorageService>().clearUser();
+              if (context.mounted) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  SigninScreen.route(),
+                  (route) => false,
+                );
+              }
             },
             icon: const Icon(
               Icons.logout,
               size: 28,
             ),
           ),
-        )
+        ),
       ],
     );
   }

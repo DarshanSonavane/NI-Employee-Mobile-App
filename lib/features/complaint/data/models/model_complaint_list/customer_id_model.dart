@@ -1,4 +1,4 @@
-import '../../domain/entities/customer_id.dart';
+import '../../../domain/entities/complaint_list_entity/customer_id.dart';
 
 class CustomerIdModel extends CustomerId {
   CustomerIdModel(

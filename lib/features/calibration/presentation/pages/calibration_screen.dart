@@ -1,18 +1,21 @@
-import 'package:employee_ni_service/core/common/widgets/simple_dialog_with_message.dart';
+import 'package:employee_ni_service/core/common/widgets/dialog_helper.dart';
+import 'package:employee_ni_service/features/calibration/data/model/model_add_machine/request_add_machine_model.dart';
 import 'package:employee_ni_service/features/calibration/data/model/model_cylinder_details/response_cylinder_details.dart';
-import 'package:employee_ni_service/features/calibration/data/model/model_delete_calibration/response_delete_calibration_model.dart';
+import 'package:employee_ni_service/features/calibration/data/model/common_response_model/common_response_calibration_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/app_theme/app_pallete.dart';
 import '../../../../core/common/widgets/auth_gradient_button.dart';
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../core/utils/show_snackbar.dart';
+import '../../../../service_locator_dependecies.dart';
 import '../../data/model/model_calibration_details/response_calibration_details.dart';
 import '../../data/model/model_update_cylinder/request_update_cylinder_details.dart';
 import '../bloc/calibration_bloc.dart';
+import '../widgets/add_machine_dialog.dart';
 import '../widgets/calibration_card.dart';
 import '../widgets/show_cylinder_details_dialog.dart';
+import '../../../../core/database/hive_storage_service.dart';
 
 class CalibrationScreen extends StatefulWidget {
   const CalibrationScreen({super.key});
@@ -27,6 +30,7 @@ class _CalibrationScreenState extends State<CalibrationScreen>
   ResponseCylinderDetails? responseCylinderDetails;
   late TabController _tabController;
   bool isDialogOpen = false;
+  final hiveStorageService = sl<HiveStorageService>();
 
   @override
   void initState() {
@@ -57,6 +61,40 @@ class _CalibrationScreenState extends State<CalibrationScreen>
         );
   }
 
+  String fetchUserStatus() {
+    var fetchuser = hiveStorageService.getUser();
+    return fetchuser!.role;
+  }
+
+  Future<dynamic> showCylinderDetailDialog(BuildContext context, data) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => ShowCylinderDetailsDialog(
+        data,
+        onCylinderDetailsTap:
+            (RequestUpdateCylinderDetails requestUpdateCylinderDetails) {
+          context.read<CalibrationBloc>().add(
+                UpdateCylinderDetails(
+                    cylinderDetails: requestUpdateCylinderDetails),
+              );
+        },
+      ),
+    );
+  }
+
+  void addMachineDialog(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => AddMachineDialog(
+          onAddMachineTap: (RequestAddMachineModel requestAddMachineModel) {
+        context.read<CalibrationBloc>().add(
+            AddMachineDetails(requestAddMachineModel: requestAddMachineModel));
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,31 +103,36 @@ class _CalibrationScreenState extends State<CalibrationScreen>
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                AuthGradientButton(
-                  buttonText: Constants.addMachine,
-                  startColor: AppPallete.label3Color,
-                  endColor: AppPallete.label3Color,
-                  width: MediaQuery.of(context).size.width < 600 ? 120 : 175,
-                  height:
-                      MediaQuery.of(context).size.height < 600 ? 0.03 : 0.02,
-                  onPressed: () {},
-                ),
-                const SizedBox(width: 20),
-                AuthGradientButton(
-                  buttonText: Constants.cylinderDetails,
-                  startColor: AppPallete.buttonColor,
-                  endColor: AppPallete.gradientColor,
-                  width: MediaQuery.of(context).size.width < 600 ? 120 : 175,
-                  height:
-                      MediaQuery.of(context).size.height < 600 ? 0.03 : 0.02,
-                  onPressed: () {
-                    context.read<CalibrationBloc>().add(GetCylinderDetails());
-                  },
-                ),
-              ],
+            child: Visibility(
+              visible: fetchUserStatus() == '0',
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  AuthGradientButton(
+                    buttonText: Constants.addMachine,
+                    startColor: AppPallete.label3Color,
+                    endColor: AppPallete.label3Color,
+                    width: MediaQuery.of(context).size.width < 600 ? 120 : 175,
+                    height:
+                        MediaQuery.of(context).size.height < 600 ? 0.03 : 0.02,
+                    onPressed: () {
+                      addMachineDialog(context);
+                    },
+                  ),
+                  const SizedBox(width: 20),
+                  AuthGradientButton(
+                    buttonText: Constants.cylinderDetails,
+                    startColor: AppPallete.buttonColor,
+                    endColor: AppPallete.gradientColor,
+                    width: MediaQuery.of(context).size.width < 600 ? 120 : 175,
+                    height:
+                        MediaQuery.of(context).size.height < 600 ? 0.03 : 0.02,
+                    onPressed: () {
+                      context.read<CalibrationBloc>().add(GetCylinderDetails());
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
           Container(
@@ -111,67 +154,49 @@ class _CalibrationScreenState extends State<CalibrationScreen>
               child: BlocConsumer<CalibrationBloc, CalibrationState>(
                 listener: (context, state) {
                   if (state is CalibrationFailure) {
-                    showSnackBar(context, state.errorMessage);
+                    DialogHelper.showAlertDialog(
+                        context: context,
+                        message: state.errorMessage,
+                        onButtonPressed: () {
+                          context
+                              .read<CalibrationBloc>()
+                              .add(GetAllCalibrationList());
+                          Navigator.pop(context);
+                        });
                   } else if (state is CalibrationSuccess) {
                     if (state.data is ResponseCalibrationDetails) {
                       calibrationDetails = state.data;
                     } else if (state.data is ResponseCylinderDetails) {
-                      if (isDialogOpen) {
-                        Navigator.pop(context); // Close dialog
-                        isDialogOpen = false;
-                        showDialog(
+                      if (state.source == Constants.fetch) {
+                        showCylinderDetailDialog(context, state.data);
+                      } else {
+                        final response = state.data as ResponseCylinderDetails;
+                        DialogHelper.showAlertDialog(
                           context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return SimpleDialogWithMessage(
-                              message: Constants.cylinderDetailsUpdated,
-                              onCloseTap: () {
-                                Navigator.pop(context);
-                              },
-                            );
+                          message: response.message!,
+                          onButtonPressed: () {
+                            Navigator.pop(context);
                           },
                         );
-                      } else {
-                        isDialogOpen = true;
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) => ShowCylinderDetailsDialog(
-                            state.data,
-                            onCylinderDetailsTap: (RequestUpdateCylinderDetails
-                                requestUpdateCylinderDetails) {
-                              context.read<CalibrationBloc>().add(
-                                  UpdateCylinderDetails(
-                                      cylinderDetails:
-                                          requestUpdateCylinderDetails));
-                            },
-                          ),
-                        ).then((_) {
-                          isDialogOpen =
-                              false; // Reset dialog state when closed
-                        });
                       }
-                    } else if (state.data is ResponseDeleteCalibrationModel) {
-                      showDialog(
+                    } else if (state.data is CommonResponseCalibrationModel) {
+                      final response =
+                          state.data as CommonResponseCalibrationModel;
+                      DialogHelper.showAlertDialog(
                         context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return SimpleDialogWithMessage(
-                            message: Constants.calibrationDeletedMessage,
-                            onCloseTap: () {
-                              context
-                                  .read<CalibrationBloc>()
-                                  .add(GetAllCalibrationList());
-                              Navigator.pop(context);
-                            },
-                          );
+                        message: response.message!,
+                        onButtonPressed: () {
+                          context
+                              .read<CalibrationBloc>()
+                              .add(GetAllCalibrationList());
+                          Navigator.pop(context);
                         },
                       );
                     }
                   }
                 },
                 builder: (context, state) {
-                  if (state is CalibrationLoader && !isDialogOpen) {
+                  if (state is CalibrationLoader) {
                     return const Loader();
                   } else if (state is CalibrationSuccess &&
                       calibrationDetails != null) {

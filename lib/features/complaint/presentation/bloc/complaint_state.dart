@@ -7,9 +7,11 @@ final class ComplaintInitial extends ComplaintState {}
 
 final class ComplaintLoader extends ComplaintState {}
 
-final class ComplaintSuccess extends ComplaintState {
-  final ResponseComplaintDetails complaintDetails;
-  ComplaintSuccess(this.complaintDetails);
+final class ComplaintSuccess<T> extends ComplaintState {
+  final T data;
+  final String? complaintId;
+  final String? source;
+  ComplaintSuccess(this.data, {this.complaintId, this.source});
 }
 
 final class ComplaintFailure extends ComplaintState {

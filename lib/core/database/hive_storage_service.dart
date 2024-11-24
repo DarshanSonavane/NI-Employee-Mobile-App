@@ -12,4 +12,9 @@ class HiveStorageService {
     var box = Hive.box<LoginResponseParams>('loginBox');
     return box.get('loggedInUser');
   }
+
+  Future<void> clearUser() async {
+    var box = Hive.box<LoginResponseParams>('loginBox');
+    await box.delete('loggedInUser');
+  }
 }

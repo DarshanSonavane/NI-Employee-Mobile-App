@@ -1,13 +1,19 @@
-import 'package:employee_ni_service/features/complaint/data/models/response_complaint_details.dart';
+import 'package:employee_ni_service/features/complaint/data/models/common_response_model/common_response_complaint_model.dart';
+import 'package:employee_ni_service/features/complaint/data/models/model_complaint_list/response_complaint_details.dart';
+import 'package:employee_ni_service/features/complaint/data/models/model_fetch_employee/response_employee_model.dart';
 import 'package:employee_ni_service/features/complaint/presentation/bloc/complaint_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/app_theme/app_pallete.dart';
+import '../../../../core/common/widgets/dialog_helper.dart';
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/constants/constants.dart';
+import '../../../../core/database/hive_storage_service.dart';
 import '../../../../core/utils/show_snackbar.dart';
+import '../../../../service_locator_dependecies.dart';
 import '../widgets/complaint_card.dart';
+import '../widgets/show_employee_dialog.dart';
 
 class ComplaintScreen extends StatefulWidget {
   const ComplaintScreen({super.key});
@@ -20,12 +26,36 @@ class _ComplaintScreenState extends State<ComplaintScreen>
     with SingleTickerProviderStateMixin {
   ResponseComplaintDetails? complaintDetails;
   late TabController _tabController;
+  final hiveStorageService = sl<HiveStorageService>();
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
     context.read<ComplaintBloc>().add(GetAllComplaintList());
+  }
+
+  String fetchUserEmployeeId() {
+    var fetchuser = hiveStorageService.getUser();
+    return fetchuser!.id;
+  }
+
+  void closeComplaintId(String complaintId) {
+    context.read<ComplaintBloc>().add(
+          CloseComplaintsItem(
+              complaintId: complaintId,
+              employeeId: fetchUserEmployeeId(),
+              source: Constants.close),
+        );
+  }
+
+  void assignComplaints(String? complaintId, String? selectedEmployee) {
+    context.read<ComplaintBloc>().add(
+          CloseComplaintsItem(
+              complaintId: complaintId!,
+              employeeId: selectedEmployee!,
+              source: Constants.assigned),
+        );
   }
 
   @override
@@ -61,7 +91,32 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                   if (state is ComplaintFailure) {
                     showSnackBar(context, state.errorMessage);
                   } else if (state is ComplaintSuccess) {
-                    complaintDetails = state.complaintDetails;
+                    if (state.data is ResponseComplaintDetails) {
+                      complaintDetails = state.data;
+                    } else if (state.data is CommonResponseComplaintModel) {
+                      final response =
+                          state.data as CommonResponseComplaintModel;
+                      DialogHelper.showAlertDialog(
+                          context: context,
+                          message: response.message!,
+                          onButtonPressed: () {
+                            Navigator.pop(context);
+                            context
+                                .read<ComplaintBloc>()
+                                .add(GetAllComplaintList());
+                          });
+                    } else if (state.data is ResponseEmployeeModel) {
+                      final response = state.data as ResponseEmployeeModel;
+                      final employees = response.employeeData;
+                      final complaintId = state.complaintId;
+                      showEmployeeDialog(
+                        context,
+                        employees,
+                        (selectedEmployee) {
+                          assignComplaints(complaintId, selectedEmployee);
+                        },
+                      );
+                    }
                   }
                 },
                 builder: (context, state) {
@@ -69,7 +124,6 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                     return const Loader();
                   } else if (state is ComplaintSuccess &&
                       complaintDetails != null) {
-                    // Filter complaints based on status
                     final statusZeroComplaints = complaintDetails!.data
                         .where((complaint) => complaint.status == '0')
                         .toList();
@@ -108,6 +162,15 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                                     additionalRequest: complaint.additionalReq,
                                     feedback: complaint.employeeFeedback,
                                     status: complaint.status,
+                                    complaintId: complaint.complaintType.id,
+                                    onClose: (String complaintId) {
+                                      closeComplaintId(complaintId);
+                                    },
+                                    onAssign: (String complaintId) {
+                                      context.read<ComplaintBloc>().add(
+                                            GetAllEmployeesList(complaintId),
+                                          );
+                                    },
                                   );
                                 },
                               ),
@@ -138,6 +201,7 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                                     additionalRequest: complaint.additionalReq,
                                     feedback: complaint.employeeFeedback,
                                     status: complaint.status,
+                                    complaintId: complaint.complaintType.id,
                                   );
                                 },
                               ),
