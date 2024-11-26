@@ -1,5 +1,7 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 
+import 'connectivity_interceptor.dart';
 import 'interceptors.dart';
 
 class DioClient {
@@ -11,7 +13,10 @@ class DioClient {
               responseType: ResponseType.json,
               sendTimeout: const Duration(seconds: 10),
               receiveTimeout: const Duration(seconds: 10)),
-        )..interceptors.addAll([LoggerInterceptor()]);
+        )..interceptors.addAll([
+            ConnectivityInterceptor(Connectivity()),
+            LoggerInterceptor(),
+          ]);
 
   // GET METHOD
   Future<Response> get(

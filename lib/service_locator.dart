@@ -39,7 +39,6 @@ void _initHiveService() {
 }
 
 void _initDioClient() {
-  // Register DioClient once, as it is used in both features
   sl.registerSingleton<DioClient>(
     DioClient(),
   );

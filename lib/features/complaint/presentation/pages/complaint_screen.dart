@@ -162,7 +162,7 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                                     additionalRequest: complaint.additionalReq,
                                     feedback: complaint.employeeFeedback,
                                     status: complaint.status,
-                                    complaintId: complaint.complaintType.id,
+                                    complaintId: complaint.id,
                                     onClose: (String complaintId) {
                                       closeComplaintId(complaintId);
                                     },
@@ -201,7 +201,7 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                                     additionalRequest: complaint.additionalReq,
                                     feedback: complaint.employeeFeedback,
                                     status: complaint.status,
-                                    complaintId: complaint.complaintType.id,
+                                    complaintId: complaint.id,
                                   );
                                 },
                               ),
