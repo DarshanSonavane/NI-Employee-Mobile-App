@@ -43,7 +43,7 @@ import 'core/database/hive_service.dart';
 import 'core/database/hive_storage_service.dart';
 import 'features/auth/domain/usecases/user_login.dart';
 import 'features/calibration/data/repository/fetch_calibration_repository_impl.dart';
-import 'features/calibration/data/source/get_calibration_details_api_service_impl.dart';
+import 'features/calibration/data/source/get_calibration_details_api_service.dart';
 import 'features/calibration/domain/repository/fetch_calibration_repository.dart';
 import 'features/calibration/domain/usecases/fetch_calibration_data.dart';
 import 'features/calibration/domain/usecases/update_cylinder_details_usecase.dart';

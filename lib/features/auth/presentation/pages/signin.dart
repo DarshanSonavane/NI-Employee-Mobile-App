@@ -46,7 +46,7 @@ class _SigninScreenState extends State<SigninScreen> {
           child: BlocConsumer<SignInBloc, SignInState>(
             listener: (context, state) async {
               if (state is SignInFailure) {
-                showSnackBar(context, state.message);
+                showSnackBar(context, Constants.loginFailed);
               } else if (state is SignInSuccess) {
                 _handleSignInSuccess(context, state.user);
               }

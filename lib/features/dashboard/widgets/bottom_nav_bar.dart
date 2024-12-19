@@ -15,7 +15,7 @@ class BottomNavBar extends StatelessWidget {
       builder: (context, dashboardState, child) {
         return CustomBottomAppBar(
           selectedIndex: dashboardState.selectedIndex,
-          onItemTapped: (index) => dashboardState.updateIndex(index),
+          onItemTapped: (index) => dashboardState.updateIndex(index, context),
         );
       },
     );

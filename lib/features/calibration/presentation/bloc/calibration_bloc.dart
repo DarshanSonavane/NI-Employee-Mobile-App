@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/core/usecase/use_case.dart';
 import 'package:employee_ni_service/features/calibration/data/model/model_add_machine/request_add_machine_model.dart';
 import 'package:employee_ni_service/features/calibration/data/model/model_cylinder_details/response_cylinder_details.dart';
 import 'package:employee_ni_service/features/calibration/data/model/model_delete_calibration/request_delete_calibration_model.dart';
@@ -45,7 +46,8 @@ class CalibrationBloc extends Bloc<CalibrationEvent, CalibrationState> {
     GetAllCalibrationList event,
     Emitter<CalibrationState> emit,
   ) async {
-    final res = await sl<FetchCalibrationData>().call();
+    final res = await sl<FetchCalibrationData>()
+        .call(params: ParamsAsType(typeOfData: event.calibrationType));
     res.fold(
       (l) => emit(CalibrationFailure(l)),
       (r) => emit(CalibrationSuccess<ResponseCalibrationDetails>(r)),

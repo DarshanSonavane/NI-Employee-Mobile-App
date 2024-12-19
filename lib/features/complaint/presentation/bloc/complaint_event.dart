@@ -3,7 +3,10 @@ part of 'complaint_bloc.dart';
 @immutable
 sealed class ComplaintEvent {}
 
-final class GetAllComplaintList extends ComplaintEvent {}
+final class GetAllComplaintList extends ComplaintEvent {
+  final String complaintType;
+  GetAllComplaintList({required this.complaintType});
+}
 
 final class GetAllEmployeesList extends ComplaintEvent {
   final String complaintId;

@@ -19,22 +19,3 @@ class DialogHelper {
     );
   }
 }
-
-
-
-
-
-
-
-// void showAlertDialog(String message, Function() onButtonPressed) {
-//     showDialog(
-//       context: context,
-//       barrierDismissible: false,
-//       builder: (BuildContext context) {
-//         return SimpleDialogWithMessage(
-//           message: message,
-//           onTap: onButtonPressed,
-//         );
-//       },
-//     );
-//   }

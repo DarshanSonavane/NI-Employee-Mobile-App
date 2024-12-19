@@ -10,7 +10,7 @@ class ConnectivityInterceptor extends Interceptor {
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     final connectivityResult = await _connectivity.checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
+    if (connectivityResult.first == ConnectivityResult.none) {
       handler.reject(
         DioException(
           requestOptions: options,

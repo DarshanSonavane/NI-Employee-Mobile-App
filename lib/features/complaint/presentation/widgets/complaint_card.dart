@@ -75,7 +75,6 @@ class _ComplaintCardState extends State<ComplaintCard> {
 
   String fetchUserStatus() {
     var fetchuser = hiveStorageService.getUser();
-    debugPrint("FetchUser ${fetchuser?.role}");
     return fetchuser!.role;
   }
 

@@ -29,14 +29,27 @@ class _CalibrationScreenState extends State<CalibrationScreen>
   ResponseCalibrationDetails? calibrationDetails;
   ResponseCylinderDetails? responseCylinderDetails;
   late TabController _tabController;
-  bool isDialogOpen = false;
   final hiveStorageService = sl<HiveStorageService>();
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _fetchDataForTab(_tabController.index);
+      }
+    });
     super.initState();
-    context.read<CalibrationBloc>().add(GetAllCalibrationList());
+  }
+
+  void _fetchDataForTab(int index) {
+    if (index == 0) {
+      context.read<CalibrationBloc>().add(
+          GetAllCalibrationList(calibrationType: Constants.activeCalibration));
+    } else {
+      context.read<CalibrationBloc>().add(
+          GetAllCalibrationList(calibrationType: Constants.closedCalibrations));
+    }
   }
 
   @override
@@ -158,9 +171,17 @@ class _CalibrationScreenState extends State<CalibrationScreen>
                         context: context,
                         message: state.errorMessage,
                         onButtonPressed: () {
-                          context
-                              .read<CalibrationBloc>()
-                              .add(GetAllCalibrationList());
+                          if (_tabController.index == 0) {
+                            context.read<CalibrationBloc>().add(
+                                GetAllCalibrationList(
+                                    calibrationType:
+                                        Constants.activeCalibration));
+                          } else {
+                            context.read<CalibrationBloc>().add(
+                                GetAllCalibrationList(
+                                    calibrationType:
+                                        Constants.closedCalibrations));
+                          }
                           Navigator.pop(context);
                         });
                   } else if (state is CalibrationSuccess) {
@@ -186,9 +207,17 @@ class _CalibrationScreenState extends State<CalibrationScreen>
                         context: context,
                         message: response.message!,
                         onButtonPressed: () {
-                          context
-                              .read<CalibrationBloc>()
-                              .add(GetAllCalibrationList());
+                          if (_tabController.index == 0) {
+                            context.read<CalibrationBloc>().add(
+                                GetAllCalibrationList(
+                                    calibrationType:
+                                        Constants.activeCalibration));
+                          } else {
+                            context.read<CalibrationBloc>().add(
+                                GetAllCalibrationList(
+                                    calibrationType:
+                                        Constants.closedCalibrations));
+                          }
                           Navigator.pop(context);
                         },
                       );

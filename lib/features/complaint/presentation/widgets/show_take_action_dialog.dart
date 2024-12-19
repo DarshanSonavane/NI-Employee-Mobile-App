@@ -98,7 +98,6 @@ void showTakeActionDialog(BuildContext context) {
                   ),
                 ],
               ),
-
               const SizedBox(height: 16),
               TextFormField(
                 style: const TextStyle(color: AppPallete.label3Color),
@@ -106,9 +105,9 @@ void showTakeActionDialog(BuildContext context) {
                 decoration: const InputDecoration(
                   hintText: Constants.enterComments,
                   border: OutlineInputBorder(),
-                  alignLabelWithHint: true, // Ensure label is at the top-left
+                  alignLabelWithHint: true,
                 ),
-                maxLines: 5, // Multiline field
+                maxLines: 5,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your comments';
@@ -117,50 +116,40 @@ void showTakeActionDialog(BuildContext context) {
                 },
               ),
               const SizedBox(height: 16),
-
-              // Action buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // Cancel button with gray color
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.grey), // Gray border
+                      side: const BorderSide(color: Colors.grey),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(30), // Circular borders
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pop(); // Close dialog
+                      Navigator.of(context).pop();
                     },
                     child: const Text(
                       Constants.close,
-                      style: TextStyle(
-                          color: AppPallete.label3Color), // Gray text color
+                      style: TextStyle(color: AppPallete.label3Color),
                     ),
                   ),
                   const SizedBox(width: 8),
-                  // Submit button with green color
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green, // Green background
+                      backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(30), // Circular borders
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                     onPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
-                        // Handle submit action
-                        debugPrint('Selected Action: $selectedAction');
-                        debugPrint('Comments: ${commentsController.text}');
-                        Navigator.of(context).pop(); // Close dialog
+                        Navigator.of(context).pop();
                       }
                     },
                     child: const Text(
                       Constants.submit,
-                      style: TextStyle(color: Colors.white), // White text color
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],

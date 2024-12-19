@@ -31,8 +31,24 @@ class _ComplaintScreenState extends State<ComplaintScreen>
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _fetchDataForTab(_tabController.index);
+      }
+    });
     super.initState();
-    context.read<ComplaintBloc>().add(GetAllComplaintList());
+  }
+
+  void _fetchDataForTab(int index) {
+    if (index == 0) {
+      context
+          .read<ComplaintBloc>()
+          .add(GetAllComplaintList(complaintType: Constants.activeComplaints));
+    } else {
+      context
+          .read<ComplaintBloc>()
+          .add(GetAllComplaintList(complaintType: Constants.closedComplaints));
+    }
   }
 
   String fetchUserEmployeeId() {
@@ -101,9 +117,17 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                           message: response.message!,
                           onButtonPressed: () {
                             Navigator.pop(context);
-                            context
-                                .read<ComplaintBloc>()
-                                .add(GetAllComplaintList());
+                            if (_tabController.index == 0) {
+                              context.read<ComplaintBloc>().add(
+                                  GetAllComplaintList(
+                                      complaintType:
+                                          Constants.activeComplaints));
+                            } else {
+                              context.read<ComplaintBloc>().add(
+                                  GetAllComplaintList(
+                                      complaintType:
+                                          Constants.closedComplaints));
+                            }
                           });
                     } else if (state.data is ResponseEmployeeModel) {
                       final response = state.data as ResponseEmployeeModel;
@@ -125,10 +149,10 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                   } else if (state is ComplaintSuccess &&
                       complaintDetails != null) {
                     final statusZeroComplaints = complaintDetails!.data
-                        .where((complaint) => complaint.status == '0')
+                        .where((complaint) => complaint.status == '2')
                         .toList();
                     final otherStatusComplaints = complaintDetails!.data
-                        .where((complaint) => complaint.status != '0')
+                        .where((complaint) => complaint.status == '1')
                         .toList();
 
                     return TabBarView(

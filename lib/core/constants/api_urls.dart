@@ -4,8 +4,13 @@ class ApiUrls {
   static const updateCustomerPassword = '${baseUrl}update-customer-password';
   static const getHomeDetails = '${baseUrl}get-admin-dashboard-details';
   static const getComplaintDetails = '${baseUrl}get-all-complaints';
+  static const getClosedComplaintDetails = '${baseUrl}get-all-close-complaints';
+  static const getActiveComplaintDetails = '${baseUrl}get-all-open-complaints';
   static const fetchEmployeeDetails = '${baseUrl}fetch-employee';
-  static const getCalibrationDetails = '${baseUrl}get-calibration-request-list';
+  static const getActiveCalibrationDetails =
+      '${baseUrl}get-open-calibration-request-list';
+  static const getClosedCalibrationDetails =
+      '${baseUrl}get-close-calibration-request-list';
   static const getCylinderDetails = '${baseUrl}get-cylinder-details';
   static const updateCylinderDetails = '${baseUrl}update-cylinder-details';
   static const deleteCalibrationItem = '${baseUrl}delete-calibration-request';

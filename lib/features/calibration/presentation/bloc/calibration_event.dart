@@ -3,7 +3,10 @@ part of 'calibration_bloc.dart';
 @immutable
 sealed class CalibrationEvent {}
 
-final class GetAllCalibrationList extends CalibrationEvent {}
+final class GetAllCalibrationList extends CalibrationEvent {
+  final String calibrationType;
+  GetAllCalibrationList({required this.calibrationType});
+}
 
 final class GetCylinderDetails extends CalibrationEvent {}
 

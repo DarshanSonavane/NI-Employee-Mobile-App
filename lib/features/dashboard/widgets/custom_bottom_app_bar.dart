@@ -25,9 +25,9 @@ class CustomBottomAppBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildNavItem(Icons.feedback, Constants.complaints, 0),
-            _buildNavItem(Icons.design_services, Constants.complaints, 1),
-            const SizedBox(width: 60), // Space for FAB
-            _buildNavItem(Icons.compass_calibration, Constants.calibration, 2),
+            _buildNavItem(Icons.compass_calibration, Constants.calibration, 1),
+            const SizedBox(width: 60),
+            _buildNavItem(Icons.document_scanner, Constants.fsrTab, 2),
             _buildNavItem(Icons.man, Constants.profile, 3),
           ],
         ),

@@ -39,4 +39,5 @@ flutter:
   assets:
     - assets/png_image/
     - assets/gif_image/
+    - shorebird.yaml
 

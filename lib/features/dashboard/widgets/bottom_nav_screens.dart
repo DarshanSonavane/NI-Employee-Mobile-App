@@ -5,7 +5,7 @@ import '../../calibration/presentation/pages/calibration_screen.dart';
 import '../../complaint/presentation/pages/complaint_screen.dart';
 import '../../home/presentation/pages/home_screen.dart';
 import '../../profile/profile_screen.dart';
-import '../../service_request/service_request.dart';
+import '../../f_service_request/presentation/pages/f_service_request.dart';
 import '../provider/dashboard_state.dart';
 
 class BottomNavScreens extends StatelessWidget {
@@ -21,8 +21,8 @@ class BottomNavScreens extends StatelessWidget {
           index: dashboardState.selectedIndex,
           children: const [
             ComplaintScreen(),
-            ServiceRequestScreen(),
             CalibrationScreen(),
+            FServiceRequest(),
             ProfileScreen(),
             HomeScreen(),
           ],

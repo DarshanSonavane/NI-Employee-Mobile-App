@@ -7,3 +7,8 @@ abstract class UseCaseSource<SuccessType, Params> {
 }
 
 class NoParams {}
+
+class ParamsAsType {
+  String typeOfData;
+  ParamsAsType({required this.typeOfData});
+}

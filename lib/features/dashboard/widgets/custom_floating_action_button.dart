@@ -14,7 +14,7 @@ class CustomFloatingActionButton extends StatelessWidget {
         return FloatingActionButton(
           splashColor: AppPallete.errorColor,
           onPressed: () {
-            dashboardState.selectFab(); // Select FAB
+            dashboardState.selectFab(context);
           },
           backgroundColor: dashboardState.isFabSelected
               ? AppPallete.bottomNavigationButton

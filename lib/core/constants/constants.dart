@@ -9,6 +9,12 @@ class Constants {
   static const password = 'Password';
   static const confirmPassword = 'Confirm Password';
   static const customerCode = 'Customer Code';
+  static const contactPerson = 'Contact Person';
+  static const designation = 'Designation';
+  static const complaintType = 'Complaint Type';
+  static const remark = 'Remark...';
+  static const correctiveAction = 'Corrective Action...';
+  static const engEmpCode = 'Engineer Employee Code';
   static const labelRichText1 = 'By clicking continue, you agree to our ';
   static const labelRichText2 = 'Terms of Service ';
   static const labelRichText3 = 'and ';
@@ -16,13 +22,19 @@ class Constants {
   static const setResetPasswordLabel = 'Set / Reset Password';
   static const appTitle = 'NI Employee';
   static const appBarHome = 'Home';
+  static const status = 'Status';
   static const appBarProfile = 'Profile';
   static const complaints = 'Complaints';
   static const service = 'Service';
   static const calibration = 'Calibration';
+  static const fsr = 'Generate FSR';
+  static const fsrTab = 'FSR';
+  static const natureOfComplaint = 'Nature of complaint';
   static const profile = 'Profile';
   static const open = 'Open';
   static const close = 'Closed';
+  static const done = 'Done';
+  static const partialydone = 'Partially Done';
   static const assigned = 'Assigned';
   static const diesel = 'Diesel';
   static const petrol = 'Petrol';
@@ -62,4 +74,7 @@ class Constants {
   static const selectEmployeeError = 'Please select an employee';
   static const selectEmployeeLabel = 'Select Employee*';
   static const selectEmployee = 'Select an Employee';
+  static const loginFailed = 'Login Failed!!!';
+  static const employeeId = 'employeeId';
+  static const rate = 'Price (1 Quantity)';
 }

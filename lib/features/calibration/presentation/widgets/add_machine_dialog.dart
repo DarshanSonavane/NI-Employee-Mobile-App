@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/app_theme/app_pallete.dart';
 import '../../../../core/common/widgets/auth_gradient_button.dart';
+import '../../../../core/common/widgets/custom_text_field.dart';
 import '../../../../core/constants/constants.dart';
+import '../../../../core/utils/machine_options.dart';
+import 'machine_dropdown.dart';
 
 class AddMachineDialog extends StatefulWidget {
   final Function(RequestAddMachineModel) onAddMachineTap;
@@ -14,13 +17,6 @@ class AddMachineDialog extends StatefulWidget {
 }
 
 class _AddMachineDialogState extends State<AddMachineDialog> {
-  final List<Map<String, dynamic>> machineOptions = [
-    {"id": 1, "label": "NPM MGA1"},
-    {"id": 2, "label": "NPM MGA2"},
-    {"id": 3, "label": "NPM SMIIIB"},
-    {"id": 4, "label": "NUVO 10"},
-    {"id": 5, "label": "NUVO 20"},
-  ];
   String? selectedMachine;
   final TextEditingController machineNumberController = TextEditingController();
   final TextEditingController customerCodeController = TextEditingController();
@@ -37,82 +33,41 @@ class _AddMachineDialogState extends State<AddMachineDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: '${Constants.selectMachine}*',
-                  labelStyle: TextStyle(color: AppPallete.label3Color),
-                  filled: true,
-                  fillColor: AppPallete.backgroundClosed,
-                  border: UnderlineInputBorder(),
-                ),
-                style: const TextStyle(
-                  color: AppPallete.label3Color,
-                  fontSize: 20,
-                ),
-                value: selectedMachine,
-                items: machineOptions
-                    .map((option) => DropdownMenuItem<String>(
-                          value: option['label'],
-                          child: Text(
-                            option['label'],
-                            style:
-                                const TextStyle(color: AppPallete.label3Color),
-                          ),
-                        ))
-                    .toList(),
+              GenericDropdown(
+                dropDownType: Constants.machineDropDown,
+                selectedValue: selectedMachine,
                 onChanged: (value) {
                   setState(() {
                     selectedMachine = value;
                   });
                 },
-                dropdownColor: AppPallete.backgroundClosed,
-                icon: const Icon(
-                  Icons.arrow_drop_down,
-                  color: AppPallete.label3Color,
-                ),
-                validator: (value) =>
-                    value == null ? Constants.machineDropDown : null,
+                options: machineOptions,
+              ),
+              const SizedBox(height: 16),
+              CustomTextFormField(
+                controller: machineNumberController,
+                labelText: Constants.machineNumber,
+                validator: (value) => value == null || value.isEmpty
+                    ? Constants.enterMachineNumber
+                    : null,
+                textStyle: const TextStyle(
+                    color: AppPallete.label3Color, fontSize: 20),
+                labelStyle: const TextStyle(color: AppPallete.label3Color),
+                fillColor: AppPallete.backgroundClosed,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: TextFormField(
-                  controller: machineNumberController,
-                  style: const TextStyle(
-                      color: AppPallete.label3Color, fontSize: 20),
-                  decoration: const InputDecoration(
-                    labelText: Constants.machineNumber,
-                    labelStyle: TextStyle(color: AppPallete.label3Color),
-                    filled: true,
-                    fillColor: AppPallete.backgroundClosed,
-                    border: UnderlineInputBorder(),
-                  ),
-                  validator: (value) => value == null || value.isEmpty
-                      ? Constants.enterMachineNumber
-                      : null,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: TextFormField(
-                  controller: customerCodeController,
-                  style: const TextStyle(
-                      color: AppPallete.label3Color, fontSize: 20),
-                  decoration: const InputDecoration(
-                    labelText: '${Constants.customerCode}*',
-                    labelStyle: TextStyle(color: AppPallete.label3Color),
-                    filled: true,
-                    fillColor: AppPallete.backgroundClosed,
-                    border: UnderlineInputBorder(),
-                  ),
-                  validator: (value) => value == null || value.isEmpty
-                      ? Constants.enterCustomerCode
-                      : null,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                ),
+              CustomTextFormField(
+                controller: customerCodeController,
+                labelText: '${Constants.customerCode}*',
+                validator: (value) => value == null || value.isEmpty
+                    ? Constants.enterCustomerCode
+                    : null,
+                textStyle: const TextStyle(
+                    color: AppPallete.label3Color, fontSize: 20),
+                labelStyle: const TextStyle(color: AppPallete.label3Color),
+                fillColor: AppPallete.backgroundClosed,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
             ],
           ),

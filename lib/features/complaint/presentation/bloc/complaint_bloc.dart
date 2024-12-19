@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/core/usecase/use_case.dart';
 import 'package:employee_ni_service/features/complaint/data/models/common_response_model/common_response_complaint_model.dart';
 import 'package:employee_ni_service/features/complaint/data/models/model_close_complaint/request_close_complaint_model.dart';
 import 'package:employee_ni_service/features/complaint/data/models/model_complaint_list/response_complaint_details.dart';
@@ -28,7 +29,8 @@ class ComplaintBloc extends Bloc<ComplaintEvent, ComplaintState> {
     GetAllComplaintList event,
     Emitter<ComplaintState> emit,
   ) async {
-    final res = await sl<FetchComplaintData>().call();
+    final res = await sl<FetchComplaintData>()
+        .call(params: ParamsAsType(typeOfData: event.complaintType));
     res.fold(
       (l) => emit(ComplaintFailure(l)),
       (r) => emit(ComplaintSuccess<ResponseComplaintDetails>(r)),
