@@ -24,5 +24,5 @@ class AppPallete {
   static const Color backgroundClosed = Color(0xFFF0F9F1);
   static const Color backgroundOpen = Color(0xFFFEF0EC);
   static final Color locationBackgroundWithOpacity =
-      const Color(0xFF00FF00).withOpacity(0.1);
+      const Color(0xFF00FF00).withValues(alpha: 0.1);
 }

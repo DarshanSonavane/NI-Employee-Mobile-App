@@ -1,6 +1,8 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/common/widgets/set_text_normal.dart';
+import '../provider/total_amount_provider.dart';
 import 'add_details_card.dart';
 
 class AddDetailsWidget extends StatefulWidget {
@@ -15,9 +17,16 @@ class _AddDetailsWidgetState extends State<AddDetailsWidget> {
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
   void addCard() {
+    final cardKey = ValueKey<int>(cards.length);
+    debugPrint(cardKey.toString());
     final newCard = AddDetailsCard(
-      key: UniqueKey(),
-      onDelete: removeCard,
+      key: cardKey,
+      onDelete: (key) {
+        removeCard(key);
+      },
+      onAmountChanged: (value) {
+        return value;
+      },
     );
 
     listKey.currentState?.insertItem(cards.length);
@@ -26,7 +35,9 @@ class _AddDetailsWidgetState extends State<AddDetailsWidget> {
 
   void removeCard(Key key) {
     final index = cards.indexWhere((card) => card.key == key);
+    debugPrint(index.toString());
     if (index != -1) {
+      Provider.of<TotalAmountProvider>(context, listen: false).removeCard(key);
       final removedCard = cards[index];
       listKey.currentState?.removeItem(
         index,

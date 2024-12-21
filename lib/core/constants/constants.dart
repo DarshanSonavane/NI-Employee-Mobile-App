@@ -6,6 +6,8 @@ class Constants {
   static const locationIcon = 'assets/png_image/locationicon.png';
   static const login = 'Login';
   static const submit = 'Submit';
+  static const employeeSignature = 'Employee Signature';
+  static const customerSignature = 'Customer Signature';
   static const password = 'Password';
   static const confirmPassword = 'Confirm Password';
   static const customerCode = 'Customer Code';
@@ -14,6 +16,7 @@ class Constants {
   static const complaintType = 'Complaint Type';
   static const remark = 'Remark...';
   static const correctiveAction = 'Corrective Action...';
+  static const detailsOfAction = 'Details of Actual Fault & Service Perfromed';
   static const engEmpCode = 'Engineer Employee Code';
   static const labelRichText1 = 'By clicking continue, you agree to our ';
   static const labelRichText2 = 'Terms of Service ';
@@ -77,4 +80,5 @@ class Constants {
   static const loginFailed = 'Login Failed!!!';
   static const employeeId = 'employeeId';
   static const rate = 'Price (1 Quantity)';
+  static const addYourSign = "Add Your Signature";
 }
