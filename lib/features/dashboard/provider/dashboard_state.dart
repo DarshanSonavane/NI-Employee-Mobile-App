@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,6 +55,8 @@ class DashboardState with ChangeNotifier {
       case 2:
         break;
       case 3:
+        context.read<ProfileBloc>().add(GetEmployeeProfileEvent(
+            employeeId: hiveStorageService.getUser()!.id));
         break;
       default:
         debugPrint('Invalid tab index');

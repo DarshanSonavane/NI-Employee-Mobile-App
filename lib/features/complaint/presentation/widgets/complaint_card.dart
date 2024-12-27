@@ -24,6 +24,7 @@ class ComplaintCard extends StatefulWidget {
   final String? complaintId;
   final Function(String)? onClose;
   final Function(String)? onAssign;
+  final Function(String)? onGenerateFSR;
 
   const ComplaintCard({
     required this.name,
@@ -39,6 +40,7 @@ class ComplaintCard extends StatefulWidget {
     required this.complaintId,
     this.onClose,
     this.onAssign,
+    this.onGenerateFSR,
     super.key,
   });
 
@@ -180,6 +182,9 @@ class _ComplaintCardState extends State<ComplaintCard> {
                     },
                     onTakeAction: () {
                       showTakeActionDialog(context);
+                    },
+                    onGenerateFSR: () {
+                      widget.onGenerateFSR!(widget.complaintId!);
                     },
                     status: widget.status!,
                     userStatus: fetchUserStatus(),

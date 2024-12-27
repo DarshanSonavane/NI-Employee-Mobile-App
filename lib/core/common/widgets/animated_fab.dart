@@ -6,6 +6,7 @@ class AnimatedFabMenu extends StatefulWidget {
   final Function()? onTakeAction;
   final Function()? onGenerateSend;
   final Function()? onDelete;
+  final Function()? onGenerateFSR;
   final String status;
   final String userStatus;
   final String tag;
@@ -17,6 +18,7 @@ class AnimatedFabMenu extends StatefulWidget {
     this.onTakeAction,
     this.onGenerateSend,
     this.onDelete,
+    this.onGenerateFSR,
     required this.status,
     required this.userStatus,
     required this.tag,
@@ -42,6 +44,7 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu> {
 
     if (status == "1" && userStatus == "0" && tag == "_complaints") {
       return [
+        _buildMenuButton('FSR', widget.onGenerateFSR ?? () {}),
         _buildMenuButton('Assign', widget.onAssignTap ?? () {}),
         _buildMenuButton('Close', widget.onCloseTap ?? () {}),
       ];
@@ -49,6 +52,7 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu> {
 
     if (status == "2" && userStatus == "0" && tag == "_complaints") {
       return [
+        _buildMenuButton('FSR', widget.onGenerateFSR ?? () {}),
         _buildMenuButton('Re-Assign', widget.onAssignTap ?? () {}),
         _buildMenuButton('Close', widget.onCloseTap ?? () {}),
       ];
@@ -58,6 +62,7 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu> {
         userStatus != "0" &&
         tag == "_complaints") {
       return [
+        _buildMenuButton('FSR', widget.onGenerateFSR ?? () {}),
         _buildMenuButton('Take Action', widget.onTakeAction ?? () {}),
       ];
     }

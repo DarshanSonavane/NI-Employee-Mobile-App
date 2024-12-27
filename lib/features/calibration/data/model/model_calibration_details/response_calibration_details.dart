@@ -8,6 +8,7 @@ class ResponseCalibrationDetails extends CalibrationRequestEntity {
     required super.code,
     required super.message,
     required super.data,
+    required super.status,
   });
 
   factory ResponseCalibrationDetails.fromMap(Map<String, dynamic> map) {
@@ -21,6 +22,7 @@ class ResponseCalibrationDetails extends CalibrationRequestEntity {
               ),
             )
           : null,
+      status: map['status'] != null ? map['status'] as String : null,
     );
   }
 

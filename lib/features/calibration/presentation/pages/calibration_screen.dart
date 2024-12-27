@@ -119,13 +119,13 @@ class _CalibrationScreenState extends State<CalibrationScreen>
             child: Visibility(
               visible: fetchUserStatus() == '0',
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   AuthGradientButton(
                     buttonText: Constants.addMachine,
                     startColor: AppPallete.label3Color,
                     endColor: AppPallete.label3Color,
-                    width: MediaQuery.of(context).size.width < 600 ? 120 : 175,
+                    width: MediaQuery.of(context).size.width * 0.4,
                     height:
                         MediaQuery.of(context).size.height < 600 ? 0.03 : 0.02,
                     onPressed: () {
@@ -137,7 +137,7 @@ class _CalibrationScreenState extends State<CalibrationScreen>
                     buttonText: Constants.cylinderDetails,
                     startColor: AppPallete.buttonColor,
                     endColor: AppPallete.gradientColor,
-                    width: MediaQuery.of(context).size.width < 600 ? 120 : 175,
+                    width: MediaQuery.of(context).size.width * 0.4,
                     height:
                         MediaQuery.of(context).size.height < 600 ? 0.03 : 0.02,
                     onPressed: () {
@@ -229,18 +229,11 @@ class _CalibrationScreenState extends State<CalibrationScreen>
                     return const Loader();
                   } else if (state is CalibrationSuccess &&
                       calibrationDetails != null) {
-                    final statusZeroCalibrations = calibrationDetails!.data
-                        ?.where((calibration) => calibration.status == '0')
-                        .toList();
-                    final otherStatusCalibrations = calibrationDetails!.data
-                        ?.where((calibration) => calibration.status != '0')
-                        .toList();
-
                     return TabBarView(
                       controller: _tabController,
                       children: [
                         // Open Tab
-                        otherStatusCalibrations!.isEmpty
+                        calibrationDetails?.data!.isEmpty ?? true
                             ? const Center(
                                 child: Text(
                                   Constants.noActiveCalibration,
@@ -250,35 +243,48 @@ class _CalibrationScreenState extends State<CalibrationScreen>
                                   ),
                                 ),
                               )
-                            : ListView.builder(
-                                itemCount: otherStatusCalibrations.length,
-                                itemBuilder: (context, index) {
-                                  final calibration =
-                                      otherStatusCalibrations[index];
-                                  return CalibrationCard(
-                                    name: calibration.customerId?.customerName,
-                                    customerCode:
-                                        calibration.customerId?.customerCode,
-                                    date: calibration.createdAt.toString(),
-                                    fuelType: calibration.machineType,
-                                    location: calibration.customerId?.city,
-                                    state: calibration.customerId?.stateCode,
-                                    status: calibration.status,
-                                    calibrationId: calibration.sId,
-                                    assignedTo:
-                                        '${calibration.employeeId?.firstName} ${calibration.employeeId?.lastName}',
-                                    onDelete: (String calibrationId) {
-                                      deleteCalibrationItem(calibrationId);
+                            : calibrationDetails?.status == Constants.open
+                                ? ListView.builder(
+                                    itemCount: calibrationDetails?.data!.length,
+                                    itemBuilder: (context, index) {
+                                      final calibration =
+                                          calibrationDetails?.data?[index];
+                                      return CalibrationCard(
+                                        name: calibration
+                                            ?.customerId?.customerName,
+                                        customerCode: calibration
+                                            ?.customerId?.customerCode,
+                                        date: calibration?.createdAt.toString(),
+                                        fuelType: calibration?.machineType,
+                                        location: calibration?.customerId?.city,
+                                        state:
+                                            calibration?.customerId?.stateCode,
+                                        status: calibration?.status,
+                                        calibrationId: calibration?.sId,
+                                        assignedTo:
+                                            '${calibration?.employeeId?.firstName} ${calibration?.employeeId?.lastName}',
+                                        onDelete: (String calibrationId) {
+                                          deleteCalibrationItem(calibrationId);
+                                        },
+                                        onGenerateAndSend:
+                                            (String calibrationId) {
+                                          generateAndSendCalibrationItem(
+                                              calibrationId);
+                                        },
+                                      );
                                     },
-                                    onGenerateAndSend: (String calibrationId) {
-                                      generateAndSendCalibrationItem(
-                                          calibrationId);
-                                    },
-                                  );
-                                },
-                              ),
+                                  )
+                                : const Center(
+                                    child: Text(
+                                      Constants.noOpenComplaints,
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 22,
+                                      ),
+                                    ),
+                                  ),
                         // Closed Tab
-                        statusZeroCalibrations!.isEmpty
+                        calibrationDetails?.data!.isEmpty ?? true
                             ? const Center(
                                 child: Text(
                                   Constants.noClosedCalibration,
@@ -288,29 +294,42 @@ class _CalibrationScreenState extends State<CalibrationScreen>
                                   ),
                                 ),
                               )
-                            : ListView.builder(
-                                itemCount: statusZeroCalibrations.length,
-                                itemBuilder: (context, index) {
-                                  final calibration =
-                                      statusZeroCalibrations[index];
-                                  return CalibrationCard(
-                                    name: calibration.customerId?.customerName,
-                                    customerCode:
-                                        calibration.customerId?.customerCode,
-                                    date: calibration.createdAt.toString(),
-                                    fuelType: calibration.machineType,
-                                    location: calibration.customerId?.city,
-                                    state: calibration.customerId?.stateCode,
-                                    status: calibration.status,
-                                    calibrationId: calibration.sId,
-                                    assignedTo:
-                                        '${calibration.employeeId?.firstName} ${calibration.employeeId?.lastName}',
-                                    onDelete: (String calibrationId) {
-                                      deleteCalibrationItem(calibrationId);
+                            : calibrationDetails?.status ==
+                                    Constants.statusClose
+                                ? ListView.builder(
+                                    itemCount: calibrationDetails?.data!.length,
+                                    itemBuilder: (context, index) {
+                                      final calibration =
+                                          calibrationDetails?.data?[index];
+                                      return CalibrationCard(
+                                        name: calibration
+                                            ?.customerId?.customerName,
+                                        customerCode: calibration
+                                            ?.customerId?.customerCode,
+                                        date: calibration?.createdAt.toString(),
+                                        fuelType: calibration?.machineType,
+                                        location: calibration?.customerId?.city,
+                                        state:
+                                            calibration?.customerId?.stateCode,
+                                        status: calibration?.status,
+                                        calibrationId: calibration?.sId,
+                                        assignedTo:
+                                            '${calibration?.employeeId?.firstName} ${calibration?.employeeId?.lastName}',
+                                        onDelete: (String calibrationId) {
+                                          deleteCalibrationItem(calibrationId);
+                                        },
+                                      );
                                     },
-                                  );
-                                },
-                              ),
+                                  )
+                                : const Center(
+                                    child: Text(
+                                      Constants.noClosedComplaints,
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
                       ],
                     );
                   }

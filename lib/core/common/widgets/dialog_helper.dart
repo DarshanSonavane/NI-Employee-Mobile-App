@@ -18,4 +18,23 @@ class DialogHelper {
       },
     );
   }
+
+  static void showOpenSettingAlertDialog({
+    required BuildContext context,
+    required String message,
+    required VoidCallback onTextButtonPressed,
+    required VoidCallback onCloseButtonPressed,
+  }) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return TextButtonDialogWithMessage(
+          message: message,
+          onTextTap: onTextButtonPressed,
+          onCloseTap: onCloseButtonPressed,
+        );
+      },
+    );
+  }
 }

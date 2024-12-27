@@ -1,17 +1,21 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
-
-import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
+import 'package:employee_ni_service/core/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
+
 import 'package:signature/signature.dart';
 
+import '../../../../core/app_theme/app_pallete.dart';
 import '../../../../core/constants/constants.dart';
 
 class CreateSignatureDialog extends StatefulWidget {
+  final String appBarTitle;
   final Function(dynamic) onSignatureSubmitTap;
-  const CreateSignatureDialog({super.key, required this.onSignatureSubmitTap});
+  const CreateSignatureDialog(
+      {super.key,
+      required this.onSignatureSubmitTap,
+      required this.appBarTitle});
 
   @override
   State<CreateSignatureDialog> createState() => _CreateSignatureDialogState();
@@ -19,27 +23,21 @@ class CreateSignatureDialog extends StatefulWidget {
 
 class _CreateSignatureDialogState extends State<CreateSignatureDialog> {
   final SignatureController controller = SignatureController(
-    penStrokeWidth: 3,
-    penColor: AppPallete.labelColor,
+    penStrokeWidth: 8,
+    penColor: AppPallete.backgroundColor,
     exportBackgroundColor: AppPallete.backgroundColor,
     exportPenColor: AppPallete.label3Color,
-    onDrawStart: () => log("drwaing started"),
-    onDrawEnd: () => log('Drawing end'),
   );
 
   @override
-  void initState() {
-    controller.addListener(() => log('Signature value changed!'));
-    super.initState();
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   Future<void> exportImage(BuildContext context) async {
     if (controller.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No content to export!'),
-        ),
-      );
+      showSnackBar(context, Constants.noImageToExport);
       return;
     }
     final Uint8List? data =
@@ -50,55 +48,76 @@ class _CreateSignatureDialogState extends State<CreateSignatureDialog> {
   }
 
   @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Dialog(
+    return Scaffold(
       backgroundColor: AppPallete.backgroundColor,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        width: MediaQuery.of(context).size.width * 0.8,
-        child: Column(
-          spacing: 16,
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            setTextNormal(Constants.addYourSign, 1),
-            Container(
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(
-                  color: AppPallete.gradientColor,
-                  width: 2,
-                ),
-                color: Colors.white,
+      appBar: AppBar(
+        title: setTextNormal(widget.appBarTitle, 1),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          color: AppPallete.gradientColor,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      body: Center(
+        // Center widget to center the signature box
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Signature(
+            key: const Key(Constants.signatureKey),
+            controller: controller,
+            height: MediaQuery.of(context).size.height * 0.6,
+            backgroundColor: AppPallete.label2Color,
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: AppPallete.bottomNavigationButton,
+        child: Container(
+          decoration:
+              const BoxDecoration(color: AppPallete.bottomNavigationButton),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              IconButton(
+                key: const Key(Constants.clearKey),
+                icon: const Icon(Icons.clear),
+                color: AppPallete.backgroundOpen,
+                onPressed: () {
+                  setState(() => controller.clear());
+                },
+                tooltip: Constants.clearKey,
               ),
-              child: Signature(
-                controller: controller,
-                backgroundColor: AppPallete.backgroundColor,
+              IconButton(
+                key: const Key(Constants.undoKey),
+                icon: const Icon(Icons.undo),
+                color: AppPallete.backgroundOpen,
+                onPressed: () {
+                  setState(() => controller.undo());
+                },
+                tooltip: Constants.undoKey,
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () => exportImage(context),
-                  child: setTextNormal(Constants.submit, 1),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: setTextNormal(Constants.close, 1),
-                ),
-              ],
-            ),
-          ],
+              IconButton(
+                key: const Key(Constants.redoKey),
+                icon: const Icon(Icons.redo),
+                color: AppPallete.backgroundOpen,
+                onPressed: () {
+                  setState(() => controller.redo());
+                },
+                tooltip: Constants.redoKey,
+              ),
+              IconButton(
+                key: const Key(Constants.exportKey),
+                icon: const Icon(Icons.check_circle),
+                color: AppPallete.backgroundOpen,
+                onPressed: () => exportImage(context),
+                tooltip: Constants.exportImage,
+              ),
+            ],
+          ),
         ),
       ),
     );

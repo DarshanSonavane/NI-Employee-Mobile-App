@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/app_theme/app_pallete.dart';
 import '../../../../core/common/widgets/set_text_normal.dart';
+import '../../../../core/constants/constants.dart';
 
 class RowQuantity extends StatefulWidget {
   const RowQuantity({
@@ -18,11 +19,12 @@ class _RowQuantityState extends State<RowQuantity> {
   int quantity = 0;
   @override
   Widget build(BuildContext context) {
-    final quantityProvider = Provider.of<QuantityProvider>(context);
+    final quantityProvider =
+        Provider.of<QuantityProvider>(context, listen: true);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        setTextNormal("Quantity :", 1),
+        setTextNormal(Constants.quantity, 1),
         Row(
           children: [
             IconButton(

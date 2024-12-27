@@ -4,11 +4,15 @@ import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc
 import 'package:employee_ni_service/features/calibration/presentation/bloc/calibration_bloc.dart';
 import 'package:employee_ni_service/features/complaint/presentation/bloc/complaint_bloc.dart';
 import 'package:employee_ni_service/features/dashboard/provider/dashboard_state.dart';
+import 'package:employee_ni_service/features/f_service_request/presentation/provider/quantity_provider.dart';
+import 'package:employee_ni_service/features/f_service_request/presentation/provider/total_amount_provider.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
+import 'package:employee_ni_service/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:employee_ni_service/features/set_reset_password/presentation/bloc/set_reset_password_bloc.dart';
 import 'package:employee_ni_service/features/splash/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'core/constants/constants.dart';
@@ -16,8 +20,9 @@ import 'service_locator_dependecies.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Geolocator.requestPermission();
   await initDependecies();
-  await Hive.openBox<LoginResponseParams>('loginBox');
+  await Hive.openBox<LoginResponseParams>(Constants.loginHiveBox);
   runApp(
     MultiBlocProvider(
       providers: [
@@ -36,12 +41,15 @@ void main() async {
         BlocProvider(
           create: (_) => sl<CalibrationBloc>(),
         ),
+        BlocProvider(
+          create: (_) => sl<ProfileBloc>(),
+        ),
       ],
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-            create: (_) => DashboardState(),
-          ),
+          ChangeNotifierProvider(create: (_) => DashboardState()),
+          ChangeNotifierProvider(create: (_) => QuantityProvider()),
+          ChangeNotifierProvider(create: (_) => TotalAmountProvider()),
         ],
         child: const MyApp(),
       ),

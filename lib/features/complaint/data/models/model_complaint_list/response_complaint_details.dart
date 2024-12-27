@@ -1,10 +1,8 @@
 import 'package:employee_ni_service/features/complaint/domain/entities/complaint_list_entity/complaint_detail_entity.dart';
 
 class ResponseComplaintDetails extends ComplaintDetailsEntity {
-  ResponseComplaintDetails({
-    required super.message,
-    required super.data,
-  });
+  ResponseComplaintDetails(
+      {required super.message, required super.data, required super.status});
 
   factory ResponseComplaintDetails.fromJson(Map<String, dynamic> json) {
     return ResponseComplaintDetails(
@@ -66,6 +64,7 @@ class ResponseComplaintDetails extends ComplaintDetailsEntity {
           updatedAt: DateTime.parse(item['updatedAt'] as String? ?? ''),
         );
       }).toList(),
+      status: json['status'] as String,
     );
   }
 }

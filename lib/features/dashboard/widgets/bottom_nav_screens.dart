@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../calibration/presentation/pages/calibration_screen.dart';
 import '../../complaint/presentation/pages/complaint_screen.dart';
 import '../../home/presentation/pages/home_screen.dart';
-import '../../profile/profile_screen.dart';
+import '../../profile/presentation/pages/profile_screen.dart';
 import '../../f_service_request/presentation/pages/f_service_request.dart';
 import '../provider/dashboard_state.dart';
 
@@ -22,7 +22,9 @@ class BottomNavScreens extends StatelessWidget {
           children: const [
             ComplaintScreen(),
             CalibrationScreen(),
-            FServiceRequest(),
+            FServiceRequest(
+              complaintId: "",
+            ),
             ProfileScreen(),
             HomeScreen(),
           ],

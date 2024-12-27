@@ -2,6 +2,8 @@ import 'package:employee_ni_service/features/complaint/data/models/common_respon
 import 'package:employee_ni_service/features/complaint/data/models/model_complaint_list/response_complaint_details.dart';
 import 'package:employee_ni_service/features/complaint/data/models/model_fetch_employee/response_employee_model.dart';
 import 'package:employee_ni_service/features/complaint/presentation/bloc/complaint_bloc.dart';
+import 'package:employee_ni_service/features/complaint/presentation/widgets/complaint_admin_view.dart';
+import 'package:employee_ni_service/features/complaint/presentation/widgets/complaint_employee_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,7 +14,6 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/database/hive_storage_service.dart';
 import '../../../../core/utils/show_snackbar.dart';
 import '../../../../service_locator_dependecies.dart';
-import '../widgets/complaint_card.dart';
 import '../widgets/show_employee_dialog.dart';
 
 class ComplaintScreen extends StatefulWidget {
@@ -49,20 +50,6 @@ class _ComplaintScreenState extends State<ComplaintScreen>
           .read<ComplaintBloc>()
           .add(GetAllComplaintList(complaintType: Constants.closedComplaints));
     }
-  }
-
-  String fetchUserEmployeeId() {
-    var fetchuser = hiveStorageService.getUser();
-    return fetchuser!.id;
-  }
-
-  void closeComplaintId(String complaintId) {
-    context.read<ComplaintBloc>().add(
-          CloseComplaintsItem(
-              complaintId: complaintId,
-              employeeId: fetchUserEmployeeId(),
-              source: Constants.close),
-        );
   }
 
   void assignComplaints(String? complaintId, String? selectedEmployee) {
@@ -148,89 +135,13 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                     return const Loader();
                   } else if (state is ComplaintSuccess &&
                       complaintDetails != null) {
-                    final statusZeroComplaints = complaintDetails!.data
-                        .where((complaint) => complaint.status == '2')
-                        .toList();
-                    final otherStatusComplaints = complaintDetails!.data
-                        .where((complaint) => complaint.status == '1')
-                        .toList();
-
-                    return TabBarView(
-                      controller: _tabController,
-                      children: [
-                        // Open Tab
-                        otherStatusComplaints.isEmpty
-                            ? const Center(
-                                child: Text(
-                                  Constants.noOpenComplaints,
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 22,
-                                  ),
-                                ),
-                              )
-                            : ListView.builder(
-                                itemCount: otherStatusComplaints.length,
-                                itemBuilder: (context, index) {
-                                  final complaint =
-                                      otherStatusComplaints[index];
-                                  return ComplaintCard(
-                                    name: complaint.customerId.customerName,
-                                    customerCode:
-                                        complaint.customerId.customerCode,
-                                    date: complaint.createdAt.toString(),
-                                    fuelType: complaint.machineType,
-                                    location: complaint.customerId.city,
-                                    state: complaint.customerId.stateCode,
-                                    complaintType: complaint.complaintType.name,
-                                    additionalRequest: complaint.additionalReq,
-                                    feedback: complaint.employeeFeedback,
-                                    status: complaint.status,
-                                    complaintId: complaint.id,
-                                    onClose: (String complaintId) {
-                                      closeComplaintId(complaintId);
-                                    },
-                                    onAssign: (String complaintId) {
-                                      context.read<ComplaintBloc>().add(
-                                            GetAllEmployeesList(complaintId),
-                                          );
-                                    },
-                                  );
-                                },
-                              ),
-                        // Closed Tab
-                        statusZeroComplaints.isEmpty
-                            ? const Center(
-                                child: Text(
-                                  Constants.noClosedComplaints,
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              )
-                            : ListView.builder(
-                                itemCount: statusZeroComplaints.length,
-                                itemBuilder: (context, index) {
-                                  final complaint = statusZeroComplaints[index];
-                                  return ComplaintCard(
-                                    name: complaint.customerId.customerName,
-                                    customerCode:
-                                        complaint.customerId.customerCode,
-                                    date: complaint.createdAt.toString(),
-                                    fuelType: complaint.machineType,
-                                    location: complaint.customerId.city,
-                                    state: complaint.customerId.stateCode,
-                                    complaintType: complaint.complaintType.name,
-                                    additionalRequest: complaint.additionalReq,
-                                    feedback: complaint.employeeFeedback,
-                                    status: complaint.status,
-                                    complaintId: complaint.id,
-                                  );
-                                },
-                              ),
-                      ],
-                    );
+                    if (hiveStorageService.getUser()?.role == '0') {
+                      return TabBarView(controller: _tabController, children: [
+                        ComplaintAdminView(complaintDetails: complaintDetails),
+                        ComplaintEmployeeView(
+                            complaintDetails: complaintDetails),
+                      ]);
+                    }
                   }
                   return const Center(
                     child: Text(

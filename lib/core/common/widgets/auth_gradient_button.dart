@@ -9,17 +9,18 @@ class AuthGradientButton extends StatelessWidget {
   final Color? textColor;
   final Color? startColor;
   final Color? endColor;
+  final double? fontSize;
 
-  const AuthGradientButton({
-    super.key,
-    required this.buttonText,
-    required this.onPressed,
-    required this.width,
-    required this.height,
-    this.textColor,
-    this.startColor,
-    this.endColor,
-  });
+  const AuthGradientButton(
+      {super.key,
+      required this.buttonText,
+      required this.onPressed,
+      required this.width,
+      required this.height,
+      this.textColor,
+      this.startColor,
+      this.endColor,
+      this.fontSize = 14.0});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class AuthGradientButton extends StatelessWidget {
           child: Text(
             buttonText,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: fontSize,
               fontWeight: FontWeight.w800,
               color: textColor ?? AppPallete.backgroundColor,
             ),

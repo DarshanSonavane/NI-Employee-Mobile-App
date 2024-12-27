@@ -19,4 +19,6 @@ class ApiUrls {
   static const addMachine = '${baseUrl}insert-machine-details';
   static const closeComplaintItem = '${baseUrl}close-service-request';
   static const assignComplaints = '${baseUrl}assign-complaint';
+  static const getEmployeeDetails = '${baseUrl}get-employee-details';
+  static const getAssignedComplaint = '${baseUrl}get-assigned-complaints';
 }

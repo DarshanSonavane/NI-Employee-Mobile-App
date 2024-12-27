@@ -8,12 +8,17 @@ class TotalAmountProvider with ChangeNotifier {
   }
 
   void updateCardAmount(Key cardKey, double amount) {
-    cardAmounts[cardKey] = amount;
-    notifyListeners();
+    if (cardAmounts[cardKey] != amount) {
+      cardAmounts[cardKey] = amount;
+      notifyListeners();
+    }
   }
 
   void removeCard(Key cardKey) {
-    cardAmounts.remove(cardKey);
-    notifyListeners();
+    if (cardAmounts.containsKey(cardKey)) {
+      cardAmounts[cardKey]!;
+      cardAmounts.remove(cardKey);
+      notifyListeners();
+    }
   }
 }

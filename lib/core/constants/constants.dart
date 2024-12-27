@@ -36,6 +36,7 @@ class Constants {
   static const profile = 'Profile';
   static const open = 'Open';
   static const close = 'Closed';
+  static const statusClose = 'Close';
   static const done = 'Done';
   static const partialydone = 'Partially Done';
   static const assigned = 'Assigned';
@@ -81,4 +82,18 @@ class Constants {
   static const employeeId = 'employeeId';
   static const rate = 'Price (1 Quantity)';
   static const addYourSign = "Add Your Signature";
+  static const totalAmountInclGst = 'Total Amount (Incl. GST) :- \u20B9';
+  static const eachItemAmount = 'Amount: \u20B9';
+  static const addDetails = 'Add Details';
+  static const quantity = "Quantity :";
+  static const loginHiveBox = 'loginBox';
+  static const exportImage = 'Export Image';
+  static const signatureKey = 'Signature';
+  static const clearKey = 'Clear';
+  static const undoKey = 'Undo';
+  static const redoKey = 'Redo';
+  static const exportKey = 'Export';
+  static const noImageToExport = 'No content to export!';
+  static const locationDeniedMessage =
+      'Location permission is required to use this app. Please enable it from the app settings.';
 }

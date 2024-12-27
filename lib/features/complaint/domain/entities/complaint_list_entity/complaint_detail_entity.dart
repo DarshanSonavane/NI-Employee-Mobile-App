@@ -1,10 +1,12 @@
 class ComplaintDetailsEntity {
   final String message;
   final List<ServiceRequest> data;
+  final String status;
 
   ComplaintDetailsEntity({
     required this.message,
     required this.data,
+    required this.status,
   });
 }
 

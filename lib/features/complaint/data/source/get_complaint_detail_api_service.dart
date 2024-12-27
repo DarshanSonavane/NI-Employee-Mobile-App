@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:employee_ni_service/core/usecase/use_case.dart';
+import 'package:employee_ni_service/features/complaint/data/models/model_employee_complaint/employee_complaint_model.dart';
 import '../../../../core/constants/api_urls.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/database/hive_storage_service.dart';
@@ -18,20 +19,33 @@ class GetComplaintDetailsApiServiceImpl extends GetComplaintDetailApiService {
   @override
   Future<Either> getComplaintDetails(ParamsAsType? params) async {
     final hiveUser = hiveStorageService.getUser();
-    final apiUrl = params?.typeOfData == Constants.activeComplaints
-        ? ApiUrls.getActiveComplaintDetails
-        : ApiUrls.getClosedComplaintDetails;
+    late String apiUrl;
+    Map<String, dynamic>? queryParams;
 
-    final queryParams = (hiveUser?.role != '0' && hiveUser?.id != null)
-        ? {
-            Constants.employeeId: hiveUser!.id,
-          }
-        : null;
+    if (hiveUser?.role != '0') {
+      apiUrl = ApiUrls.getAssignedComplaint;
+      if (hiveUser?.id != null) {
+        queryParams = {
+          Constants.employeeId: hiveUser!.id,
+        };
+      }
+    } else {
+      apiUrl = params?.typeOfData == Constants.activeComplaints
+          ? ApiUrls.getActiveComplaintDetails
+          : ApiUrls.getClosedComplaintDetails;
+    }
     try {
       var response =
           await sl<DioClient>().get(apiUrl, queryParameters: queryParams);
-      var getComplaintDetailsResponse =
-          ResponseComplaintDetails.fromJson(response.data);
+      late Object getComplaintDetailsResponse;
+      if (hiveUser?.role != '0') {
+        getComplaintDetailsResponse =
+            EmployeeComplaintModel.fromMap(response.data);
+      } else {
+        getComplaintDetailsResponse =
+            ResponseComplaintDetails.fromJson(response.data);
+      }
+
       return Right(getComplaintDetailsResponse);
     } on DioException catch (e) {
       return left(e.message);

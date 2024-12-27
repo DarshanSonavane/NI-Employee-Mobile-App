@@ -34,6 +34,8 @@ import 'package:employee_ni_service/features/home/data/source/home_api_service.d
 import 'package:employee_ni_service/features/home/domain/repository/fetch_home_repository.dart';
 import 'package:employee_ni_service/features/home/domain/usecases/fetch_home_data.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
+import 'package:employee_ni_service/features/profile/data/source/employee_profile_details_service.dart';
+import 'package:employee_ni_service/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:employee_ni_service/features/set_reset_password/data/source/set_reset_password_service.dart';
 import 'package:employee_ni_service/features/set_reset_password/domain/repository/set_reset_password_repository.dart';
 import 'package:employee_ni_service/features/set_reset_password/presentation/bloc/set_reset_password_bloc.dart';
@@ -54,6 +56,9 @@ import 'features/complaint/data/source/get_complaint_detail_api_service.dart';
 import 'features/complaint/domain/repository/fetch_complaint_repository.dart';
 import 'features/complaint/domain/usecases/close_complaint_data.dart';
 import 'features/complaint/presentation/bloc/complaint_bloc.dart';
+import 'features/profile/data/repository/employee_profile_repository_impl.dart';
+import 'features/profile/domain/repository/employee_profile_repository.dart';
+import 'features/profile/domain/usecases/fetch_employee_profile_usecase.dart';
 import 'features/set_reset_password/data/repository/set_reset_password_repository_impl.dart';
 import 'features/set_reset_password/domain/usecase/set_reset_password_usecase.dart';
 

@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../app_theme/app_pallete.dart';
 
-Text setTextNormal(
-  String value,
-  double scalingFactor,
-) {
+Text setTextNormal(String value, double scalingFactor,
+    {color = AppPallete.gradientColor}) {
   return Text(
     textAlign: TextAlign.end,
     value,
     style: TextStyle(
       fontSize: 20 * scalingFactor,
       fontWeight: FontWeight.bold,
-      color: AppPallete.gradientColor,
+      color: color,
     ),
   );
 }

@@ -14,6 +14,7 @@ Future<void> initDependecies() async {
   _initDashBoardDetails();
   _initGetComplaintList();
   _initGetCalibrationList();
+  _initGetProfileData();
 }
 
 void _initDashBoardDetails() {
@@ -199,5 +200,27 @@ void _initSetResetPassword() {
   //Bloc
   sl.registerFactory<SetResetPasswordBloc>(
     () => SetResetPasswordBloc(setResetPasswordUsecase: sl()),
+  );
+}
+
+void _initGetProfileData() {
+  //Repository
+  sl.registerSingleton<EmployeeProfileRepository>(
+    EmployeeProfileRepositoryImpl(),
+  );
+
+  //service
+  sl.registerSingleton<EmployeeProfileDetailsService>(
+    EmployeeProfileDetailsServiceImpl(),
+  );
+
+  //UseCase
+  sl.registerSingleton<FetchEmployeeProfileUsecase>(
+    FetchEmployeeProfileUsecase(),
+  );
+
+  //Bloc
+  sl.registerFactory<ProfileBloc>(
+    () => ProfileBloc(fetchEmployeeProfileUseCase: sl()),
   );
 }
