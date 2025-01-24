@@ -20,7 +20,7 @@ class LoginApiServiceImpl extends LoginApiService {
       var loginResponse = LoginResponseParams.fromJson(response.data['data']);
       return Right(loginResponse);
     } on DioException catch (e) {
-      return left(e);
+      return Left(e);
     }
   }
 }

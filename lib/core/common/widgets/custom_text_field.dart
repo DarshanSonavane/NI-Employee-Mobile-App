@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final String labelText;
+  final String? value;
   final String? Function(String?)? validator;
   final TextStyle? textStyle;
   final TextStyle? labelStyle;
@@ -11,11 +12,13 @@ class CustomTextFormField extends StatelessWidget {
   final bool? editableText;
   final String? initialValue;
   final int? maxLines;
+  final int? minLines;
 
   const CustomTextFormField({
     super.key,
     this.controller,
     required this.labelText,
+    this.value,
     this.validator,
     this.textStyle,
     this.labelStyle,
@@ -23,27 +26,31 @@ class CustomTextFormField extends StatelessWidget {
     this.autovalidateMode,
     this.editableText = true,
     this.initialValue,
-    this.maxLines = 1,
+    this.maxLines,
+    this.minLines = 1,
   });
 
   @override
   Widget build(BuildContext context) {
     if (controller != null &&
-        initialValue != null &&
+        (value?.isNotEmpty ?? false) &&
         controller!.text.isEmpty) {
-      controller!.text = initialValue!;
+      controller!.text = value!;
     }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
         controller: controller,
-        initialValue: controller == null ? initialValue : null,
+        initialValue:
+            controller == null && value?.isNotEmpty == true ? value : null,
         readOnly: !editableText!,
         style: textStyle,
         maxLines: maxLines,
+        minLines: minLines,
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: labelStyle,
+          hintText: value?.isEmpty ?? true ? 'Enter $labelText' : null,
           filled: true,
           alignLabelWithHint: true,
           fillColor: fillColor,

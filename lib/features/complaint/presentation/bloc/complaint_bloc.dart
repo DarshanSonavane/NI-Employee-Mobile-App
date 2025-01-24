@@ -2,10 +2,12 @@ import 'package:employee_ni_service/core/usecase/use_case.dart';
 import 'package:employee_ni_service/features/complaint/data/models/common_response_model/common_response_complaint_model.dart';
 import 'package:employee_ni_service/features/complaint/data/models/model_close_complaint/request_close_complaint_model.dart';
 import 'package:employee_ni_service/features/complaint/data/models/model_complaint_list/response_complaint_details.dart';
+import 'package:employee_ni_service/features/complaint/data/models/model_employee_complaint/employee_complaint_model.dart';
 import 'package:employee_ni_service/features/complaint/domain/usecases/fetch_complaint_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/database/hive_storage_service.dart';
 import '../../../../service_locator_dependecies.dart';
 import '../../data/models/model_fetch_employee/response_employee_model.dart';
 import '../../domain/usecases/close_complaint_data.dart';
@@ -29,12 +31,21 @@ class ComplaintBloc extends Bloc<ComplaintEvent, ComplaintState> {
     GetAllComplaintList event,
     Emitter<ComplaintState> emit,
   ) async {
+    final role = sl<HiveStorageService>().getUser()?.role;
     final res = await sl<FetchComplaintData>()
         .call(params: ParamsAsType(typeOfData: event.complaintType));
-    res.fold(
-      (l) => emit(ComplaintFailure(l)),
-      (r) => emit(ComplaintSuccess<ResponseComplaintDetails>(r)),
-    );
+
+    if (role == '0') {
+      res.fold(
+        (l) => emit(ComplaintFailure(l)),
+        (r) => emit(ComplaintSuccess<ResponseComplaintDetails>(r)),
+      );
+    } else {
+      res.fold(
+        (l) => emit(ComplaintFailure(l)),
+        (r) => emit(ComplaintSuccess<EmployeeComplaintModel>(r)),
+      );
+    }
   }
 
   void _onFetchEmployeeDetails(

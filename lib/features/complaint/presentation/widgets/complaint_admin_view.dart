@@ -39,8 +39,6 @@ class _ComplaintAdminViewState extends State<ComplaintAdminView> {
         );
   }
 
-  openFSRScreen() {}
-
   @override
   Widget build(BuildContext context) {
     final complaintDetails = widget.complaintDetails;
@@ -72,10 +70,17 @@ class _ComplaintAdminViewState extends State<ComplaintAdminView> {
                     status: complaint.status,
                     complaintId: complaint.id,
                     onClose: closeComplaint,
-                    onGenerateFSR: (String complaintId) {
+                    onGenerateFSR: (
+                      String complaintId,
+                      String customerName,
+                      String customerCode,
+                      String employeeCode,
+                      String complaintType,
+                    ) {
                       Navigator.push(
                         context,
-                        FServiceRequest.route(complaintId),
+                        FServiceRequest.route(complaintId, customerName,
+                            customerCode, employeeCode, complaintType),
                       );
                     },
                     onAssign: (String complaintId) {

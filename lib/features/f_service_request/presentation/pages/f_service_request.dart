@@ -17,10 +17,29 @@ import '../widgets/add_details_widget.dart';
 
 class FServiceRequest extends StatefulWidget {
   final String complaintId;
-  static route(String complaintId) => MaterialPageRoute(
-        builder: (context) => FServiceRequest(complaintId: complaintId),
+  final String customerCode;
+  final String customerName;
+  final String employeeCode;
+  final String complaintType;
+  static route(String complaintId, String customerCode, String customerName,
+          String employeeCode, String complaintType) =>
+      MaterialPageRoute(
+        builder: (context) => FServiceRequest(
+          complaintId: complaintId,
+          customerCode: customerCode,
+          customerName: customerName,
+          employeeCode: employeeCode,
+          complaintType: complaintType,
+        ),
       );
-  const FServiceRequest({super.key, required this.complaintId});
+  const FServiceRequest({
+    super.key,
+    required this.complaintId,
+    required this.customerName,
+    required this.customerCode,
+    required this.employeeCode,
+    required this.complaintType,
+  });
 
   @override
   State<FServiceRequest> createState() => _FServiceRequestState();
@@ -122,21 +141,25 @@ class _FServiceRequestState extends State<FServiceRequest> {
                 children: [
                   CustomTextFormField(
                     labelText: Constants.customerCode,
+                    value: widget.customerCode,
                     controller: customerCodeController,
                     textStyle: const TextStyle(
                         color: AppPallete.label3Color, fontSize: 20),
                     labelStyle: const TextStyle(color: AppPallete.label3Color),
                     fillColor: AppPallete.backgroundClosed,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
+                    editableText: false,
                   ),
                   CustomTextFormField(
                     labelText: Constants.contactPerson,
+                    value: widget.customerName,
                     controller: contactPersonController,
                     textStyle: const TextStyle(
                         color: AppPallete.label3Color, fontSize: 20),
                     labelStyle: const TextStyle(color: AppPallete.label3Color),
                     fillColor: AppPallete.backgroundClosed,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
+                    editableText: false,
                   ),
                   CustomTextFormField(
                     labelText: Constants.designation,
@@ -149,12 +172,14 @@ class _FServiceRequestState extends State<FServiceRequest> {
                   ),
                   CustomTextFormField(
                     labelText: Constants.engEmpCode,
+                    value: widget.employeeCode,
                     controller: engEmpCodeController,
                     textStyle: const TextStyle(
                         color: AppPallete.label3Color, fontSize: 20),
                     labelStyle: const TextStyle(color: AppPallete.label3Color),
                     fillColor: AppPallete.backgroundClosed,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
+                    editableText: false,
                   ),
                   GenericDropdown(
                     dropDownType: Constants.selectMachine,
@@ -168,12 +193,16 @@ class _FServiceRequestState extends State<FServiceRequest> {
                   ),
                   CustomTextFormField(
                     labelText: Constants.complaintType,
+                    value: widget.complaintType,
                     controller: complaintTypeController,
                     textStyle: const TextStyle(
                         color: AppPallete.label3Color, fontSize: 20),
                     labelStyle: const TextStyle(color: AppPallete.label3Color),
                     fillColor: AppPallete.backgroundClosed,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
+                    editableText: false,
+                    minLines: 1,
+                    maxLines: null,
                   ),
                   GenericDropdown(
                     dropDownType: Constants.natureOfComplaint,
@@ -202,7 +231,8 @@ class _FServiceRequestState extends State<FServiceRequest> {
                     labelStyle: const TextStyle(color: AppPallete.label3Color),
                     fillColor: AppPallete.backgroundClosed,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    maxLines: 3,
+                    maxLines: null,
+                    minLines: 3,
                   ),
                   CustomTextFormField(
                     labelText: Constants.correctiveAction,
@@ -212,7 +242,8 @@ class _FServiceRequestState extends State<FServiceRequest> {
                     labelStyle: const TextStyle(color: AppPallete.label3Color),
                     fillColor: AppPallete.backgroundClosed,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    maxLines: 3,
+                    maxLines: null,
+                    minLines: 3,
                   ),
                   GenericDropdown(
                     dropDownType: Constants.status,

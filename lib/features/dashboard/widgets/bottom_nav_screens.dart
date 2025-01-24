@@ -24,6 +24,10 @@ class BottomNavScreens extends StatelessWidget {
             CalibrationScreen(),
             FServiceRequest(
               complaintId: "",
+              customerName: '',
+              complaintType: "",
+              customerCode: "",
+              employeeCode: "",
             ),
             ProfileScreen(),
             HomeScreen(),

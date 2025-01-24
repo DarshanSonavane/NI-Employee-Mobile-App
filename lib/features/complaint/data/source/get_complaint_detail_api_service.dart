@@ -40,7 +40,7 @@ class GetComplaintDetailsApiServiceImpl extends GetComplaintDetailApiService {
       late Object getComplaintDetailsResponse;
       if (hiveUser?.role != '0') {
         getComplaintDetailsResponse =
-            EmployeeComplaintModel.fromMap(response.data);
+            EmployeeComplaintModel.fromJson(response.data);
       } else {
         getComplaintDetailsResponse =
             ResponseComplaintDetails.fromJson(response.data);

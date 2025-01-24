@@ -24,7 +24,7 @@ class ComplaintCard extends StatefulWidget {
   final String? complaintId;
   final Function(String)? onClose;
   final Function(String)? onAssign;
-  final Function(String)? onGenerateFSR;
+  final Function(String, String, String, String, String)? onGenerateFSR;
 
   const ComplaintCard({
     required this.name,
@@ -91,7 +91,7 @@ class _ComplaintCardState extends State<ComplaintCard> {
         color: AppPallete.backgroundColor,
         elevation: 2,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(18),
         ),
         child: Padding(
           padding: EdgeInsets.all(25.0 * scalingFactor),
@@ -111,10 +111,21 @@ class _ComplaintCardState extends State<ComplaintCard> {
                           widget.name!,
                           style: TextStyle(
                             color: AppPallete.label3Color,
-                            fontSize: 22 * scalingFactor,
+                            fontSize: 24 * scalingFactor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        setHeadingText(
+                            null,
+                            widget.customerCode.toString().trim(),
+                            Constants.customerCode,
+                            scalingFactor,
+                            20,
+                            AppPallete.label2Color,
+                            AppPallete.label2Color),
+                        setTextNormal('${widget.location!}, ${widget.state}',
+                            scalingFactor,
+                            color: AppPallete.label2Color, fontSize: 18),
                         SizedBox(height: 16 * scalingFactor),
                         Row(
                           children: [
@@ -132,14 +143,9 @@ class _ComplaintCardState extends State<ComplaintCard> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         setTextNormal(
-                            'Code : ${widget.customerCode}', scalingFactor),
-                        SizedBox(height: 4 * scalingFactor),
-                        setTextNormal(
                             setDateFormat(widget.date!.substring(0, 10)),
-                            scalingFactor),
-                        SizedBox(height: 4 * scalingFactor),
-                        setTextNormal('${widget.location!}, ${widget.state}',
-                            scalingFactor),
+                            scalingFactor,
+                            color: AppPallete.label2Color),
                       ],
                     ),
                   ),
@@ -149,25 +155,31 @@ class _ComplaintCardState extends State<ComplaintCard> {
               const Divider(),
               SizedBox(height: 8 * scalingFactor),
               setHeadingText(
-                Icons.report_problem,
-                widget.complaintType.toString().trim(),
-                Constants.complaintTypeHeader,
-                scalingFactor,
-              ),
+                  null,
+                  widget.complaintType.toString().trim(),
+                  Constants.complaintTypeHeader,
+                  scalingFactor,
+                  22,
+                  AppPallete.label2Color,
+                  AppPallete.label3Color),
               SizedBox(height: 8 * scalingFactor),
               setHeadingText(
-                Icons.more,
-                widget.additionalRequest.toString().trim(),
-                Constants.additionReqHeader,
-                scalingFactor,
-              ),
+                  null,
+                  widget.additionalRequest.toString().trim(),
+                  Constants.additionReqHeader,
+                  scalingFactor,
+                  22,
+                  AppPallete.label2Color,
+                  AppPallete.label3Color),
               SizedBox(height: 8 * scalingFactor),
               setHeadingText(
-                Icons.feedback,
-                widget.feedback.toString().trim(),
-                Constants.feedbackHeader,
-                scalingFactor,
-              ),
+                  null,
+                  widget.feedback.toString().trim(),
+                  Constants.feedbackHeader,
+                  scalingFactor,
+                  22,
+                  AppPallete.label2Color,
+                  AppPallete.label3Color),
               SizedBox(height: 8 * scalingFactor),
               Visibility(
                 visible: widget.status != '0',
@@ -184,7 +196,13 @@ class _ComplaintCardState extends State<ComplaintCard> {
                       showTakeActionDialog(context);
                     },
                     onGenerateFSR: () {
-                      widget.onGenerateFSR!(widget.complaintId!);
+                      widget.onGenerateFSR!(
+                        widget.complaintId!,
+                        widget.customerCode!,
+                        widget.name!,
+                        hiveStorageService.getUser()!.employeeCode,
+                        widget.complaintType.toString().trim(),
+                      );
                     },
                     status: widget.status!,
                     userStatus: fetchUserStatus(),

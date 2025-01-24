@@ -87,6 +87,7 @@ class _AddDetailsCardState extends State<AddDetailsCard> {
               const SizedBox(height: 10),
               CustomTextFormField(
                 controller: rateController,
+                value: rate.toString(),
                 labelText: Constants.rate,
                 textStyle: const TextStyle(
                     color: AppPallete.label3Color, fontSize: 20),
@@ -94,7 +95,6 @@ class _AddDetailsCardState extends State<AddDetailsCard> {
                 fillColor: AppPallete.backgroundClosed,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 editableText: false,
-                initialValue: rate.toString(),
               ),
               const SizedBox(height: 10),
               setTextNormal(

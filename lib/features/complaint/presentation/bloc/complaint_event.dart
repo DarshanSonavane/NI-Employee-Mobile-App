@@ -5,7 +5,9 @@ sealed class ComplaintEvent {}
 
 final class GetAllComplaintList extends ComplaintEvent {
   final String complaintType;
-  GetAllComplaintList({required this.complaintType});
+  GetAllComplaintList({
+    required this.complaintType,
+  });
 }
 
 final class GetAllEmployeesList extends ComplaintEvent {

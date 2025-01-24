@@ -1,133 +1,237 @@
-import 'package:employee_ni_service/features/complaint/domain/entities/employee_complaint_entity/entity_employee_complaint.dart';
-
-class EmployeeComplaintModel extends EmployeeComplaintEntity {
+class EmployeeComplaintModel {
   EmployeeComplaintModel({
-    required super.code,
-    required super.message,
-    required super.data,
+    required this.code,
+    required this.message,
+    required this.data,
   });
 
-  factory EmployeeComplaintModel.fromMap(Map<String, dynamic> map) {
+  final String? code;
+  final String? message;
+  final List<Datum> data;
+
+  factory EmployeeComplaintModel.fromJson(Map<String, dynamic> json) {
     return EmployeeComplaintModel(
-      code: map['code'] as String,
-      message: map['message'] as String,
-      data: List<DataModel>.from(
-        (map['data'] as List<int>).map<DataModel>(
-          (x) => DataModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      code: json["code"],
+      message: json["message"],
+      data: json["data"] == null
+          ? []
+          : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "message": message,
+        "data": data.map((x) => x.toJson()).toList(),
+      };
 }
 
-class DataModel extends DataEntity {
-  DataModel({
-    required super.id,
-    required super.updatedAt,
-    required super.createdAt,
-    required super.employeeId,
-    required super.serviceRequest,
-    required super.version,
+class Datum {
+  Datum({
+    required this.id,
+    required this.updatedAt,
+    required this.createdAt,
+    required this.employeeId,
+    required this.serviceRequestId,
+    required this.v,
   });
 
-  factory DataModel.fromMap(Map<String, dynamic> map) {
-    return DataModel(
-      id: map['id'] as String,
-      updatedAt: map['updatedAt'] as String,
-      createdAt: map['createdAt'] as String,
-      employeeId: map['employeeId'] as String,
-      serviceRequest: ServiceRequestModel.fromMap(
-          map['serviceRequest'] as Map<String, dynamic>),
-      version: map['version'] as int,
+  final String? id;
+  final DateTime? updatedAt;
+  final DateTime? createdAt;
+  final String? employeeId;
+  final ServiceRequestId? serviceRequestId;
+  final int? v;
+
+  factory Datum.fromJson(Map<String, dynamic> json) {
+    return Datum(
+      id: json["_id"],
+      updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
+      createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
+      employeeId: json["employeeId"],
+      serviceRequestId: json["serviceRequestId"] == null
+          ? null
+          : ServiceRequestId.fromJson(json["serviceRequestId"]),
+      v: json["__v"],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "updatedAt": updatedAt?.toIso8601String(),
+        "createdAt": createdAt?.toIso8601String(),
+        "employeeId": employeeId,
+        "serviceRequestId": serviceRequestId?.toJson(),
+        "__v": v,
+      };
 }
 
-class ServiceRequestModel extends ServiceRequestEntity {
-  ServiceRequestModel({
-    required super.additionalRequest,
-    required super.id,
-    required super.updatedAt,
-    required super.createdAt,
-    required super.customer,
-    required super.complaintType,
-    required super.assignedTo,
-    required super.employeeFeedback,
-    required super.status,
-    required super.machineType,
-    required super.version,
-    required super.updatedBy,
-    required super.ratings,
+class ServiceRequestId {
+  ServiceRequestId({
+    required this.additionalReq,
+    required this.id,
+    required this.updatedAt,
+    required this.createdAt,
+    required this.customerId,
+    required this.complaintType,
+    required this.assignedTo,
+    required this.employeeFeedback,
+    required this.status,
+    required this.machineType,
+    required this.v,
+    required this.updatedBy,
+    required this.ratings,
   });
 
-  factory ServiceRequestModel.fromMap(Map<String, dynamic> map) {
-    return ServiceRequestModel(
-      additionalRequest: map['additionalRequest'] as String,
-      id: map['id'] as String,
-      updatedAt: map['updatedAt'] as String,
-      createdAt: map['createdAt'] as String,
-      customer: CustomerModel.fromMap(map['customer'] as Map<String, dynamic>),
-      complaintType: ComplaintTypeModel.fromMap(
-          map['complaintType'] as Map<String, dynamic>),
-      assignedTo: map['assignedTo'] as String,
-      employeeFeedback: map['employeeFeedback'] as String,
-      status: map['status'] as String,
-      machineType: map['machineType'] as String,
-      version: map['version'] as int,
-      updatedBy: map['updatedBy'] as String,
-      ratings: map['ratings'] as String,
+  final String? additionalReq;
+  final String? id;
+  final DateTime? updatedAt;
+  final DateTime? createdAt;
+  final CustomerId? customerId;
+  final ComplaintType? complaintType;
+  final String? assignedTo;
+  final String? employeeFeedback;
+  final String? status;
+  final String? machineType;
+  final int? v;
+  final String? updatedBy;
+  final String? ratings;
+
+  factory ServiceRequestId.fromJson(Map<String, dynamic> json) {
+    return ServiceRequestId(
+      additionalReq: json["additionalReq"],
+      id: json["_id"],
+      updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
+      createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
+      customerId: json["customerId"] == null
+          ? null
+          : CustomerId.fromJson(json["customerId"]),
+      complaintType: json["complaintType"] == null
+          ? null
+          : ComplaintType.fromJson(json["complaintType"]),
+      assignedTo: json["assignedTo"],
+      employeeFeedback: json["employeeFeedback"],
+      status: json["status"],
+      machineType: json["machineType"],
+      v: json["__v"],
+      updatedBy: json["updatedBy"],
+      ratings: json["ratings"],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "additionalReq": additionalReq,
+        "_id": id,
+        "updatedAt": updatedAt?.toIso8601String(),
+        "createdAt": createdAt?.toIso8601String(),
+        "customerId": customerId?.toJson(),
+        "complaintType": complaintType?.toJson(),
+        "assignedTo": assignedTo,
+        "employeeFeedback": employeeFeedback,
+        "status": status,
+        "machineType": machineType,
+        "__v": v,
+        "updatedBy": updatedBy,
+        "ratings": ratings,
+      };
 }
 
-class CustomerModel extends CustomerEntity {
-  CustomerModel({
-    required super.machineModel,
-    required super.id,
-    required super.customerCode,
-    required super.customerName,
-    required super.city,
-    required super.email,
-    required super.gstNo,
-    required super.mobile,
-    required super.amcDue,
-    required super.comboMachineNumber,
-    required super.dieselMachineNumber,
-    required super.petrolMachineNumber,
-    required super.stateCode,
-    required super.machineNumber,
+class ComplaintType {
+  ComplaintType({
+    required this.id,
+    required this.name,
   });
 
-  factory CustomerModel.fromMap(Map<String, dynamic> map) {
-    return CustomerModel(
-      machineModel: map['machineModel'] as String,
-      id: map['id'] as String,
-      customerCode: map['customerCode'] as String,
-      customerName: map['customerName'] as String,
-      city: map['city'] as String,
-      email: map['email'] as String,
-      gstNo: map['gstNo'] as String,
-      mobile: map['mobile'] as String,
-      amcDue: map['amcDue'] as String,
-      comboMachineNumber: map['comboMachineNumber'] as String,
-      dieselMachineNumber: map['dieselMachineNumber'] as String,
-      petrolMachineNumber: map['petrolMachineNumber'] as String,
-      stateCode: map['stateCode'] as String,
-      machineNumber: map['machineNumber'] as String,
+  final String? id;
+  final String? name;
+
+  factory ComplaintType.fromJson(Map<String, dynamic> json) {
+    return ComplaintType(
+      id: json["_id"],
+      name: json["name"],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "name": name,
+      };
 }
 
-class ComplaintTypeModel extends ComplaintTypeEntity {
-  ComplaintTypeModel({
-    required super.id,
-    required super.name,
+class CustomerId {
+  CustomerId({
+    required this.machineModel,
+    required this.id,
+    required this.customerCode,
+    required this.customerName,
+    required this.city,
+    required this.email,
+    required this.gstNo,
+    required this.mobile,
+    required this.amcDue,
+    required this.comboMachineNumber,
+    required this.dieselMachineNumber,
+    required this.petrolMachineNumber,
+    required this.stateCode,
+    required this.password,
+    required this.v,
+    required this.machineNumber,
   });
 
-  factory ComplaintTypeModel.fromMap(Map<String, dynamic> map) {
-    return ComplaintTypeModel(
-      id: map['id'] as String,
-      name: map['name'] as String,
+  final String? machineModel;
+  final String? id;
+  final String? customerCode;
+  final String? customerName;
+  final String? city;
+  final String? email;
+  final String? gstNo;
+  final String? mobile;
+  final DateTime? amcDue;
+  final String? comboMachineNumber;
+  final String? dieselMachineNumber;
+  final String? petrolMachineNumber;
+  final String? stateCode;
+  final String? password;
+  final int? v;
+  final String? machineNumber;
+
+  factory CustomerId.fromJson(Map<String, dynamic> json) {
+    return CustomerId(
+      machineModel: json["machineModel"],
+      id: json["_id"],
+      customerCode: json["customerCode"],
+      customerName: json["customerName"],
+      city: json["city"],
+      email: json["email"],
+      gstNo: json["gstNo"],
+      mobile: json["mobile"],
+      amcDue: DateTime.tryParse(json["amcDue"] ?? ""),
+      comboMachineNumber: json["comboMachineNumber"],
+      dieselMachineNumber: json["dieselMachineNumber"],
+      petrolMachineNumber: json["petrolMachineNumber"],
+      stateCode: json["stateCode"],
+      password: json["password"],
+      v: json["__v"],
+      machineNumber: json["machineNumber"],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "machineModel": machineModel,
+        "_id": id,
+        "customerCode": customerCode,
+        "customerName": customerName,
+        "city": city,
+        "email": email,
+        "gstNo": gstNo,
+        "mobile": mobile,
+        "amcDue": amcDue?.toIso8601String(),
+        "comboMachineNumber": comboMachineNumber,
+        "dieselMachineNumber": dieselMachineNumber,
+        "petrolMachineNumber": petrolMachineNumber,
+        "stateCode": stateCode,
+        "password": password,
+        "__v": v,
+        "machineNumber": machineNumber,
+      };
 }

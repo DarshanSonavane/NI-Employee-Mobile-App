@@ -142,11 +142,13 @@ class _CalibrationCardState extends State<CalibrationCard> {
               const Divider(),
               SizedBox(height: 8 * scalingFactor),
               setHeadingText(
-                Icons.person,
-                widget.assignedTo.toString().trim(),
-                Constants.assignedTo,
-                scalingFactor,
-              ),
+                  null,
+                  widget.assignedTo.toString().trim(),
+                  Constants.assignedTo,
+                  scalingFactor,
+                  22,
+                  AppPallete.label2Color,
+                  AppPallete.label3Color),
               SizedBox(height: 8 * scalingFactor),
               Visibility(
                 visible: (fetchUserStatus() == '0') ||

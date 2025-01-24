@@ -1,5 +1,6 @@
 import 'package:employee_ni_service/features/complaint/data/models/common_response_model/common_response_complaint_model.dart';
 import 'package:employee_ni_service/features/complaint/data/models/model_complaint_list/response_complaint_details.dart';
+import 'package:employee_ni_service/features/complaint/data/models/model_employee_complaint/employee_complaint_model.dart';
 import 'package:employee_ni_service/features/complaint/data/models/model_fetch_employee/response_employee_model.dart';
 import 'package:employee_ni_service/features/complaint/presentation/bloc/complaint_bloc.dart';
 import 'package:employee_ni_service/features/complaint/presentation/widgets/complaint_admin_view.dart';
@@ -26,6 +27,7 @@ class ComplaintScreen extends StatefulWidget {
 class _ComplaintScreenState extends State<ComplaintScreen>
     with SingleTickerProviderStateMixin {
   ResponseComplaintDetails? complaintDetails;
+  EmployeeComplaintModel? employeeComplaintDetails;
   late TabController _tabController;
   final hiveStorageService = sl<HiveStorageService>();
 
@@ -127,20 +129,39 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                           assignComplaints(complaintId, selectedEmployee);
                         },
                       );
+                    } else if (state.data is EmployeeComplaintModel) {
+                      employeeComplaintDetails = state.data;
                     }
                   }
                 },
                 builder: (context, state) {
                   if (state is ComplaintLoader) {
                     return const Loader();
-                  } else if (state is ComplaintSuccess &&
-                      complaintDetails != null) {
-                    if (hiveStorageService.getUser()?.role == '0') {
-                      return TabBarView(controller: _tabController, children: [
-                        ComplaintAdminView(complaintDetails: complaintDetails),
-                        ComplaintEmployeeView(
-                            complaintDetails: complaintDetails),
-                      ]);
+                  } else if (state is ComplaintSuccess) {
+                    if (state.data is ResponseComplaintDetails) {
+                      return TabBarView(
+                        controller: _tabController,
+                        children: [
+                          ComplaintAdminView(
+                              complaintDetails: complaintDetails),
+                          ComplaintAdminView(
+                              complaintDetails: complaintDetails),
+                        ],
+                      );
+                    } else if (state.data is EmployeeComplaintModel) {
+                      return TabBarView(
+                        controller: _tabController,
+                        children: [
+                          ComplaintEmployeeView(
+                            complaintDetails: employeeComplaintDetails,
+                            isOpenTab: true,
+                          ),
+                          ComplaintEmployeeView(
+                            complaintDetails: employeeComplaintDetails,
+                            isOpenTab: false,
+                          ),
+                        ],
+                      );
                     }
                   }
                   return const Center(
