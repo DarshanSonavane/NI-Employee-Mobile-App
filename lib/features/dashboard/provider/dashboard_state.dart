@@ -1,3 +1,5 @@
+import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
+import 'package:employee_ni_service/features/products/presentation/bloc/product_bloc.dart';
 import 'package:employee_ni_service/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +19,7 @@ class DashboardState with ChangeNotifier {
   final Map<int, String> _titles = {
     0: Constants.complaints,
     1: Constants.calibration,
-    2: Constants.fsr,
+    2: Constants.productInventory,
     3: Constants.profile,
     4: Constants.appBarHome,
   };
@@ -53,6 +55,8 @@ class DashboardState with ChangeNotifier {
             calibrationType: Constants.activeCalibration));
         break;
       case 2:
+        context.read<ProductBloc>().add(GetAssignedProductList(
+            employeeId: hiveStorageService.getUser()!.id));
         break;
       case 3:
         context.read<ProfileBloc>().add(GetEmployeeProfileEvent(

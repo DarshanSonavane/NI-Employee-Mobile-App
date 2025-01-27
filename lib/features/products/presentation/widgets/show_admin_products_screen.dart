@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+
+import '../../../../core/app_theme/app_pallete.dart';
+
+class ShowAdminProductScreen extends StatelessWidget {
+  const ShowAdminProductScreen({
+    super.key,
+    required this.listOfProductsInventoryUseCases,
+  });
+
+  final List<String> listOfProductsInventoryUseCases;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppPallete.screenBackground,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: listOfProductsInventoryUseCases.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {},
+              child: Card(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                elevation: 8,
+                margin: const EdgeInsets.symmetric(vertical: 10.0),
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.inventory_2_outlined,
+                    size: 40,
+                    color: AppPallete.blueColor,
+                  ),
+                  title: Text(
+                    listOfProductsInventoryUseCases[index],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppPallete.label3Color,
+                      fontSize: 18,
+                    ),
+                  ),
+                  subtitle: const Text(
+                    'Tap to view details',
+                    style: TextStyle(
+                      color: AppPallete.label2Color,
+                    ),
+                  ),
+                  trailing: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: AppPallete.blueColor,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}

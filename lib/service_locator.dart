@@ -15,6 +15,7 @@ Future<void> initDependecies() async {
   _initGetComplaintList();
   _initGetCalibrationList();
   _initGetProfileData();
+  _initGetAssignedProductList();
 }
 
 void _initDashBoardDetails() {
@@ -42,6 +43,28 @@ void _initHiveService() {
 void _initDioClient() {
   sl.registerSingleton<DioClient>(
     DioClient(),
+  );
+}
+
+void _initGetAssignedProductList() {
+  //service
+  sl.registerSingleton<FetchEmployeeAssignedProductsService>(
+    FetchEmployeeAssignedProductsServiceImpl(),
+  );
+
+  //Repository
+  sl.registerSingleton<EmpProductRepository>(
+    EmpProductRepositoryImpl(),
+  );
+
+  //UseCases
+  sl.registerSingleton<FetchEmpAssignedProductUsecase>(
+    FetchEmpAssignedProductUsecase(),
+  );
+
+  //Bloc
+  sl.registerFactory<ProductBloc>(
+    () => ProductBloc(fetchEmpAssignedProductUsecase: sl()),
   );
 }
 

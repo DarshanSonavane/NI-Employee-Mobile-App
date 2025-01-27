@@ -1,4 +1,5 @@
 import 'package:employee_ni_service/core/common/widgets/dialog_helper.dart';
+import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:employee_ni_service/features/calibration/data/model/model_add_machine/request_add_machine_model.dart';
 import 'package:employee_ni_service/features/calibration/data/model/model_cylinder_details/response_cylinder_details.dart';
 import 'package:employee_ni_service/features/calibration/data/model/common_response_model/common_response_calibration_model.dart';
@@ -8,14 +9,12 @@ import '../../../../core/app_theme/app_pallete.dart';
 import '../../../../core/common/widgets/auth_gradient_button.dart';
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../service_locator_dependecies.dart';
 import '../../data/model/model_calibration_details/response_calibration_details.dart';
 import '../../data/model/model_update_cylinder/request_update_cylinder_details.dart';
 import '../bloc/calibration_bloc.dart';
 import '../widgets/add_machine_dialog.dart';
 import '../widgets/calibration_card.dart';
 import '../widgets/show_cylinder_details_dialog.dart';
-import '../../../../core/database/hive_storage_service.dart';
 
 class CalibrationScreen extends StatefulWidget {
   const CalibrationScreen({super.key});
@@ -29,7 +28,6 @@ class _CalibrationScreenState extends State<CalibrationScreen>
   ResponseCalibrationDetails? calibrationDetails;
   ResponseCylinderDetails? responseCylinderDetails;
   late TabController _tabController;
-  final hiveStorageService = sl<HiveStorageService>();
 
   @override
   void initState() {
@@ -74,11 +72,6 @@ class _CalibrationScreenState extends State<CalibrationScreen>
         );
   }
 
-  String fetchUserStatus() {
-    var fetchuser = hiveStorageService.getUser();
-    return fetchuser!.role;
-  }
-
   Future<dynamic> showCylinderDetailDialog(BuildContext context, data) {
     return showDialog(
       context: context,
@@ -117,7 +110,7 @@ class _CalibrationScreenState extends State<CalibrationScreen>
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Visibility(
-              visible: fetchUserStatus() == '0',
+              visible: fetchUserRole() == '0',
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

@@ -7,6 +7,7 @@ import 'package:employee_ni_service/features/dashboard/provider/dashboard_state.
 import 'package:employee_ni_service/features/f_service_request/presentation/provider/quantity_provider.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/provider/total_amount_provider.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
+import 'package:employee_ni_service/features/products/presentation/bloc/product_bloc.dart';
 import 'package:employee_ni_service/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:employee_ni_service/features/set_reset_password/presentation/bloc/set_reset_password_bloc.dart';
 import 'package:employee_ni_service/features/splash/pages/splash_screen.dart';
@@ -43,6 +44,9 @@ void main() async {
         ),
         BlocProvider(
           create: (_) => sl<ProfileBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<ProductBloc>(),
         ),
       ],
       child: MultiProvider(

@@ -12,9 +12,7 @@ import '../../../../core/app_theme/app_pallete.dart';
 import '../../../../core/common/widgets/dialog_helper.dart';
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../core/database/hive_storage_service.dart';
 import '../../../../core/utils/show_snackbar.dart';
-import '../../../../service_locator_dependecies.dart';
 import '../widgets/show_employee_dialog.dart';
 
 class ComplaintScreen extends StatefulWidget {
@@ -29,7 +27,6 @@ class _ComplaintScreenState extends State<ComplaintScreen>
   ResponseComplaintDetails? complaintDetails;
   EmployeeComplaintModel? employeeComplaintDetails;
   late TabController _tabController;
-  final hiveStorageService = sl<HiveStorageService>();
 
   @override
   void initState() {

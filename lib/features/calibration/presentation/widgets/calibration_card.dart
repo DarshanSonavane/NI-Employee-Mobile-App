@@ -1,13 +1,12 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
+import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/common/widgets/animated_fab.dart';
 import '../../../../core/common/widgets/build_legends.dart';
 import '../../../../core/common/widgets/set_heading_text.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../core/database/hive_storage_service.dart';
-import '../../../../service_locator_dependecies.dart';
 
 class CalibrationCard extends StatefulWidget {
   final String? name;
@@ -42,7 +41,6 @@ class CalibrationCard extends StatefulWidget {
 }
 
 class _CalibrationCardState extends State<CalibrationCard> {
-  final hiveStorageService = sl<HiveStorageService>();
   String setDateFormat(String dateString) {
     final DateTime parsedDate = DateTime.parse(dateString);
     final DateFormat formatter = DateFormat('dd-MMM-yyyy');
@@ -66,11 +64,6 @@ class _CalibrationCardState extends State<CalibrationCard> {
     } else {
       return const BuildLegends(Constants.petrol, AppPallete.gradientColor);
     }
-  }
-
-  String fetchUserStatus() {
-    var fetchuser = hiveStorageService.getUser();
-    return fetchuser!.role;
   }
 
   @override
@@ -151,8 +144,8 @@ class _CalibrationCardState extends State<CalibrationCard> {
                   AppPallete.label3Color),
               SizedBox(height: 8 * scalingFactor),
               Visibility(
-                visible: (fetchUserStatus() == '0') ||
-                    (fetchUserStatus() == '1' && widget.status != '0'),
+                visible: (fetchUserRole() == '0') ||
+                    (fetchUserRole() == '1' && widget.status != '0'),
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: AnimatedFabMenu(
@@ -163,7 +156,7 @@ class _CalibrationCardState extends State<CalibrationCard> {
                       widget.onDelete(widget.calibrationId!);
                     },
                     status: widget.status!,
-                    userStatus: fetchUserStatus(),
+                    userStatus: fetchUserRole(),
                     tag: '_calibration',
                   ),
                 ),

@@ -31,7 +31,9 @@ class Constants {
   static const service = 'Service';
   static const calibration = 'Calibration';
   static const fsr = 'Generate FSR';
+  static const productInventory = 'Product Inventory';
   static const fsrTab = 'FSR';
+  static const productsTab = 'Products';
   static const natureOfComplaint = 'Nature of complaint';
   static const profile = 'Profile';
   static const open = 'Open';
@@ -93,7 +95,9 @@ class Constants {
   static const undoKey = 'Undo';
   static const redoKey = 'Redo';
   static const exportKey = 'Export';
+  static const avlQty = "Available Qty.";
   static const noImageToExport = 'No content to export!';
+  static const noProductAvailable = 'No products available.';
   static const locationDeniedMessage =
       'Location permission is required to use this app. Please enable it from the app settings.';
 }

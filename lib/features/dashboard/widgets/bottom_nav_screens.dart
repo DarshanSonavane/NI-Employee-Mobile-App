@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/features/products/presentation/pages/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -5,7 +6,6 @@ import '../../calibration/presentation/pages/calibration_screen.dart';
 import '../../complaint/presentation/pages/complaint_screen.dart';
 import '../../home/presentation/pages/home_screen.dart';
 import '../../profile/presentation/pages/profile_screen.dart';
-import '../../f_service_request/presentation/pages/f_service_request.dart';
 import '../provider/dashboard_state.dart';
 
 class BottomNavScreens extends StatelessWidget {
@@ -22,13 +22,7 @@ class BottomNavScreens extends StatelessWidget {
           children: const [
             ComplaintScreen(),
             CalibrationScreen(),
-            FServiceRequest(
-              complaintId: "",
-              customerName: '',
-              complaintType: "",
-              customerCode: "",
-              employeeCode: "",
-            ),
+            ProductScreen(),
             ProfileScreen(),
             HomeScreen(),
           ],

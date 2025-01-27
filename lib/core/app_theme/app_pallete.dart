@@ -7,6 +7,7 @@ class AppPallete {
   static const Color gradient2 = Colors.greenAccent;
   static const Color errorColor = Colors.redAccent;
   static const Color transparentColor = Colors.transparent;
+  static const Color blueColor = Colors.blue;
   static const Color orangeColor = Colors.orange;
   static const Color buttonColor = Color(0xFF8DC641);
   static const Color gradientColor = Color(0xFF4CAF50);
@@ -23,6 +24,7 @@ class AppPallete {
   static const Color backgroundInProcess = Color(0xFFFEF7EC);
   static const Color backgroundClosed = Color(0xFFF0F9F1);
   static const Color backgroundOpen = Color(0xFFFEF0EC);
+  static const Color deepNavy = Color(0xFF1C2331);
   static final Color locationBackgroundWithOpacity =
       const Color(0xFF00FF00).withValues(alpha: 0.1);
 }

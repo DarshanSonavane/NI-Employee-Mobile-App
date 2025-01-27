@@ -1,12 +1,11 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
+import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:employee_ni_service/features/complaint/presentation/widgets/show_take_action_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/common/widgets/build_legends.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../core/database/hive_storage_service.dart';
-import '../../../../service_locator_dependecies.dart';
 import '../../../../core/common/widgets/animated_fab.dart';
 import '../../../../core/common/widgets/set_heading_text.dart';
 
@@ -49,7 +48,6 @@ class ComplaintCard extends StatefulWidget {
 }
 
 class _ComplaintCardState extends State<ComplaintCard> {
-  final hiveStorageService = sl<HiveStorageService>();
   String setDateFormat(String dateString) {
     final DateTime parsedDate = DateTime.parse(dateString);
     final DateFormat formatter = DateFormat('dd-MMM-yyyy');
@@ -73,11 +71,6 @@ class _ComplaintCardState extends State<ComplaintCard> {
     } else {
       return const BuildLegends(Constants.petrol, AppPallete.gradientColor);
     }
-  }
-
-  String fetchUserStatus() {
-    var fetchuser = hiveStorageService.getUser();
-    return fetchuser!.role;
   }
 
   @override
@@ -205,7 +198,7 @@ class _ComplaintCardState extends State<ComplaintCard> {
                       );
                     },
                     status: widget.status!,
-                    userStatus: fetchUserStatus(),
+                    userStatus: fetchUserRole(),
                     tag: '_complaints',
                   ),
                 ),
