@@ -1,13 +1,18 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/loader.dart';
+import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
+import 'package:employee_ni_service/core/utils/scaling_factor.dart';
+import 'package:employee_ni_service/features/home/data/model/response_fsr_model.dart';
 import 'package:employee_ni_service/features/home/data/model/response_home_details.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
-import 'package:employee_ni_service/features/home/presentation/widgets/pie_chart_card.dart';
-import 'package:employee_ni_service/features/home/presentation/widgets/total_visit_row.dart';
+import 'package:employee_ni_service/features/home/presentation/widgets/build_home_details_card.dart';
+import 'package:employee_ni_service/features/home/presentation/widgets/build_pie_char_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/utils/fetch_user_role.dart';
 import '../../../../core/utils/show_snackbar.dart';
+import '../widgets/build_fsr_list_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,9 +23,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ResponseHomeDetails? homeDetailsValue;
+  ResponseFsrModel? fsrList;
   @override
   void initState() {
     context.read<HomeBloc>().add(GetAllHomeDetails());
+    context.read<HomeBloc>().add(GetFSRList(
+        employeeId: hiveStorageService.getUser()!.id, role: fetchUserRole()));
     super.initState();
   }
 
@@ -34,8 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
           listener: (context, state) {
             if (state is HomeBlocFailure) {
               showSnackBar(context, state.error);
-            } else if (state is HomeBlocSuccess) {
-              homeDetailsValue = state.homeDetails;
+            } else if (state is HomeBlocSuccess<ResponseHomeDetails>) {
+              homeDetailsValue = state.data;
+            } else if (state is HomeBlocSuccess<ResponseFsrModel>) {
+              fsrList = state.data;
             }
           },
           builder: (context, state) {
@@ -43,39 +53,23 @@ class _HomeScreenState extends State<HomeScreen> {
               return const Loader();
             }
 
-            if (homeDetailsValue != null) {
-              return Column(
+            return SingleChildScrollView(
+              child: Column(
+                spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Flexible(
-                    flex: 15,
-                    child: Card(
-                      color: AppPallete.backgroundColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: TotalVisitRow(homeDetailsValue),
-                      ),
-                    ),
+                  BuildHomeDetailsCard(homeDetailsValue),
+                  BuildPieCharCard(homeDetailsValue),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: setTextNormal(
+                        "Field Survey Report(FSR)", ScalingFactor.scale(1.2),
+                        color: AppPallete.label3Color),
                   ),
-                  const SizedBox(height: 20),
-                  Flexible(
-                    flex: 70,
-                    child: PieChartCard(
-                      homeDetailsValue: homeDetailsValue!,
-                    ),
-                  ),
-                  const Spacer(
-                    flex: 15,
-                  )
+                  BuildFsrListCard(fsrList),
                 ],
-              );
-            }
-
-            return const Center(
-              child: Text('No data available'),
+              ),
             );
           },
         ),

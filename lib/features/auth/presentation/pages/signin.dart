@@ -12,13 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/database/hive_storage_service.dart';
+import '../../../../core/utils/app_transition.dart';
 import '../../../../core/utils/show_snackbar.dart';
 import '../../../../service_locator_dependecies.dart';
 
 class SigninScreen extends StatefulWidget {
-  static route() => MaterialPageRoute(
-        builder: (context) => const SigninScreen(),
-      );
+  static Route route() {
+    return createSlideTransitionRoute(const SigninScreen());
+  }
+
   const SigninScreen({super.key});
 
   @override

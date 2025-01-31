@@ -4,3 +4,12 @@ part of 'home_bloc.dart';
 sealed class HomeEvent {}
 
 final class GetAllHomeDetails extends HomeEvent {}
+
+final class GetFSRList extends HomeEvent {
+  final String employeeId;
+  final String role;
+  GetFSRList({
+    required this.employeeId,
+    required this.role,
+  });
+}

@@ -19,20 +19,36 @@ Future<void> initDependecies() async {
 }
 
 void _initDashBoardDetails() {
+  //Service
   sl.registerSingleton<GetHomeDetailsApiService>(
     GetHomeDetailsApiServiceImpl(),
   );
+  sl.registerSingleton<FetchFsrListService>(
+    FetchFsrListServiceImpl(),
+  );
 
+  //Repository
   sl.registerSingleton<FetchHomeRepository>(
     FetchDashboardDataRepositoryImpl(),
   );
 
+  sl.registerSingleton<RegisteredFsrRepository>(
+    FetchFsrRepositoryImpl(),
+  );
+
+  //UseCases
   sl.registerSingleton<FetchHomeData>(
     FetchHomeData(),
   );
+  sl.registerSingleton<FetchFsrUsecase>(
+    FetchFsrUsecase(),
+  );
 
   sl.registerFactory<HomeBloc>(
-    () => HomeBloc(fetchHomeData: sl()),
+    () => HomeBloc(
+      fetchHomeData: sl(),
+      fetchFSRListUsecase: sl(),
+    ),
   );
 }
 

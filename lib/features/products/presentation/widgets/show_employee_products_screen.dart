@@ -28,7 +28,7 @@ class ShowEmployeeProductsScreen extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is ProductSuccess) {
                 final productList = state.responseAssignedEmployeeProductList;
-                if (productList.isEmpty) {
+                if (productList.employeeInventory.isEmpty) {
                   return const NoProductAvailable();
                 }
                 return EmployeeAssignedProductLayout(productList: productList);

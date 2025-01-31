@@ -5,17 +5,16 @@ import '../../../../core/constants/constants.dart';
 import '../../data/models/response_assigned_employee_product_list.dart';
 
 class EmployeeAssignedProductLayout extends StatelessWidget {
+  final ResponseAssignedEmployeeProductList productList;
   const EmployeeAssignedProductLayout({
     super.key,
     required this.productList,
   });
 
-  final List<ResponseAssignedEmployeeProductList> productList;
-
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      itemCount: productList.length,
+      itemCount: productList.employeeInventory.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 15,
@@ -23,7 +22,7 @@ class EmployeeAssignedProductLayout extends StatelessWidget {
         childAspectRatio: 0.75,
       ),
       itemBuilder: (context, index) {
-        final product = productList[index];
+        final product = productList.employeeInventory[index];
         return Card(
           elevation: 5,
           color: AppPallete.deepNavy,
@@ -41,9 +40,7 @@ class EmployeeAssignedProductLayout extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       color: AppPallete.backgroundOpen,
                       image: DecorationImage(
-                        image: NetworkImage(
-                          product.productImageUrl,
-                        ),
+                        image: Image.asset(Constants.pucServiceImage).image,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -51,7 +48,7 @@ class EmployeeAssignedProductLayout extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  product.productName,
+                  product.product.productName,
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -59,7 +56,7 @@ class EmployeeAssignedProductLayout extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  '₹${product.productPrice}',
+                  '₹${product.product.price}',
                   style: const TextStyle(
                     fontSize: 14,
                     color: AppPallete.gradientColor,
@@ -68,7 +65,7 @@ class EmployeeAssignedProductLayout extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  '${Constants.avlQty} ${product.productQuantity}',
+                  '${Constants.avlQty} ${product.assignedQuantity}',
                   style: const TextStyle(
                     fontSize: 14,
                     color: AppPallete.gradientColor,

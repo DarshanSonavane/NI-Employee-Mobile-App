@@ -6,15 +6,28 @@ import '../../../service_locator_dependecies.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final bool isBackButtonVisible;
   const AppBarWidget({
     super.key,
     required this.title,
+    this.isBackButtonVisible = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
+      leading: isBackButtonVisible
+          ? IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: AppPallete.gradientColor,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Navigate back
+              },
+            )
+          : null,
       title: AnimatedSwitcher(
         duration: const Duration(milliseconds: 200),
         child: Text(

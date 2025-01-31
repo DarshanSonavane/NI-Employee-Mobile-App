@@ -5,15 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/app_theme/app_pallete.dart';
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/constants/constants.dart';
+import '../../../../core/utils/app_transition.dart';
 import '../../../../core/utils/show_snackbar.dart';
 import '../../../../core/common/widgets/auth_field.dart';
 import '../../../../core/common/widgets/auth_gradient_button.dart';
 import '../bloc/set_reset_password_bloc.dart';
 
 class SetResetPassword extends StatefulWidget {
-  static route() => MaterialPageRoute(
-        builder: (context) => const SetResetPassword(),
-      );
+  static Route route() {
+    return createSlideTransitionRoute(const SetResetPassword());
+  }
+
   const SetResetPassword({super.key});
   @override
   State<SetResetPassword> createState() => _SetResetPasswordState();

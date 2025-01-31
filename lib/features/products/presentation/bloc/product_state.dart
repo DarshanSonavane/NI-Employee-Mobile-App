@@ -8,8 +8,7 @@ final class ProductInitial extends ProductState {}
 final class ProductLoader extends ProductState {}
 
 final class ProductSuccess extends ProductState {
-  final List<ResponseAssignedEmployeeProductList>
-      responseAssignedEmployeeProductList;
+  final ResponseAssignedEmployeeProductList responseAssignedEmployeeProductList;
   ProductSuccess(this.responseAssignedEmployeeProductList);
 }
 

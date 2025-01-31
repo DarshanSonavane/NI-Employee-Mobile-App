@@ -3,12 +3,14 @@ class Constants {
   static const appLogo = 'assets/png_image/nilogo.png';
   static const gifLogo = 'assets/gif_image/ni_splash.gif';
   static const mapIcon = 'assets/png_image/mapicon.png';
+  static const pucServiceImage = 'assets/jpg_image/puc.jpeg';
   static const locationIcon = 'assets/png_image/locationicon.png';
   static const login = 'Login';
   static const submit = 'Submit';
   static const employeeSignature = 'Employee Signature';
   static const customerSignature = 'Customer Signature';
   static const password = 'Password';
+  static const noDataAvailable = 'No data available';
   static const confirmPassword = 'Confirm Password';
   static const customerCode = 'Customer Code';
   static const contactPerson = 'Contact Person';

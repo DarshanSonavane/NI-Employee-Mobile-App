@@ -7,9 +7,9 @@ final class HomeBlocInitial extends HomeState {}
 
 final class HomeBlocLoader extends HomeState {}
 
-final class HomeBlocSuccess extends HomeState {
-  final ResponseHomeDetails homeDetails;
-  HomeBlocSuccess(this.homeDetails);
+final class HomeBlocSuccess<T> extends HomeState {
+  final T data;
+  HomeBlocSuccess(this.data);
 }
 
 final class HomeBlocFailure extends HomeState {

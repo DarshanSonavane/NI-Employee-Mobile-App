@@ -29,9 +29,13 @@ import 'package:employee_ni_service/features/complaint/domain/repository/close_c
 import 'package:employee_ni_service/features/complaint/domain/repository/fetch_employee_repository.dart';
 import 'package:employee_ni_service/features/complaint/domain/usecases/fetch_complaint_data.dart';
 import 'package:employee_ni_service/features/complaint/domain/usecases/fetch_employee_data.dart';
+import 'package:employee_ni_service/features/home/data/repository/fetch_fsr_repository_impl.dart';
 import 'package:employee_ni_service/features/home/data/repository/fetch_home_data_repository_impl.dart';
+import 'package:employee_ni_service/features/home/data/source/fetch_fsr_list_service.dart';
 import 'package:employee_ni_service/features/home/data/source/home_api_service.dart';
 import 'package:employee_ni_service/features/home/domain/repository/fetch_home_repository.dart';
+import 'package:employee_ni_service/features/home/domain/repository/registered_fsr_repository.dart';
+import 'package:employee_ni_service/features/home/domain/usecases/fetch_fsr_usecase.dart';
 import 'package:employee_ni_service/features/home/domain/usecases/fetch_home_data.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
 import 'package:employee_ni_service/features/products/data/repository/emp_product_repository_impl.dart';
