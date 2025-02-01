@@ -48,22 +48,23 @@ class BuildFsrListCard extends StatelessWidget {
               ),
             const SizedBox(height: 20),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  FsrDetailsScreen.route(fsrList),
-                );
-              },
-              child: const Center(
-                child: CustomGlolbalText(
-                  text: "View All FSRs",
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.normal,
-                  color: AppPallete.errorColor,
-                ),
-              ),
-            ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    FsrDetailsScreen.route(fsrList),
+                  );
+                },
+                child: Center(
+                  child: fsrList != null && fsrList!.fsrData.length > 2
+                      ? const CustomGlolbalText(
+                          text: "View All FSRs",
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.normal,
+                          color: AppPallete.errorColor,
+                        )
+                      : null,
+                )),
             const SizedBox(height: 10),
           ],
         ),

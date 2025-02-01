@@ -16,6 +16,45 @@ Future<void> initDependecies() async {
   _initGetCalibrationList();
   _initGetProfileData();
   _initGetAssignedProductList();
+  _initAssignProductFromMasterInventory();
+}
+
+void _initAssignProductFromMasterInventory() {
+  //service
+  sl.registerSingleton<GetMasterInventoryApiService>(
+    GetMasterInventoryApiServiceImpl(),
+  );
+
+  sl.registerSingleton<AssignProductToEmpService>(
+    AssignProductToEmpServiceImpl(),
+  );
+
+  //Repository
+  sl.registerSingleton<FetchMasterInventoryRepository>(
+    FetchMasterInventoryRepositoryImpl(),
+  );
+
+  sl.registerSingleton<ProductAssigmentRepository>(
+    ProductAssignRepoImpl(),
+  );
+
+  //UseCases
+  sl.registerSingleton<FetchMasterInventoryUsecase>(
+    FetchMasterInventoryUsecase(),
+  );
+
+  sl.registerSingleton<AssignProductToEmpUsecase>(
+    AssignProductToEmpUsecase(),
+  );
+
+  //Bloc
+  sl.registerFactory<AssignProductToEmployeeBloc>(
+    () => AssignProductToEmployeeBloc(
+      fetchMasterInventoryUsecase: sl(),
+      fetchEmployeeData: sl(),
+      assignProductToEmpUseCase: sl(),
+    ),
+  );
 }
 
 void _initDashBoardDetails() {

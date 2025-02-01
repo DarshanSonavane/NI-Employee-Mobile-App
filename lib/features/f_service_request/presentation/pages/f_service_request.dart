@@ -2,11 +2,13 @@ import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/dialog_helper.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
 import 'package:employee_ni_service/core/utils/machine_options.dart';
+import 'package:employee_ni_service/features/dashboard/widgets/app_bar_widget.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/provider/total_amount_provider.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/widgets/create_signature_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/common/widgets/auth_gradient_button.dart';
 import '../../../../core/common/widgets/custom_text_field.dart';
@@ -14,6 +16,7 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/location_permission.dart';
 import '../../../calibration/presentation/widgets/machine_dropdown.dart';
 import '../widgets/add_details_widget.dart';
+import '../widgets/switch_chargable.dart';
 
 class FServiceRequest extends StatefulWidget {
   final String complaintId;
@@ -59,9 +62,11 @@ class _FServiceRequestState extends State<FServiceRequest> {
   final correctiveActionController = TextEditingController();
   final detailsActionController = TextEditingController();
   double totalAmount = 0.0;
+  bool isChargable = false;
 
   @override
   void initState() {
+    int epochMilliseconds = DateTime.now().millisecondsSinceEpoch;
     super.initState();
   }
 
@@ -112,23 +117,63 @@ class _FServiceRequestState extends State<FServiceRequest> {
     );
   }
 
+  void validateAndSubmit() {
+    if (formKey.currentState?.validate() != true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all required fields'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Additional field validations
+    if (selectedMachine == null || selectedMachine!.isEmpty) {
+      //showError('Please select a machine');
+      return;
+    }
+
+    if (natureOfComplaint == null || natureOfComplaint!.isEmpty) {
+      // showError('Please select nature of complaint');
+      return;
+    }
+
+    if (status == null || status!.isEmpty) {
+      // showError('Please select status');
+      return;
+    }
+
+    if (designationController.text.trim().isEmpty) {
+      // showError('Please enter designation');
+      return;
+    }
+
+    if (remarkController.text.trim().isEmpty) {
+      //showError('Please enter remarks');
+      return;
+    }
+
+    if (correctiveActionController.text.trim().isEmpty) {
+      // showError('Please enter details of action');
+      return;
+    }
+
+    if (detailsActionController.text.trim().isEmpty) {
+      //  showError('Please enter corrective action');
+      return;
+    }
+
+    // If all validations pass, proceed with location check
+    checkLocationPermission();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppPallete.screenBackground,
-      appBar: AppBar(
-        title: setTextNormal(Constants.fsr, 1, color: AppPallete.label3Color),
-        backgroundColor: AppPallete.backgroundColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppPallete.gradientColor,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar:
+          const AppBarWidget(title: Constants.fsr, isBackButtonVisible: true),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -255,17 +300,28 @@ class _FServiceRequestState extends State<FServiceRequest> {
                     },
                     options: statusOptions,
                   ),
+                  const SizedBox(height: 5),
+                  SwitchChargable(
+                    onChargableChanged: (value) {
+                      setState(() {
+                        isChargable = value;
+                      });
+                    },
+                  ),
                   const AddDetailsWidget(),
-                  const SizedBox(height: 10),
                   Consumer<TotalAmountProvider>(
                     builder: (context, provider, child) {
-                      double totalAmount = provider.getTotalAmount;
+                      double totalAmountincGST = provider.getTotalAmountInclGst;
+                      if (isChargable) {
+                        double gst = 2500 * 0.18;
+                        totalAmountincGST += 2500 + gst;
+                      }
                       return Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 4.0),
                           child: setTextNormal(
-                              '${Constants.totalAmountInclGst}${totalAmount.toString()}/-',
+                              '${Constants.totalAmountInclGst}${totalAmountincGST.toString()}/-',
                               1),
                         ),
                       );
@@ -325,9 +381,10 @@ class _FServiceRequestState extends State<FServiceRequest> {
                     endColor: AppPallete.gradientColor,
                     width: MediaQuery.of(context).size.width * 1,
                     height: 55,
-                    onPressed: () {
-                      checkLocationPermission();
-                    },
+                    onPressed: validateAndSubmit,
+                    // onPressed: () {
+                    //   checkLocationPermission();
+                    // },
                   ),
                   const SizedBox(height: 20)
                 ],

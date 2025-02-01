@@ -13,22 +13,23 @@ class CustomTextFormField extends StatelessWidget {
   final String? initialValue;
   final int? maxLines;
   final int? minLines;
+  final EdgeInsetsGeometry? contentPadding;
 
-  const CustomTextFormField({
-    super.key,
-    this.controller,
-    required this.labelText,
-    this.value,
-    this.validator,
-    this.textStyle,
-    this.labelStyle,
-    this.fillColor,
-    this.autovalidateMode,
-    this.editableText = true,
-    this.initialValue,
-    this.maxLines,
-    this.minLines = 1,
-  });
+  const CustomTextFormField(
+      {super.key,
+      this.controller,
+      required this.labelText,
+      this.value,
+      this.validator,
+      this.textStyle,
+      this.labelStyle,
+      this.fillColor,
+      this.autovalidateMode,
+      this.editableText = true,
+      this.initialValue,
+      this.maxLines,
+      this.minLines = 1,
+      this.contentPadding});
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +49,14 @@ class CustomTextFormField extends StatelessWidget {
         maxLines: maxLines,
         minLines: minLines,
         decoration: InputDecoration(
-          labelText: labelText,
-          labelStyle: labelStyle,
-          hintText: value?.isEmpty ?? true ? 'Enter $labelText' : null,
-          filled: true,
-          alignLabelWithHint: true,
-          fillColor: fillColor,
-          border: const UnderlineInputBorder(),
-        ),
+            labelText: labelText,
+            labelStyle: labelStyle,
+            hintText: value?.isEmpty ?? true ? 'Enter $labelText' : null,
+            filled: true,
+            alignLabelWithHint: true,
+            fillColor: fillColor,
+            border: const UnderlineInputBorder(),
+            contentPadding: contentPadding),
         validator: validator,
         autovalidateMode: autovalidateMode,
       ),

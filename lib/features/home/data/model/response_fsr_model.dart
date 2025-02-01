@@ -137,9 +137,9 @@ class CustomerInfoModel extends CustomerInfoEntity {
 
   factory CustomerInfoModel.fromJson(Map<String, dynamic> json) {
     return CustomerInfoModel(
-      stateCode: json['stateCode'],
-      customerName: json['customerName'],
-      city: json['city'],
+      stateCode: json['stateCode'] as String? ?? '',
+      customerName: json['customerName'] as String? ?? '',
+      city: json['city'] as String? ?? '',
     );
   }
 

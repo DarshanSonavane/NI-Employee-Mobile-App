@@ -11,7 +11,7 @@ final class GetAllComplaintList extends ComplaintEvent {
 }
 
 final class GetAllEmployeesList extends ComplaintEvent {
-  final String complaintId;
+  final String? complaintId;
   GetAllEmployeesList(this.complaintId);
 }
 

@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/constants.dart';
 
@@ -11,7 +12,7 @@ class NoProductAvailable extends StatelessWidget {
     return const Center(
       child: Text(
         Constants.noProductAvailable,
-        style: TextStyle(fontSize: 16, color: Colors.grey),
+        style: TextStyle(fontSize: 16, color: AppPallete.deepNavy),
       ),
     );
   }

@@ -7,6 +7,12 @@ class TotalAmountProvider with ChangeNotifier {
     return cardAmounts.values.fold(0, (sum, amount) => sum + amount);
   }
 
+  double get getTotalAmountInclGst {
+    double totalAmount = getTotalAmount;
+    double gst = totalAmount * 0.18;
+    return totalAmount + gst;
+  }
+
   void updateCardAmount(Key cardKey, double amount) {
     if (cardAmounts[cardKey] != amount) {
       cardAmounts[cardKey] = amount;

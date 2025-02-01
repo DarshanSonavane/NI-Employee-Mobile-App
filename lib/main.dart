@@ -1,4 +1,5 @@
 import 'package:employee_ni_service/core/app_theme/app_theme.dart';
+import 'package:employee_ni_service/features/assign_product_by_admin/presentation/bloc/assign_product_to_employee_bloc.dart';
 import 'package:employee_ni_service/features/auth/data/models/login_response_params.dart';
 import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc.dart';
 import 'package:employee_ni_service/features/calibration/presentation/bloc/calibration_bloc.dart';
@@ -47,6 +48,9 @@ void main() async {
         ),
         BlocProvider(
           create: (_) => sl<ProductBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<AssignProductToEmployeeBloc>(),
         ),
       ],
       child: MultiProvider(

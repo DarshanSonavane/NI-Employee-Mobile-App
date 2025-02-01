@@ -8,12 +8,14 @@ class GenericDropdown extends StatelessWidget {
   final String? selectedValue;
   final ValueChanged<String?> onChanged;
   final List<Map<String, dynamic>> options;
-  const GenericDropdown(
-      {super.key,
-      required this.dropDownType,
-      required this.selectedValue,
-      required this.onChanged,
-      required this.options});
+
+  const GenericDropdown({
+    super.key,
+    required this.dropDownType,
+    required this.selectedValue,
+    required this.onChanged,
+    required this.options,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,30 @@ class GenericDropdown extends StatelessWidget {
         labelStyle: const TextStyle(color: AppPallete.label3Color),
         filled: true,
         fillColor: AppPallete.backgroundClosed,
-        border: const UnderlineInputBorder(),
+        // Define borders for all states with rounded edges
+        enabledBorder: OutlineInputBorder(
+          borderSide:
+              const BorderSide(color: AppPallete.label2Color, width: 1.0),
+          borderRadius: BorderRadius.circular(12.0), // Increased border radius
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide:
+              const BorderSide(color: AppPallete.label2Color, width: 2.0),
+          borderRadius: BorderRadius.circular(12.0), // Increased border radius
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.red, width: 1.0),
+          borderRadius: BorderRadius.circular(12.0), // Increased border radius
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+          borderRadius: BorderRadius.circular(12.0), // Increased border radius
+        ),
+        border: OutlineInputBorder(
+          borderSide:
+              const BorderSide(color: AppPallete.label2Color, width: 1.0),
+          borderRadius: BorderRadius.circular(12.0), // Increased border radius
+        ),
       ),
       style: const TextStyle(
         color: AppPallete.label3Color,

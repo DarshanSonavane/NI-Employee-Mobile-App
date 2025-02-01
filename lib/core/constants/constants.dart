@@ -6,6 +6,7 @@ class Constants {
   static const pucServiceImage = 'assets/jpg_image/puc.jpeg';
   static const locationIcon = 'assets/png_image/locationicon.png';
   static const login = 'Login';
+  static const proceed = 'Proceed';
   static const submit = 'Submit';
   static const employeeSignature = 'Employee Signature';
   static const customerSignature = 'Customer Signature';

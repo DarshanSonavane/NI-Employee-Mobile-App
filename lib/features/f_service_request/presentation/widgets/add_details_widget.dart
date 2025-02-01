@@ -1,10 +1,15 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/provider/quantity_provider.dart';
+import 'package:employee_ni_service/features/products/domain/entities/assigned_emp_product_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/common/widgets/set_text_normal.dart';
 import '../../../../core/constants/constants.dart';
+import '../../../../core/utils/fetch_user_role.dart';
+import '../../../../core/utils/show_snackbar.dart';
+import '../../../products/presentation/bloc/product_bloc.dart';
 import '../provider/total_amount_provider.dart';
 import 'add_details_card.dart';
 
@@ -19,38 +24,57 @@ class _AddDetailsWidgetState extends State<AddDetailsWidget> {
   final List<(Widget, Key)> cardEntries = [];
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final uuid = const Uuid();
+  List<EmployeeInventoryEntity> inventoryList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<ProductBloc>()
+        .add(GetAssignedProductList(employeeId: fetchUserId()));
+  }
 
   void addCard() {
-    final cardId = uuid.v4();
-    final cardKey = ValueKey<String>(cardId);
-
-    final newCard = ChangeNotifierProvider(
-      create: (_) => QuantityProvider(),
-      child: AddDetailsCard(
-        key: cardKey,
-        cardKey: cardKey,
-        isLastCard: true,
-        onDelete: (Key key) => removeCard(key),
-      ),
-    );
-
-    if (cardEntries.isNotEmpty) {
-      final lastCard = cardEntries.last;
-      cardEntries[cardEntries.length - 1] = (
-        ChangeNotifierProvider(
-          create: (_) => QuantityProvider(),
-          child: AddDetailsCard(
-            key: lastCard.$2,
-            cardKey: lastCard.$2,
-            isLastCard: false,
-            onDelete: (Key key) => removeCard(key),
-          ),
+    final productState = context.read<ProductBloc>().state;
+    if (productState is ProductSuccess &&
+        productState
+            .responseAssignedEmployeeProductList.employeeInventory.isNotEmpty) {
+      final cardId = uuid.v4();
+      final cardKey = ValueKey<String>(cardId);
+      inventoryList =
+          productState.responseAssignedEmployeeProductList.employeeInventory;
+      final newCard = ChangeNotifierProvider(
+        create: (_) => QuantityProvider(),
+        child: AddDetailsCard(
+          key: cardKey,
+          cardKey: cardKey,
+          isLastCard: true,
+          onDelete: (Key key) => removeCard(key),
+          inventoryList: inventoryList,
         ),
-        lastCard.$2
       );
+
+      if (cardEntries.isNotEmpty) {
+        final lastCard = cardEntries.last;
+        cardEntries[cardEntries.length - 1] = (
+          ChangeNotifierProvider(
+            create: (_) => QuantityProvider(),
+            child: AddDetailsCard(
+              key: lastCard.$2,
+              cardKey: lastCard.$2,
+              isLastCard: false,
+              onDelete: (Key key) => removeCard(key),
+              inventoryList: inventoryList,
+            ),
+          ),
+          lastCard.$2
+        );
+      }
+      cardEntries.add((newCard, cardKey));
+      listKey.currentState?.insertItem(cardEntries.length - 1);
+    } else {
+      showSnackBar(context, "No products available to add a card.");
     }
-    cardEntries.add((newCard, cardKey));
-    listKey.currentState?.insertItem(cardEntries.length - 1);
   }
 
   void removeCard(Key key) {
@@ -81,6 +105,7 @@ class _AddDetailsWidgetState extends State<AddDetailsWidget> {
               cardKey: lastCard.$2,
               isLastCard: true,
               onDelete: (Key key) => removeCard(key),
+              inventoryList: inventoryList,
             ),
           ),
           lastCard.$2
@@ -91,54 +116,63 @@ class _AddDetailsWidgetState extends State<AddDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AnimatedList(
-          key: listKey,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          initialItemCount: cardEntries.length,
-          itemBuilder: (context, index, animation) {
-            return SizeTransition(
-              sizeFactor: animation,
-              child: FadeTransition(
-                opacity: animation,
-                child: cardEntries[index].$1,
-              ),
-            );
-          },
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocConsumer<ProductBloc, ProductState>(
+      listener: (context, state) {
+        if (state is ProductFailure) {
+          showSnackBar(context, state.message);
+        }
+      },
+      builder: (context, state) {
+        return Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 4.0),
-              child: setTextNormal(Constants.addDetails, 1),
+            AnimatedList(
+              key: listKey,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              initialItemCount: cardEntries.length,
+              itemBuilder: (context, index, animation) {
+                return SizeTransition(
+                  sizeFactor: animation,
+                  child: FadeTransition(
+                    opacity: animation,
+                    child: cardEntries[index].$1,
+                  ),
+                );
+              },
             ),
-            InkWell(
-              onTap: addCard,
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppPallete.gradientColor,
-                    width: 2,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: setTextNormal(Constants.addDetails, 1),
+                ),
+                InkWell(
+                  onTap: addCard,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppPallete.gradientColor,
+                        width: 2,
+                      ),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.add,
+                        color: AppPallete.gradientColor,
+                        size: 30,
+                      ),
+                    ),
                   ),
                 ),
-                child: const Center(
-                  child: Icon(
-                    Icons.add,
-                    color: AppPallete.gradientColor,
-                    size: 30,
-                  ),
-                ),
-              ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

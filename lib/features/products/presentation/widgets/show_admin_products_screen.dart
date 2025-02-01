@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/features/assign_product_by_admin/presentation/pages/assign_product_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/app_theme/app_pallete.dart';
@@ -20,7 +21,13 @@ class ShowAdminProductScreen extends StatelessWidget {
           itemCount: listOfProductsInventoryUseCases.length,
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: () {},
+              onTap: () {
+                if (index == 0) {
+                  // Navigator.pushNamed(context, '/insert_update_master_inventory');
+                } else {
+                  Navigator.push(context, AssignProductScreen.route());
+                }
+              },
               child: Card(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(

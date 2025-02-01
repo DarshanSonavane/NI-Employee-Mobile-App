@@ -1,15 +1,14 @@
+import 'package:employee_ni_service/core/common/widgets/custom_global_text.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/provider/quantity_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/app_theme/app_pallete.dart';
-import '../../../../core/common/widgets/set_text_normal.dart';
 import '../../../../core/constants/constants.dart';
 
 class RowQuantity extends StatefulWidget {
-  const RowQuantity({
-    super.key,
-  });
+  final int assignedQuantity;
+  const RowQuantity({super.key, required this.assignedQuantity});
 
   @override
   State<RowQuantity> createState() => _RowQuantityState();
@@ -24,24 +23,50 @@ class _RowQuantityState extends State<RowQuantity> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        setTextNormal(Constants.quantity, 1),
+        const CustomGlolbalText(
+          text: Constants.quantity,
+          fontSize: 16,
+          color: AppPallete.label3Color,
+          fontWeight: FontWeight.bold,
+        ),
         Row(
           children: [
             IconButton(
-              onPressed: quantityProvider.increment,
+              onPressed: quantity <
+                      widget
+                          .assignedQuantity // Limit increment to assignedQuantity
+                  ? () {
+                      quantityProvider.increment();
+                      setState(() {
+                        quantity++;
+                      });
+                    }
+                  : null,
               icon: const Icon(
                 Icons.add,
                 color: AppPallete.gradientColor,
-                weight: 20,
+                weight: 16,
               ),
             ),
-            setTextNormal(quantityProvider.quantity.toString(), 1),
+            CustomGlolbalText(
+              text: quantityProvider.quantity.toString(),
+              fontSize: 16,
+              color: AppPallete.label3Color,
+              fontWeight: FontWeight.bold,
+            ),
             IconButton(
-              onPressed: quantityProvider.decrement,
+              onPressed: quantity > 0
+                  ? () {
+                      quantityProvider.decrement();
+                      setState(() {
+                        quantity--;
+                      });
+                    }
+                  : null,
               icon: const Icon(
                 Icons.remove,
                 color: AppPallete.errorColor,
-                weight: 20,
+                weight: 16,
               ),
             ),
           ],

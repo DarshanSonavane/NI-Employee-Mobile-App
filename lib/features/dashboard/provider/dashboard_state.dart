@@ -57,12 +57,16 @@ class DashboardState with ChangeNotifier {
             calibrationType: Constants.activeCalibration));
         break;
       case 2:
-        context.read<ProductBloc>().add(GetAssignedProductList(
-            employeeId: hiveStorageService.getUser()!.id));
+        fetchUserRole() != "0"
+            ? context
+                .read<ProductBloc>()
+                .add(GetAssignedProductList(employeeId: fetchUserId()))
+            : null;
         break;
       case 3:
-        context.read<ProfileBloc>().add(GetEmployeeProfileEvent(
-            employeeId: hiveStorageService.getUser()!.id));
+        context
+            .read<ProfileBloc>()
+            .add(GetEmployeeProfileEvent(employeeId: fetchUserId()));
         break;
       default:
         debugPrint('Invalid tab index');
