@@ -169,7 +169,7 @@ class _FServiceRequestState extends State<FServiceRequest> {
     fsrLocation = await getCurrentLocation();
     epochMillisecondsEnd = DateTime.now().millisecondsSinceEpoch;
     sendRequestForCreatingFSR();
-    // _showOtpDialog();
+    _showOtpDialog();
   }
 
   void _showOtpDialog() {
