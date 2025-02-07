@@ -126,38 +126,47 @@ class _ShowCylinderDetailsDialogState extends State<ShowCylinderDetailsDialog> {
         ),
       ),
       actions: [
-        AuthGradientButton(
-          buttonText: Constants.submit,
-          startColor: AppPallete.buttonColor,
-          endColor: AppPallete.gradientColor,
-          width: screenWidth > 600 ? 200 : 100,
-          height: 55,
-          onPressed: () {
-            Navigator.pop(context);
-            final requestUpdateCylinderDetails = RequestUpdateCylinderDetails(
-              sId: cylinderId,
-              cO: coController.text,
-              cO2: co2Controller.text,
-              hC: hcController.text,
-              o2: o2Controller.text,
-              cylinderNumber: cylinderNumberController.text,
-              cylinderMake: cylinderMakeController.text,
-              validityDate: validityDateController.text,
-              createdBy: createdBy,
-            );
-            widget.onCylinderDetailsTap(requestUpdateCylinderDetails);
-          },
-        ),
-        const SizedBox(width: 5),
-        AuthGradientButton(
-          buttonText: Constants.close,
-          startColor: AppPallete.label3Color,
-          endColor: AppPallete.label3Color,
-          width: screenWidth > 600 ? 200 : 100,
-          height: 55,
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        Row(
+          children: [
+            Expanded(
+              child: AuthGradientButton(
+                buttonText: Constants.submit,
+                startColor: AppPallete.buttonColor,
+                endColor: AppPallete.gradientColor,
+                width: screenWidth > 600 ? 200 : 100,
+                height: 55,
+                onPressed: () {
+                  Navigator.pop(context);
+                  final requestUpdateCylinderDetails =
+                      RequestUpdateCylinderDetails(
+                    sId: cylinderId,
+                    cO: coController.text,
+                    cO2: co2Controller.text,
+                    hC: hcController.text,
+                    o2: o2Controller.text,
+                    cylinderNumber: cylinderNumberController.text,
+                    cylinderMake: cylinderMakeController.text,
+                    validityDate: validityDateController.text,
+                    createdBy: createdBy,
+                  );
+                  widget.onCylinderDetailsTap(requestUpdateCylinderDetails);
+                },
+              ),
+            ),
+            const SizedBox(width: 15),
+            Expanded(
+              child: AuthGradientButton(
+                buttonText: Constants.close,
+                startColor: AppPallete.label3Color,
+                endColor: AppPallete.label3Color,
+                width: screenWidth > 600 ? 200 : 100,
+                height: 55,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );

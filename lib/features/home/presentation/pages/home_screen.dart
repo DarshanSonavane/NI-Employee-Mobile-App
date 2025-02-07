@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           },
           builder: (context, state) {
-            if (state is HomeBlocLoader) {
+            if (state is HomeBlocLoader || homeDetailsValue == null) {
               return const Loader();
             }
 

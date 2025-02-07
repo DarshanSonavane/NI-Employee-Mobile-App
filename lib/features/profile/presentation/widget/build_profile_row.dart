@@ -1,6 +1,8 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/common/widgets/custom_global_text.dart';
+
 class BuildProfileRow extends StatelessWidget {
   final String labelName;
   final String labelValue;
@@ -29,21 +31,17 @@ class BuildProfileRow extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                labelName,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  color: AppPallete.backgroundColor,
-                ),
+              CustomGlolbalText(
+                text: labelName,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: AppPallete.deepNavy,
               ),
               const SizedBox(height: 4),
-              Text(
-                labelValue,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: AppPallete.backgroundColor,
-                ),
+              CustomGlolbalText(
+                text: labelValue,
+                fontSize: 16,
+                color: AppPallete.deepNavy,
               ),
             ],
           ),

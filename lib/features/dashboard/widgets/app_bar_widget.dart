@@ -1,8 +1,10 @@
 import 'package:employee_ni_service/features/auth/presentation/pages/signin.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../core/app_theme/app_pallete.dart';
 import '../../../core/database/hive_storage_service.dart';
 import '../../../service_locator_dependecies.dart';
+import '../provider/dashboard_state.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -52,6 +54,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                   SigninScreen.route(),
                   (route) => false,
                 );
+                context.read<DashboardState>().resetState();
               }
             },
             icon: const Icon(

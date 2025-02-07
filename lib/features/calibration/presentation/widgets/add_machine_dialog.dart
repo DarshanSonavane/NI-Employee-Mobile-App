@@ -74,34 +74,42 @@ class _AddMachineDialogState extends State<AddMachineDialog> {
         ),
       ),
       actions: [
-        AuthGradientButton(
-            buttonText: Constants.submit,
-            startColor: AppPallete.buttonColor,
-            endColor: AppPallete.gradientColor,
-            width: screenWidth > 600 ? 200 : 100,
-            height: 55,
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                Navigator.pop(context);
-                RequestAddMachineModel requestAddMachineModel =
-                    RequestAddMachineModel(
-                  machineType: selectedMachine!,
-                  machineNumber: machineNumberController.text.toString(),
-                  customerCode: customerCodeController.text.toString(),
-                );
-                widget.onAddMachineTap(requestAddMachineModel);
-              }
-            }),
-        const SizedBox(width: 5),
-        AuthGradientButton(
-          buttonText: Constants.close,
-          startColor: AppPallete.label3Color,
-          endColor: AppPallete.label3Color,
-          width: screenWidth > 600 ? 200 : 100,
-          height: 55,
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        Row(
+          children: [
+            Expanded(
+              child: AuthGradientButton(
+                  buttonText: Constants.submit,
+                  startColor: AppPallete.buttonColor,
+                  endColor: AppPallete.gradientColor,
+                  width: screenWidth > 600 ? 200 : 100,
+                  height: 55,
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.pop(context);
+                      RequestAddMachineModel requestAddMachineModel =
+                          RequestAddMachineModel(
+                        machineType: selectedMachine!,
+                        machineNumber: machineNumberController.text.toString(),
+                        customerCode: customerCodeController.text.toString(),
+                      );
+                      widget.onAddMachineTap(requestAddMachineModel);
+                    }
+                  }),
+            ),
+            const SizedBox(width: 15),
+            Expanded(
+              child: AuthGradientButton(
+                buttonText: Constants.close,
+                startColor: AppPallete.label3Color,
+                endColor: AppPallete.label3Color,
+                width: screenWidth > 600 ? 200 : 100,
+                height: 55,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );

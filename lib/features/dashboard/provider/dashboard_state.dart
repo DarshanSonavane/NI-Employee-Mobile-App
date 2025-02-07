@@ -46,6 +46,12 @@ class DashboardState with ChangeNotifier {
     notifyListeners();
   }
 
+  void resetState() {
+    _selectedIndex = 4;
+    _isFabSelected = true;
+    notifyListeners();
+  }
+
   void _fetchTabData(int index, BuildContext context) {
     switch (index) {
       case 0:

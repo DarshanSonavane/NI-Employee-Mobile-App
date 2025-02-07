@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 
 class CustomDropdown<T> extends StatelessWidget {
@@ -11,6 +12,7 @@ class CustomDropdown<T> extends StatelessWidget {
   final Color iconColor;
   final Color textColor;
   final Color dropdownColor;
+  final bool? isEnabled;
 
   const CustomDropdown({
     super.key,
@@ -24,14 +26,16 @@ class CustomDropdown<T> extends StatelessWidget {
     this.iconColor = Colors.black,
     this.textColor = Colors.black,
     this.dropdownColor = Colors.white,
+    this.isEnabled,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool enabled = isEnabled ?? true;
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: borderColor,
+          color: enabled ? borderColor : AppPallete.label2Color,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(borderRadius),
@@ -42,20 +46,23 @@ class CustomDropdown<T> extends StatelessWidget {
         hint: Text(
           hintText,
           style: TextStyle(
-            color: textColor,
+            color: enabled ? textColor : AppPallete.label2Color,
             fontSize: 16,
           ),
         ),
         isExpanded: true,
         underline: const SizedBox(), // Remove the default underline
-        icon: Icon(Icons.arrow_drop_down, color: iconColor),
+        icon: Icon(
+          Icons.arrow_drop_down,
+          color: enabled ? iconColor : AppPallete.label2Color,
+        ),
         style: TextStyle(
-          color: textColor,
+          color: enabled ? textColor : AppPallete.label2Color,
           fontSize: 16,
         ),
         dropdownColor: dropdownColor,
         items: items,
-        onChanged: onChanged,
+        onChanged: enabled ? onChanged : null,
       ),
     );
   }

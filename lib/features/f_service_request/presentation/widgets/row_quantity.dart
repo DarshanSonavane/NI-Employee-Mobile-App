@@ -15,7 +15,6 @@ class RowQuantity extends StatefulWidget {
 }
 
 class _RowQuantityState extends State<RowQuantity> {
-  int quantity = 0;
   @override
   Widget build(BuildContext context) {
     final quantityProvider =
@@ -32,14 +31,9 @@ class _RowQuantityState extends State<RowQuantity> {
         Row(
           children: [
             IconButton(
-              onPressed: quantity <
-                      widget
-                          .assignedQuantity // Limit increment to assignedQuantity
+              onPressed: quantityProvider.getQuantity < widget.assignedQuantity
                   ? () {
                       quantityProvider.increment();
-                      setState(() {
-                        quantity++;
-                      });
                     }
                   : null,
               icon: const Icon(
@@ -49,18 +43,15 @@ class _RowQuantityState extends State<RowQuantity> {
               ),
             ),
             CustomGlolbalText(
-              text: quantityProvider.quantity.toString(),
+              text: quantityProvider.getQuantity.toString(),
               fontSize: 16,
               color: AppPallete.label3Color,
               fontWeight: FontWeight.bold,
             ),
             IconButton(
-              onPressed: quantity > 0
+              onPressed: quantityProvider.getQuantity > 0
                   ? () {
                       quantityProvider.decrement();
-                      setState(() {
-                        quantity--;
-                      });
                     }
                   : null,
               icon: const Icon(

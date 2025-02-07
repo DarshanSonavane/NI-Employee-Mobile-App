@@ -23,6 +23,10 @@ class ApiUrls {
   static const getAssignedComplaint = '${baseUrl}get-assigned-complaints';
   static const getFSRList = '${baseUrl}fsr-list';
   static const fetchMasterInventory = '${baseUrl}fetch-master-inventory';
+  static const sendVerificationCode = '${baseUrl}send-verification-code';
+  static const sendOTP = '${baseUrl}verify-otp';
+  static const createFSR = '${baseUrl}create-fsr';
+  static const insertUpdateMaster = '${baseUrl}insert-update-master-inventory';
   static const getAssignedProductInventory =
       '${baseUrl}employee-inventory-list';
   static const assignedProductToEmp =

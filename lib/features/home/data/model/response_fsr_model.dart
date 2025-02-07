@@ -54,7 +54,7 @@ class FsrDataModel extends FsrDataEntity {
       designation: json['designation'],
       employeeCode: json['employeeCode'],
       complaintType: json['complaintType'],
-      natureOfCompliant: json['natureOfCompliant'],
+      natureOfCompliant: json['natureOfCall'] ?? "",
       productsUsed: List<ProductUsedModel>.from(
         json['productsUsed'].map((x) => ProductUsedModel.fromJson(x)),
       ),
@@ -77,7 +77,7 @@ class FsrDataModel extends FsrDataEntity {
       'designation': designation,
       'employeeCode': employeeCode,
       'complaintType': complaintType,
-      'natureOfCompliant': natureOfCompliant,
+      'natureOfCall': natureOfCompliant,
       'productsUsed':
           productsUsed.map((x) => (x as ProductUsedModel).toJson()).toList(),
       'remark': remark,
@@ -105,13 +105,13 @@ class ProductUsedModel extends ProductUsedEntity {
 
   factory ProductUsedModel.fromJson(Map<String, dynamic> json) {
     return ProductUsedModel(
-      productName: json['productName'],
-      quantityUsed: json['quantityUsed'],
-      chargeable: json['chargeable'],
-      rate: json['rate'],
-      amount: json['amount'],
-      gstAmount: json['gstAmount'],
-      id: json['_id'],
+      productName: json['productName'] ?? "",
+      quantityUsed: json['quantityUsed'] ?? "",
+      chargeable: json['chargeable'] ?? "",
+      rate: json['rate'] ?? "",
+      amount: json['amount'] ?? "",
+      gstAmount: json['gstAmount'] ?? "",
+      id: json['_id'] ?? "",
     );
   }
 

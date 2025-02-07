@@ -22,8 +22,10 @@ class GenericDropdown extends StatelessWidget {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         labelText: '$dropDownType*',
-        labelStyle: const TextStyle(color: AppPallete.label3Color),
+        labelStyle: const TextStyle(color: AppPallete.deepNavy, fontSize: 16),
         filled: true,
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         fillColor: AppPallete.backgroundClosed,
         // Define borders for all states with rounded edges
         enabledBorder: OutlineInputBorder(
@@ -52,7 +54,7 @@ class GenericDropdown extends StatelessWidget {
       ),
       style: const TextStyle(
         color: AppPallete.label3Color,
-        fontSize: 20,
+        fontSize: 16,
       ),
       value: selectedValue,
       items: options

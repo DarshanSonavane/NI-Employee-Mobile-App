@@ -1,21 +1,30 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/dialog_helper.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
+import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:employee_ni_service/core/utils/machine_options.dart';
+import 'package:employee_ni_service/core/utils/show_snackbar.dart';
 import 'package:employee_ni_service/features/dashboard/widgets/app_bar_widget.dart';
+import 'package:employee_ni_service/features/f_service_request/data/model/request_create_fsr_model.dart';
+import 'package:employee_ni_service/features/f_service_request/data/model/response_verification_model.dart';
+import 'package:employee_ni_service/features/f_service_request/domain/entities/request_create_fsr_entity.dart';
+import 'package:employee_ni_service/features/f_service_request/presentation/bloc/fsr_bloc.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/provider/total_amount_provider.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/widgets/create_signature_dialog.dart';
+import 'package:employee_ni_service/features/f_service_request/presentation/widgets/otp_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/common/widgets/auth_gradient_button.dart';
 import '../../../../core/common/widgets/custom_text_field.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/location_permission.dart';
 import '../../../calibration/presentation/widgets/machine_dropdown.dart';
+import '../../../products/presentation/bloc/product_bloc.dart';
 import '../widgets/add_details_widget.dart';
+import '../widgets/signature_display.dart';
 import '../widgets/switch_chargable.dart';
 
 class FServiceRequest extends StatefulWidget {
@@ -63,10 +72,17 @@ class _FServiceRequestState extends State<FServiceRequest> {
   final detailsActionController = TextEditingController();
   double totalAmount = 0.0;
   bool isChargable = false;
+  int epochMillisecondsStart = 0;
+  int epochMillisecondsEnd = 0;
+  double totalAmountincGST = 0.0;
+  String employeeSign = "";
+  String customerSign = "";
+  String fsrLocation = "";
+  List<ProductUsedEntity> productsUsed = [];
 
   @override
   void initState() {
-    int epochMilliseconds = DateTime.now().millisecondsSinceEpoch;
+    epochMillisecondsStart = DateTime.now().millisecondsSinceEpoch;
     super.initState();
   }
 
@@ -79,7 +95,13 @@ class _FServiceRequestState extends State<FServiceRequest> {
     }
   }
 
-  Future<void> getCurrentLocation() async {
+  void _updateTotalAmountincGST(double newValue) {
+    setState(() {
+      totalAmountincGST = newValue;
+    });
+  }
+
+  Future<String> getCurrentLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
           locationSettings: const LocationSettings(
@@ -88,20 +110,16 @@ class _FServiceRequestState extends State<FServiceRequest> {
       ));
       debugPrint(
           "Current location: ${position.latitude}, ${position.longitude}");
-
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
       Placemark place = placemarks[0];
-      debugPrint(
-          "Full address: ${place.street}, ${place.locality}, ${place.country}");
-      debugPrint("Street: ${place.street}");
-      debugPrint("Sub-locality: ${place.subLocality}");
-      debugPrint("Locality: ${place.locality}");
-      debugPrint("Administrative Area: ${place.administrativeArea}");
-      debugPrint("Country: ${place.country}");
-      debugPrint("Postal Code: ${place.postalCode}");
+      String fullAddress =
+          "${place.street}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.country}, ${place.postalCode}";
+      debugPrint("Full address: $fullAddress");
+      return fullAddress;
     } catch (e) {
       debugPrint("Error getting location: $e");
+      throw Exception("Failed to fetch location: $e");
     }
   }
 
@@ -117,282 +135,402 @@ class _FServiceRequestState extends State<FServiceRequest> {
     );
   }
 
-  void validateAndSubmit() {
+  Future<void> validateAndSubmit() async {
     if (formKey.currentState?.validate() != true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill in all required fields'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      showSnackBar(context, "Please fill in all required fields",
+          backgroundColor: AppPallete.errorColor);
       return;
     }
 
-    // Additional field validations
     if (selectedMachine == null || selectedMachine!.isEmpty) {
-      //showError('Please select a machine');
+      showSnackBar(context, Constants.machineDropDown,
+          backgroundColor: AppPallete.errorColor);
       return;
     }
 
     if (natureOfComplaint == null || natureOfComplaint!.isEmpty) {
-      // showError('Please select nature of complaint');
+      showSnackBar(context, 'Please select nature of complaint',
+          backgroundColor: AppPallete.errorColor);
       return;
     }
 
     if (status == null || status!.isEmpty) {
-      // showError('Please select status');
+      showSnackBar(context, 'Please select status',
+          backgroundColor: AppPallete.errorColor);
       return;
     }
 
-    if (designationController.text.trim().isEmpty) {
-      // showError('Please enter designation');
+    bool permissionGranted = await handleLocationPermission();
+    if (!permissionGranted) {
+      showPermissionDeniedDialog();
       return;
     }
 
-    if (remarkController.text.trim().isEmpty) {
-      //showError('Please enter remarks');
-      return;
-    }
+    fsrLocation = await getCurrentLocation();
+    epochMillisecondsEnd = DateTime.now().millisecondsSinceEpoch;
+    sendRequestForCreatingFSR();
+    // _showOtpDialog();
+  }
 
-    if (correctiveActionController.text.trim().isEmpty) {
-      // showError('Please enter details of action');
-      return;
-    }
+  void _showOtpDialog() {
+    context.read<FsrBloc>().add(
+          SendOtpRequest(
+              customerCode: customerCodeController.text, otpType: "complaint"),
+        );
+  }
 
-    if (detailsActionController.text.trim().isEmpty) {
-      //  showError('Please enter corrective action');
-      return;
-    }
+  void sendRequestForCreatingFSR() {
+    RequestCreateFSRModel requestCreateFsrModel = RequestCreateFSRModel(
+      customerCode: customerCodeController.text,
+      contactPerson: contactPersonController.text,
+      designation: designationController.text,
+      employeeCode: engEmpCodeController.text,
+      model: selectedMachine.toString(),
+      employeeId: fetchUserId(),
+      complaintType: complaintTypeController.text,
+      natureOfCompliant: natureOfComplaint.toString(),
+      productsUsed: productsUsed,
+      remark: remarkController.text,
+      correctiveAction: correctiveActionController.text,
+      status: status.toString(),
+      serviceDetails: detailsActionController.text,
+      employeeSignature: employeeSign,
+      customerSignature: customerSign,
+      fsrLocation: fsrLocation,
+      fstStartTime: epochMillisecondsStart.toString(),
+      fsrEndTime: epochMillisecondsEnd.toString(),
+      finalTotalAmount: totalAmountincGST,
+      chargable: isChargable == true ? "1" : "0",
+      complaint: widget.complaintId,
+    );
 
-    // If all validations pass, proceed with location check
-    checkLocationPermission();
+    context.read<FsrBloc>().add(
+          SendRequestForCreateFSR(
+            requestCreateFSRModel: requestCreateFsrModel,
+          ),
+        );
+  }
+
+  void _clearAllFields() {
+    setState(() {
+      selectedMachine = null;
+      natureOfComplaint = null;
+      status = null;
+      customerCodeController.clear();
+      contactPersonController.clear();
+      designationController.clear();
+      engEmpCodeController.clear();
+      complaintTypeController.clear();
+      remarkController.clear();
+      correctiveActionController.clear();
+      detailsActionController.clear();
+      totalAmount = 0.0;
+      isChargable = false;
+      epochMillisecondsStart = 0;
+      epochMillisecondsEnd = 0;
+      totalAmountincGST = 0.0;
+      employeeSign = "";
+      customerSign = "";
+      fsrLocation = "";
+      productsUsed = [];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppPallete.screenBackground,
-      appBar:
-          const AppBarWidget(title: Constants.fsr, isBackButtonVisible: true),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Form(
-            key: formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                spacing: 10,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomTextFormField(
-                    labelText: Constants.customerCode,
-                    value: widget.customerCode,
-                    controller: customerCodeController,
-                    textStyle: const TextStyle(
-                        color: AppPallete.label3Color, fontSize: 20),
-                    labelStyle: const TextStyle(color: AppPallete.label3Color),
-                    fillColor: AppPallete.backgroundClosed,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    editableText: false,
-                  ),
-                  CustomTextFormField(
-                    labelText: Constants.contactPerson,
-                    value: widget.customerName,
-                    controller: contactPersonController,
-                    textStyle: const TextStyle(
-                        color: AppPallete.label3Color, fontSize: 20),
-                    labelStyle: const TextStyle(color: AppPallete.label3Color),
-                    fillColor: AppPallete.backgroundClosed,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    editableText: false,
-                  ),
-                  CustomTextFormField(
-                    labelText: Constants.designation,
-                    controller: designationController,
-                    textStyle: const TextStyle(
-                        color: AppPallete.label3Color, fontSize: 20),
-                    labelStyle: const TextStyle(color: AppPallete.label3Color),
-                    fillColor: AppPallete.backgroundClosed,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                  ),
-                  CustomTextFormField(
-                    labelText: Constants.engEmpCode,
-                    value: widget.employeeCode,
-                    controller: engEmpCodeController,
-                    textStyle: const TextStyle(
-                        color: AppPallete.label3Color, fontSize: 20),
-                    labelStyle: const TextStyle(color: AppPallete.label3Color),
-                    fillColor: AppPallete.backgroundClosed,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    editableText: false,
-                  ),
-                  GenericDropdown(
-                    dropDownType: Constants.selectMachine,
-                    selectedValue: selectedMachine,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedMachine = value;
-                      });
-                    },
-                    options: machineOptions,
-                  ),
-                  CustomTextFormField(
-                    labelText: Constants.complaintType,
-                    value: widget.complaintType,
-                    controller: complaintTypeController,
-                    textStyle: const TextStyle(
-                        color: AppPallete.label3Color, fontSize: 20),
-                    labelStyle: const TextStyle(color: AppPallete.label3Color),
-                    fillColor: AppPallete.backgroundClosed,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    editableText: false,
-                    minLines: 1,
-                    maxLines: null,
-                  ),
-                  GenericDropdown(
-                    dropDownType: Constants.natureOfComplaint,
-                    selectedValue: natureOfComplaint,
-                    onChanged: (value) {
-                      setState(() {
-                        natureOfComplaint = value;
-                      });
-                    },
-                    options: natureOfCallOptions,
-                  ),
-                  CustomTextFormField(
-                    labelText: Constants.remark,
-                    controller: remarkController,
-                    textStyle: const TextStyle(
-                        color: AppPallete.label3Color, fontSize: 20),
-                    labelStyle: const TextStyle(color: AppPallete.label3Color),
-                    fillColor: AppPallete.backgroundClosed,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                  ),
-                  CustomTextFormField(
-                    labelText: Constants.detailsOfAction,
-                    controller: correctiveActionController,
-                    textStyle: const TextStyle(
-                        color: AppPallete.label3Color, fontSize: 20),
-                    labelStyle: const TextStyle(color: AppPallete.label3Color),
-                    fillColor: AppPallete.backgroundClosed,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    maxLines: null,
-                    minLines: 3,
-                  ),
-                  CustomTextFormField(
-                    labelText: Constants.correctiveAction,
-                    controller: detailsActionController,
-                    textStyle: const TextStyle(
-                        color: AppPallete.label3Color, fontSize: 20),
-                    labelStyle: const TextStyle(color: AppPallete.label3Color),
-                    fillColor: AppPallete.backgroundClosed,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    maxLines: null,
-                    minLines: 3,
-                  ),
-                  GenericDropdown(
-                    dropDownType: Constants.status,
-                    selectedValue: status,
-                    onChanged: (value) {
-                      setState(() {
-                        status = value;
-                      });
-                    },
-                    options: statusOptions,
-                  ),
-                  const SizedBox(height: 5),
-                  SwitchChargable(
-                    onChargableChanged: (value) {
-                      setState(() {
-                        isChargable = value;
-                      });
-                    },
-                  ),
-                  const AddDetailsWidget(),
-                  Consumer<TotalAmountProvider>(
-                    builder: (context, provider, child) {
-                      double totalAmountincGST = provider.getTotalAmountInclGst;
-                      if (isChargable) {
-                        double gst = 2500 * 0.18;
-                        totalAmountincGST += 2500 + gst;
-                      }
-                      return Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 4.0),
-                          child: setTextNormal(
-                              '${Constants.totalAmountInclGst}${totalAmountincGST.toString()}/-',
-                              1),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        backgroundColor: AppPallete.screenBackground,
+        appBar:
+            const AppBarWidget(title: Constants.fsr, isBackButtonVisible: true),
+        body: BlocListener<FsrBloc, FsrState>(
+          listener: (context, state) {
+            if (state is FsrFailure) {
+              showSnackBar(context, state.message);
+            }
+            if (state is FsrSuccess<ResponseVerificationModel>) {
+              if (state.type == "sendVerification") {
+                OtpDialog.showOtpDialog(
+                    context: context,
+                    onSubmitOtp: (String otpValue) {
+                      context.read<FsrBloc>().add(VerifyOtp(
+                          customerCode: customerCodeController.text,
+                          otpValue: otpValue,
+                          otpType: "complaint"));
+                    });
+              } else if (state.type == "sendOTP") {
+                sendRequestForCreatingFSR();
+              } else {
+                showSnackBar(context, state.data.message,
+                    backgroundColor: AppPallete.gradientColor);
+                _clearAllFields();
+                Navigator.pop(context);
+              }
+            }
+          },
+          child: BlocBuilder<FsrBloc, FsrState>(builder: (context, state) {
+            if (state is ProductLoader) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    spacing: 10,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      CustomTextFormField(
+                        labelText: Constants.customerCode,
+                        value: widget.customerCode,
+                        controller: customerCodeController,
+                        textStyle: const TextStyle(
+                            color: AppPallete.label3Color, fontSize: 16),
+                        labelStyle: const TextStyle(color: AppPallete.deepNavy),
+                        fillColor: AppPallete.backgroundClosed,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        editableText: false,
+                      ),
+                      CustomTextFormField(
+                        labelText: Constants.contactPerson,
+                        value: widget.customerName,
+                        controller: contactPersonController,
+                        textStyle: const TextStyle(
+                            color: AppPallete.label3Color, fontSize: 16),
+                        labelStyle: const TextStyle(color: AppPallete.deepNavy),
+                        fillColor: AppPallete.backgroundClosed,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        editableText: false,
+                      ),
+                      CustomTextFormField(
+                        labelText: Constants.designation,
+                        controller: designationController,
+                        textStyle: const TextStyle(
+                            color: AppPallete.label3Color, fontSize: 16),
+                        labelStyle: const TextStyle(color: AppPallete.deepNavy),
+                        fillColor: AppPallete.backgroundClosed,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      ),
+                      CustomTextFormField(
+                        labelText: Constants.engEmpCode,
+                        value: widget.employeeCode,
+                        controller: engEmpCodeController,
+                        textStyle: const TextStyle(
+                            color: AppPallete.label3Color, fontSize: 16),
+                        labelStyle: const TextStyle(color: AppPallete.deepNavy),
+                        fillColor: AppPallete.backgroundClosed,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        editableText: false,
+                      ),
+                      GenericDropdown(
+                        dropDownType: Constants.selectMachine,
+                        selectedValue: selectedMachine,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedMachine = value;
+                          });
+                        },
+                        options: machineOptions,
+                      ),
+                      CustomTextFormField(
+                        labelText: Constants.complaintType,
+                        value: widget.complaintType,
+                        controller: complaintTypeController,
+                        textStyle: const TextStyle(
+                            color: AppPallete.label3Color, fontSize: 16),
+                        labelStyle: const TextStyle(color: AppPallete.deepNavy),
+                        fillColor: AppPallete.backgroundClosed,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        editableText: false,
+                        minLines: 1,
+                        maxLines: null,
+                      ),
+                      GenericDropdown(
+                        dropDownType: Constants.natureOfComplaint,
+                        selectedValue: natureOfComplaint,
+                        onChanged: (value) {
+                          setState(() {
+                            natureOfComplaint = value;
+                          });
+                        },
+                        options: natureOfCallOptions,
+                      ),
+                      CustomTextFormField(
+                        labelText: Constants.remark,
+                        controller: remarkController,
+                        textStyle: const TextStyle(
+                            color: AppPallete.label3Color, fontSize: 16),
+                        labelStyle: const TextStyle(color: AppPallete.deepNavy),
+                        fillColor: AppPallete.backgroundClosed,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      ),
+                      CustomTextFormField(
+                        labelText: Constants.detailsOfAction,
+                        controller: detailsActionController,
+                        textStyle: const TextStyle(
+                            color: AppPallete.label3Color, fontSize: 16),
+                        labelStyle: const TextStyle(color: AppPallete.deepNavy),
+                        fillColor: AppPallete.backgroundClosed,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        maxLines: null,
+                        minLines: 3,
+                      ),
+                      CustomTextFormField(
+                        labelText: Constants.correctiveAction,
+                        controller: correctiveActionController,
+                        textStyle: const TextStyle(
+                            color: AppPallete.label3Color, fontSize: 16),
+                        labelStyle: const TextStyle(color: AppPallete.deepNavy),
+                        fillColor: AppPallete.backgroundClosed,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        maxLines: null,
+                        minLines: 3,
+                      ),
+                      GenericDropdown(
+                        dropDownType: Constants.status,
+                        selectedValue: status,
+                        onChanged: (value) {
+                          setState(() {
+                            status = value;
+                          });
+                        },
+                        options: statusOptions,
+                      ),
+                      const SizedBox(height: 5),
+                      SwitchChargable(
+                        onChargableChanged: (value) {
+                          setState(() {
+                            isChargable = value;
+                          });
+                        },
+                      ),
+                      AddDetailsWidget(
+                        onProductsChanged: (products) {
+                          setState(() {
+                            productsUsed = products;
+                          });
+                        },
+                      ),
+                      Consumer<TotalAmountProvider>(
+                        builder: (context, provider, child) {
+                          double totalAmountincGST =
+                              provider.getTotalAmountInclGst;
+                          if (isChargable) {
+                            double gst = 2500 * 0.18;
+                            totalAmountincGST += 2500 + gst;
+                          }
+
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _updateTotalAmountincGST(totalAmountincGST);
+                          });
+                          return Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 4.0),
+                              child: setTextNormal(
+                                  '${Constants.totalAmountInclGst}${totalAmountincGST.toString()}/-',
+                                  1),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AuthGradientButton(
+                            buttonText: Constants.employeeSignature,
+                            startColor: AppPallete.buttonColor,
+                            endColor: AppPallete.gradientColor,
+                            fontSize: 13.0,
+                            width: MediaQuery.of(context).size.width / 2.2,
+                            height: 55,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return CreateSignatureDialog(
+                                    appBarTitle: Constants.employeeSignature,
+                                    onSignatureSubmitTap: (value) {
+                                      employeeSign = value;
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                          AuthGradientButton(
+                            buttonText: Constants.customerSignature,
+                            startColor: AppPallete.label3Color,
+                            endColor: AppPallete.label3Color,
+                            fontSize: 13.0,
+                            width: MediaQuery.of(context).size.width / 2.2,
+                            height: 55,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return CreateSignatureDialog(
+                                    appBarTitle: Constants.customerSignature,
+                                    onSignatureSubmitTap: (value) {
+                                      customerSign = value;
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      (employeeSign.isNotEmpty || customerSign.isNotEmpty)
+                          ? Column(
+                              spacing: 15,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (employeeSign.isNotEmpty)
+                                  SignatureDisplay(
+                                    signature: employeeSign,
+                                    label: Constants.employeeSignature,
+                                    onDelete: () {
+                                      setState(() {
+                                        employeeSign = "";
+                                      });
+                                    },
+                                  ),
+                                if (customerSign.isNotEmpty)
+                                  SignatureDisplay(
+                                    signature: customerSign,
+                                    label: Constants.customerSignature,
+                                    onDelete: () {
+                                      setState(() {
+                                        customerSign = "";
+                                      });
+                                    },
+                                  ),
+                              ],
+                            )
+                          : Container(),
+                      const SizedBox(height: 10),
                       AuthGradientButton(
-                        buttonText: Constants.employeeSignature,
+                        buttonText: Constants.submit,
                         startColor: AppPallete.buttonColor,
                         endColor: AppPallete.gradientColor,
-                        fontSize: 13.0,
-                        width: MediaQuery.of(context).size.width / 2.2,
+                        width: MediaQuery.of(context).size.width * 1,
                         height: 55,
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return CreateSignatureDialog(
-                                appBarTitle: Constants.employeeSignature,
-                                onSignatureSubmitTap: (value) => {},
-                              );
-                            },
-                          );
-                        },
+                        onPressed: () => validateAndSubmit(),
                       ),
-                      AuthGradientButton(
-                        buttonText: Constants.customerSignature,
-                        startColor: AppPallete.label3Color,
-                        endColor: AppPallete.label3Color,
-                        fontSize: 13.0,
-                        width: MediaQuery.of(context).size.width / 2.2,
-                        height: 55,
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return CreateSignatureDialog(
-                                appBarTitle: Constants.customerSignature,
-                                onSignatureSubmitTap: (value) =>
-                                    {debugPrint(value)},
-                              );
-                            },
-                          );
-                        },
-                      ),
+                      const SizedBox(height: 20)
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  AuthGradientButton(
-                    buttonText: Constants.submit,
-                    startColor: AppPallete.buttonColor,
-                    endColor: AppPallete.gradientColor,
-                    width: MediaQuery.of(context).size.width * 1,
-                    height: 55,
-                    onPressed: validateAndSubmit,
-                    // onPressed: () {
-                    //   checkLocationPermission();
-                    // },
-                  ),
-                  const SizedBox(height: 20)
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
-    );
+            );
+          }),
+        ));
   }
 }

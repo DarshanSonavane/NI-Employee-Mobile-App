@@ -2,6 +2,7 @@ import 'package:employee_ni_service/features/assign_product_by_admin/presentatio
 import 'package:flutter/material.dart';
 
 import '../../../../core/app_theme/app_pallete.dart';
+import '../../../insert_update_master_admin/presentation/pages/insert_update_master_inventory_screen.dart';
 
 class ShowAdminProductScreen extends StatelessWidget {
   const ShowAdminProductScreen({
@@ -23,7 +24,8 @@ class ShowAdminProductScreen extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 if (index == 0) {
-                  // Navigator.pushNamed(context, '/insert_update_master_inventory');
+                  Navigator.push(
+                      context, InsertUpdateMasterInventoryScreen.route());
                 } else {
                   Navigator.push(context, AssignProductScreen.route());
                 }

@@ -15,6 +15,7 @@ class Constants {
   static const confirmPassword = 'Confirm Password';
   static const customerCode = 'Customer Code';
   static const contactPerson = 'Contact Person';
+  static const otpScreen = 'OTP Number';
   static const designation = 'Designation';
   static const complaintType = 'Complaint Type';
   static const remark = 'Remark...';
@@ -37,7 +38,7 @@ class Constants {
   static const productInventory = 'Product Inventory';
   static const fsrTab = 'FSR';
   static const productsTab = 'Products';
-  static const natureOfComplaint = 'Nature of complaint';
+  static const natureOfComplaint = 'Nature of call';
   static const profile = 'Profile';
   static const open = 'Open';
   static const close = 'Closed';

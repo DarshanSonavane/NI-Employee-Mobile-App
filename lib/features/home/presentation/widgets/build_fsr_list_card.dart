@@ -55,7 +55,7 @@ class BuildFsrListCard extends StatelessWidget {
                   );
                 },
                 child: Center(
-                  child: fsrList != null && fsrList!.fsrData.length > 2
+                  child: fsrList != null && fsrList!.fsrData.isNotEmpty
                       ? const CustomGlolbalText(
                           text: "View All FSRs",
                           fontSize: 18,

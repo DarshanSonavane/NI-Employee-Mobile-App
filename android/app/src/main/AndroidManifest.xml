@@ -6,7 +6,7 @@
 
 
     <application
-        android:label="ni_employee"
+        android:label="NI Employee"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

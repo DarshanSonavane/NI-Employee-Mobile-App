@@ -10,11 +10,13 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/fetch_user_role.dart';
 import '../../../../core/utils/show_snackbar.dart';
 import '../../../products/presentation/bloc/product_bloc.dart';
+import '../../domain/entities/request_create_fsr_entity.dart';
 import '../provider/total_amount_provider.dart';
 import 'add_details_card.dart';
 
 class AddDetailsWidget extends StatefulWidget {
-  const AddDetailsWidget({super.key});
+  final Function(List<ProductUsedEntity>) onProductsChanged;
+  const AddDetailsWidget({super.key, required this.onProductsChanged});
 
   @override
   State<AddDetailsWidget> createState() => _AddDetailsWidgetState();
@@ -25,6 +27,7 @@ class _AddDetailsWidgetState extends State<AddDetailsWidget> {
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final uuid = const Uuid();
   List<EmployeeInventoryEntity> inventoryList = [];
+  final Map<Key, ProductUsedEntity> productsByCard = {};
 
   @override
   void initState() {
@@ -51,6 +54,7 @@ class _AddDetailsWidgetState extends State<AddDetailsWidget> {
           isLastCard: true,
           onDelete: (Key key) => removeCard(key),
           inventoryList: inventoryList,
+          onProductChanged: (product) => updateProducts(cardKey, product),
         ),
       );
 
@@ -65,6 +69,8 @@ class _AddDetailsWidgetState extends State<AddDetailsWidget> {
               isLastCard: false,
               onDelete: (Key key) => removeCard(key),
               inventoryList: inventoryList,
+              onProductChanged: (product) =>
+                  updateProducts(lastCard.$2, product),
             ),
           ),
           lastCard.$2
@@ -83,6 +89,7 @@ class _AddDetailsWidgetState extends State<AddDetailsWidget> {
       final removedEntry = cardEntries[index];
       cardEntries.removeAt(index);
       Provider.of<TotalAmountProvider>(context, listen: false).removeCard(key);
+      removeProduct(key);
       listKey.currentState?.removeItem(
         index,
         (context, animation) => SizeTransition(
@@ -106,12 +113,24 @@ class _AddDetailsWidgetState extends State<AddDetailsWidget> {
               isLastCard: true,
               onDelete: (Key key) => removeCard(key),
               inventoryList: inventoryList,
+              onProductChanged: (product) =>
+                  updateProducts(lastCard.$2, product),
             ),
           ),
           lastCard.$2
         );
       }
     }
+  }
+
+  void updateProducts(Key cardKey, ProductUsedEntity product) {
+    productsByCard[cardKey] = product;
+    widget.onProductsChanged(productsByCard.values.toList());
+  }
+
+  void removeProduct(Key cardKey) {
+    productsByCard.remove(cardKey);
+    widget.onProductsChanged(productsByCard.values.toList());
   }
 
   @override

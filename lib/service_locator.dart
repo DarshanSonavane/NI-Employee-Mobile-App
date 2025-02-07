@@ -17,6 +17,80 @@ Future<void> initDependecies() async {
   _initGetProfileData();
   _initGetAssignedProductList();
   _initAssignProductFromMasterInventory();
+  _initFSRScreen();
+  _initMasterInventory();
+}
+
+void _initMasterInventory() {
+  sl.registerSingleton<UpdateProductsInventoryService>(
+    UpdateProductsInventoryServiceImpl(),
+  );
+  //Repository
+  sl.registerSingleton<InsertUpdateProductRepository>(
+    InsertUpdateProductRepositoryImpl(),
+  );
+
+  //UseCases
+  sl.registerSingleton<InsertUpdateProductUsecase>(
+    InsertUpdateProductUsecase(),
+  );
+
+  sl.registerFactory<MasterInventoryBloc>(
+    () => MasterInventoryBloc(
+      fetchMasterInventoryUsecase: sl(),
+      insertUpdateProductUsecase: sl(),
+    ),
+  );
+}
+
+void _initFSRScreen() {
+  //service
+  sl.registerSingleton<CreateFSRService>(
+    CreateFSRServiceImpl(),
+  );
+
+  sl.registerSingleton<SendOtpService>(
+    SendOtpServiceImpl(),
+  );
+
+  sl.registerSingleton<SendVerificationService>(
+    SendVerificationServiceImpl(),
+  );
+
+  //Repository
+  sl.registerSingleton<SendOTPRepository>(
+    SendOTPRepositoryImpl(),
+  );
+
+  sl.registerSingleton<SendRequestForCreateFSRRepository>(
+    CreateFsrRepositoryImpl(),
+  );
+
+  sl.registerSingleton<SendVerificationRepository>(
+    SendVerificationRepositoryImpl(),
+  );
+
+  //UseCases
+  sl.registerSingleton<CreateFSRUsecase>(
+    CreateFSRUsecase(),
+  );
+
+  sl.registerSingleton<SendOtpUsecase>(
+    SendOtpUsecase(),
+  );
+
+  sl.registerSingleton<SendVerificationUsecase>(
+    SendVerificationUsecase(),
+  );
+
+  //Bloc
+  sl.registerFactory<FsrBloc>(
+    () => FsrBloc(
+      sendVerificationCodeUsecase: sl(),
+      sendOTPUsecase: sl(),
+      createFsrUsecase: sl(),
+    ),
+  );
 }
 
 void _initAssignProductFromMasterInventory() {

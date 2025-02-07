@@ -107,10 +107,10 @@ class _CalibrationScreenState extends State<CalibrationScreen>
       backgroundColor: AppPallete.screenBackground,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Visibility(
-              visible: fetchUserRole() == '0',
+          Visibility(
+            visible: fetchUserRole() == '0',
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

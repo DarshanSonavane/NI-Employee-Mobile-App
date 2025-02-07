@@ -108,10 +108,10 @@ class _ComplaintEmployeeViewState extends State<ComplaintEmployeeView> {
                       FServiceRequest.route(
                           complaintId,
                           complaint
-                                  .serviceRequestId?.customerId?.customerName ??
+                                  .serviceRequestId?.customerId?.customerCode ??
                               '',
                           complaint
-                                  .serviceRequestId?.customerId?.customerCode ??
+                                  .serviceRequestId?.customerId?.customerName ??
                               '',
                           hiveStorageService.getUser()!.employeeCode,
                           complaint.serviceRequestId?.complaintType?.name ??

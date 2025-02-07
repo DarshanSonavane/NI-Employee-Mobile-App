@@ -10,15 +10,18 @@ import '../../../../core/common/widgets/custom_global_text.dart';
 import '../../../../core/common/widgets/custom_text_field.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../products/domain/entities/assigned_emp_product_list.dart';
+import '../../domain/entities/request_create_fsr_entity.dart';
 
 class AddDetailsCard extends StatefulWidget {
   final Function(Key) onDelete;
+  final Function(ProductUsedEntity) onProductChanged;
   final Key cardKey;
   final bool isLastCard;
   final List<EmployeeInventoryEntity> inventoryList;
   const AddDetailsCard(
       {super.key,
       required this.onDelete,
+      required this.onProductChanged,
       required this.cardKey,
       required this.isLastCard,
       required this.inventoryList});
@@ -36,15 +39,24 @@ class _AddDetailsCardState extends State<AddDetailsCard> {
   final rateController = TextEditingController();
   late double totalAmount = 0.0;
   late TotalAmountProvider? totalAmountProvider;
+  late QuantityProvider quantityProvider;
 
   @override
   void initState() {
     super.initState();
     totalAmountProvider =
         Provider.of<TotalAmountProvider>(context, listen: false);
+    quantityProvider = Provider.of<QuantityProvider>(context, listen: false);
+    quantityProvider.addListener(updateProductData);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       totalAmountProvider?.updateCardAmount(widget.cardKey, totalAmount);
     });
+  }
+
+  @override
+  void dispose() {
+    quantityProvider.removeListener(updateProductData);
+    super.dispose();
   }
 
   @override
@@ -57,6 +69,29 @@ class _AddDetailsCardState extends State<AddDetailsCard> {
           Provider.of<TotalAmountProvider>(context, listen: false);
       totalAmountProvider.updateCardAmount(widget.cardKey, totalAmount);
     });
+  }
+
+  void updateProductData() {
+    if (selectedProduct != null) {
+      final product =
+          widget.inventoryList.firstWhere((item) => item.id == selectedProduct);
+      int selectedQuantity = quantityProvider.getQuantity;
+      double amount = double.parse(rateController.text) * selectedQuantity;
+      double gstAmount = amount * 0.18; // Calculate 18% GST
+      double totalAmountInclGst =
+          amount + gstAmount; // Total amount including GST
+      final productUsed = ProductUsedEntity(
+        productName: product.product.productName,
+        quantityUsed: selectedQuantity,
+        rate: rateController.text,
+        amount: amount,
+        gstAmount: totalAmountInclGst,
+        productId: product.product.id,
+      );
+
+      widget.onProductChanged(productUsed);
+      totalAmountProvider!.updateCardAmount(widget.cardKey, totalAmount);
+    }
   }
 
   @override
@@ -100,6 +135,7 @@ class _AddDetailsCardState extends State<AddDetailsCard> {
                         .price;
                     rateController.text = selectProductPrice.toString();
                   });
+                  updateProductData();
                 },
                 borderColor: AppPallete.gradientColor,
                 iconColor: AppPallete.deepNavy,

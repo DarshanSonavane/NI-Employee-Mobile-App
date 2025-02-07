@@ -74,10 +74,9 @@ class _CreateSignatureDialogState extends State<CreateSignatureDialog> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: AppPallete.bottomNavigationButton,
+        color: AppPallete.gradientColor,
         child: Container(
-          decoration:
-              const BoxDecoration(color: AppPallete.bottomNavigationButton),
+          decoration: const BoxDecoration(color: AppPallete.gradientColor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             mainAxisSize: MainAxisSize.max,
@@ -113,7 +112,10 @@ class _CreateSignatureDialogState extends State<CreateSignatureDialog> {
                 key: const Key(Constants.exportKey),
                 icon: const Icon(Icons.check_circle),
                 color: AppPallete.backgroundOpen,
-                onPressed: () => exportImage(context),
+                onPressed: () {
+                  exportImage(context);
+                  Navigator.of(context).pop();
+                },
                 tooltip: Constants.exportImage,
               ),
             ],

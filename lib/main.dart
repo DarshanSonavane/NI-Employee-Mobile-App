@@ -5,9 +5,11 @@ import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc
 import 'package:employee_ni_service/features/calibration/presentation/bloc/calibration_bloc.dart';
 import 'package:employee_ni_service/features/complaint/presentation/bloc/complaint_bloc.dart';
 import 'package:employee_ni_service/features/dashboard/provider/dashboard_state.dart';
+import 'package:employee_ni_service/features/f_service_request/presentation/bloc/fsr_bloc.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/provider/quantity_provider.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/provider/total_amount_provider.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
+import 'package:employee_ni_service/features/insert_update_master_admin/presentation/bloc/master_inventory_bloc.dart';
 import 'package:employee_ni_service/features/products/presentation/bloc/product_bloc.dart';
 import 'package:employee_ni_service/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:employee_ni_service/features/set_reset_password/presentation/bloc/set_reset_password_bloc.dart';
@@ -52,6 +54,12 @@ void main() async {
         BlocProvider(
           create: (_) => sl<AssignProductToEmployeeBloc>(),
         ),
+        BlocProvider(
+          create: (_) => sl<FsrBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<MasterInventoryBloc>(),
+        )
       ],
       child: MultiProvider(
         providers: [
