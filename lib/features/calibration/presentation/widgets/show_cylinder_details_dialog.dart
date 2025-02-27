@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/common/widgets/auth_gradient_button.dart';
 import '../../../../core/constants/constants.dart';
+import '../../../../core/utils/show_snackbar.dart';
 
 class ShowCylinderDetailsDialog extends StatefulWidget {
   final ResponseCylinderDetails responseCylinderDetails;
@@ -136,6 +137,17 @@ class _ShowCylinderDetailsDialogState extends State<ShowCylinderDetailsDialog> {
                 width: screenWidth > 600 ? 200 : 100,
                 height: 55,
                 onPressed: () {
+                  if (coController.text.isEmpty ||
+                      co2Controller.text.isEmpty ||
+                      hcController.text.isEmpty ||
+                      o2Controller.text.isEmpty ||
+                      cylinderNumberController.text.isEmpty ||
+                      cylinderMakeController.text.isEmpty ||
+                      validityDateController.text.isEmpty) {
+                    showSnackBar(context, "Please fill in all required fields",
+                        backgroundColor: AppPallete.errorColor);
+                    return;
+                  }
                   Navigator.pop(context);
                   final requestUpdateCylinderDetails =
                       RequestUpdateCylinderDetails(
@@ -187,6 +199,7 @@ class _ShowCylinderDetailsDialogState extends State<ShowCylinderDetailsDialog> {
           fillColor: AppPallete.backgroundClosed,
           border: const UnderlineInputBorder(),
         ),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
       ),
     );
   }

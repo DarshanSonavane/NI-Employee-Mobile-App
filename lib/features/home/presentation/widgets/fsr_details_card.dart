@@ -65,7 +65,17 @@ class FSRDetailsCard extends StatelessWidget {
                 fontSize: 14,
                 color: AppPallete.label3Color,
               ),
-              ProductsUsedSection(productsUsed: fsr.productsUsed),
+              CustomGlolbalText(
+                text:
+                    "Service Charge: ${fsr.serviceCharge == "0" ? "No" : "Yes"}",
+                fontSize: 14,
+                fontStyle: FontStyle.italic,
+                color: AppPallete.bottomNavigationButton,
+              ),
+              ProductsUsedSection(
+                  productsUsed: fsr.productsUsed,
+                  fsrFinalAmount: fsr.fsrFinalAmount,
+                  fsrGstAmount: fsr.fsrFinalGstAmount),
             ],
           ],
         ),

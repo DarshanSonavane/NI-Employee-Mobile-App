@@ -1,6 +1,7 @@
 import 'package:employee_ni_service/core/common/widgets/custom_global_text.dart';
 import 'package:employee_ni_service/features/fsr_list_detail/presentation/pages/fsr_details_screen.dart';
 import 'package:employee_ni_service/features/home/data/model/response_fsr_model.dart';
+import 'package:employee_ni_service/features/products/presentation/widgets/no_product_available.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/app_theme/app_pallete.dart';
 import 'fsr_details_card.dart';
@@ -39,11 +40,7 @@ class BuildFsrListCard extends StatelessWidget {
               const SizedBox(
                 height: 200,
                 child: Center(
-                  child: CustomGlolbalText(
-                    text: "No FSR Data Available",
-                    fontSize: 14,
-                    color: AppPallete.label2Color,
-                  ),
+                  child: NoProductAvailable(),
                 ),
               ),
             const SizedBox(height: 20),
@@ -57,7 +54,7 @@ class BuildFsrListCard extends StatelessWidget {
                 child: Center(
                   child: fsrList != null && fsrList!.fsrData.isNotEmpty
                       ? const CustomGlolbalText(
-                          text: "View All FSRs",
+                          text: "View FSR in Detail",
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.normal,

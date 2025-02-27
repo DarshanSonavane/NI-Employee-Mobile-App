@@ -11,6 +11,7 @@ import '../../../../core/common/widgets/custom_text_field.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../products/domain/entities/assigned_emp_product_list.dart';
 import '../../domain/entities/request_create_fsr_entity.dart';
+import 'switch_chargable.dart';
 
 class AddDetailsCard extends StatefulWidget {
   final Function(Key) onDelete;
@@ -31,14 +32,14 @@ class AddDetailsCard extends StatefulWidget {
 }
 
 class _AddDetailsCardState extends State<AddDetailsCard> {
-  bool isChargable = false;
+  String isChargable = "N";
   String? selectedMachine;
   String? selectedProduct;
   int assignedQuantity = 0;
   double selectProductPrice = 0.0;
   final rateController = TextEditingController();
-  late double totalAmount = 0.0;
-  late TotalAmountProvider? totalAmountProvider;
+  double totalAmount = 0.0;
+  late TotalAmountProvider totalAmountProvider;
   late QuantityProvider quantityProvider;
 
   @override
@@ -49,26 +50,15 @@ class _AddDetailsCardState extends State<AddDetailsCard> {
     quantityProvider = Provider.of<QuantityProvider>(context, listen: false);
     quantityProvider.addListener(updateProductData);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      totalAmountProvider?.updateCardAmount(widget.cardKey, totalAmount);
+      totalAmountProvider.updateCardAmount(widget.cardKey, totalAmount);
     });
   }
 
   @override
   void dispose() {
     quantityProvider.removeListener(updateProductData);
+    rateController.dispose();
     super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final quantityProvider = Provider.of<QuantityProvider>(context);
-    totalAmount = quantityProvider.quantity * selectProductPrice;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final totalAmountProvider =
-          Provider.of<TotalAmountProvider>(context, listen: false);
-      totalAmountProvider.updateCardAmount(widget.cardKey, totalAmount);
-    });
   }
 
   void updateProductData() {
@@ -77,20 +67,25 @@ class _AddDetailsCardState extends State<AddDetailsCard> {
           widget.inventoryList.firstWhere((item) => item.id == selectedProduct);
       int selectedQuantity = quantityProvider.getQuantity;
       double amount = double.parse(rateController.text) * selectedQuantity;
-      double gstAmount = amount * 0.18; // Calculate 18% GST
-      double totalAmountInclGst =
-          amount + gstAmount; // Total amount including GST
+      double gstAmount = amount * 0.18;
+      double totalAmountInclGst = amount + gstAmount;
+
+      setState(() {
+        totalAmount = isChargable == "Y" ? amount : 0.0;
+      });
+
       final productUsed = ProductUsedEntity(
-        productName: product.product.productName,
-        quantityUsed: selectedQuantity,
-        rate: rateController.text,
-        amount: amount,
-        gstAmount: totalAmountInclGst,
-        productId: product.product.id,
-      );
+          productName: product.product.productName,
+          quantityUsed: selectedQuantity,
+          rate: rateController.text,
+          amount: isChargable == "Y" ? amount : 0.00,
+          gstAmount: isChargable == "Y" ? totalAmountInclGst : 0.00,
+          productId: product.product.id,
+          productCode: product.product.productCode,
+          chargable: isChargable);
 
       widget.onProductChanged(productUsed);
-      totalAmountProvider!.updateCardAmount(widget.cardKey, totalAmount);
+      totalAmountProvider.updateCardAmount(widget.cardKey, totalAmount);
     }
   }
 
@@ -126,13 +121,10 @@ class _AddDetailsCardState extends State<AddDetailsCard> {
                 onChanged: (value) {
                   setState(() {
                     selectedProduct = value;
-                    assignedQuantity = widget.inventoryList
-                        .firstWhere((item) => item.id == value)
-                        .assignedQuantity;
-                    selectProductPrice = widget.inventoryList
-                        .firstWhere((item) => item.id == value)
-                        .product
-                        .price;
+                    final product = widget.inventoryList
+                        .firstWhere((item) => item.id == value);
+                    assignedQuantity = product.assignedQuantity;
+                    selectProductPrice = product.product.price;
                     rateController.text = selectProductPrice.toString();
                   });
                   updateProductData();
@@ -143,6 +135,14 @@ class _AddDetailsCardState extends State<AddDetailsCard> {
                 dropdownColor: AppPallete.backgroundColor,
               ),
               const SizedBox(height: 15),
+              SwitchChargable(
+                onChargableChanged: (value) {
+                  setState(() {
+                    isChargable = value ? "Y" : "N";
+                    updateProductData();
+                  });
+                },
+              ),
               RowQuantity(assignedQuantity: assignedQuantity),
               const SizedBox(height: 10),
               CustomTextFormField(

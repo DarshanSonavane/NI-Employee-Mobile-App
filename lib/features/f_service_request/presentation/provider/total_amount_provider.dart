@@ -27,4 +27,9 @@ class TotalAmountProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void resetTotalAmount() {
+    cardAmounts.clear();
+    notifyListeners();
+  }
 }

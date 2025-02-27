@@ -23,13 +23,13 @@ class SetResetPassword extends StatefulWidget {
 
 class _SetResetPasswordState extends State<SetResetPassword> {
   final formKey = GlobalKey<FormState>();
-  final customerCodeController = TextEditingController();
+  final employeeCodeController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
-    customerCodeController.dispose();
+    employeeCodeController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
@@ -88,8 +88,8 @@ class _SetResetPasswordState extends State<SetResetPassword> {
                       ),
                       const SizedBox(height: 30),
                       AuthField(
-                        hintText: Constants.customerCode,
-                        controller: customerCodeController,
+                        hintText: Constants.employeeCode,
+                        controller: employeeCodeController,
                       ),
                       const SizedBox(height: 15),
                       AuthField(
@@ -115,7 +115,7 @@ class _SetResetPasswordState extends State<SetResetPassword> {
                             context.read<SetResetPasswordBloc>().add(
                                   EventSetResetPassword(
                                     customerCode:
-                                        customerCodeController.text.trim(),
+                                        employeeCodeController.text.trim(),
                                     password: passwordController.text.trim(),
                                   ),
                                 );

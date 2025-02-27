@@ -6,8 +6,6 @@ void showSnackBar(BuildContext context, String content,
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(SnackBar(
-      content: Text(content),
-      backgroundColor:
-          backgroundColor ?? AppPallete.transparentColor, // Use default if null
-    ));
+        content: Text(content),
+        backgroundColor: backgroundColor ?? AppPallete.gradientColor));
 }

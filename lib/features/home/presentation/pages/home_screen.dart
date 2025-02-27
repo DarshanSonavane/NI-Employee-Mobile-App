@@ -7,6 +7,7 @@ import 'package:employee_ni_service/features/home/data/model/response_home_detai
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
 import 'package:employee_ni_service/features/home/presentation/widgets/build_home_details_card.dart';
 import 'package:employee_ni_service/features/home/presentation/widgets/build_pie_char_card.dart';
+import 'package:employee_ni_service/features/products/presentation/widgets/no_product_available.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -58,8 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BuildHomeDetailsCard(homeDetailsValue),
-                  BuildPieCharCard(homeDetailsValue),
+                  fetchUserRole() == "0"
+                      ? BuildHomeDetailsCard(homeDetailsValue)
+                      : const SizedBox.shrink(),
+                  fetchUserRole() == "0"
+                      ? BuildPieCharCard(homeDetailsValue)
+                      : const SizedBox.shrink(),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
@@ -67,7 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         "Field Survey Report(FSR)", ScalingFactor.scale(1.2),
                         color: AppPallete.label3Color),
                   ),
-                  BuildFsrListCard(fsrList),
+                  (fsrList != null && fsrList!.fsrData.isNotEmpty)
+                      ? BuildFsrListCard(fsrList)
+                      : const NoProductAvailable(),
                 ],
               ),
             );

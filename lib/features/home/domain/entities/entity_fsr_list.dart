@@ -25,6 +25,9 @@ class FsrDataEntity {
   final String serviceDetails;
   final String fsrLocation;
   final String fsrStatus;
+  final String fsrFinalAmount;
+  final String fsrFinalGstAmount;
+  final String serviceCharge;
   final CustomerInfoEntity customerInfo;
   final EmployeeInfoEntity employeeInfo;
 
@@ -43,6 +46,9 @@ class FsrDataEntity {
     required this.serviceDetails,
     required this.fsrLocation,
     required this.fsrStatus,
+    required this.fsrFinalAmount,
+    required this.fsrFinalGstAmount,
+    required this.serviceCharge,
     required this.customerInfo,
     required this.employeeInfo,
   });

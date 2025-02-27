@@ -44,6 +44,9 @@ class FsrDataModel extends FsrDataEntity {
     required super.fsrStatus,
     required CustomerInfoModel super.customerInfo,
     required EmployeeInfoModel super.employeeInfo,
+    required super.fsrFinalAmount,
+    required super.fsrFinalGstAmount,
+    required super.serviceCharge,
   });
 
   factory FsrDataModel.fromJson(Map<String, dynamic> json) {
@@ -66,6 +69,9 @@ class FsrDataModel extends FsrDataEntity {
       fsrStatus: json['fsrStatus'],
       customerInfo: CustomerInfoModel.fromJson(json['customerInfo']),
       employeeInfo: EmployeeInfoModel.fromJson(json['employeeInfo']),
+      fsrFinalAmount: json['fsrFinalAmount'],
+      fsrFinalGstAmount: json['totalGSTAmount'],
+      serviceCharge: json['serviceVisit'],
     );
   }
 
@@ -88,6 +94,9 @@ class FsrDataModel extends FsrDataEntity {
       'fsrStatus': fsrStatus,
       'customerInfo': (customerInfo as CustomerInfoModel).toJson(),
       'employeeInfo': (employeeInfo as EmployeeInfoModel).toJson(),
+      'fsrFinalAmount': fsrFinalAmount,
+      'totalGSTAmount': fsrFinalGstAmount,
+      'serviceVisit': serviceCharge,
     };
   }
 }

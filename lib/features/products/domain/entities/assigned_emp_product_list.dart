@@ -50,10 +50,11 @@ class ProductEntity {
   final String id;
   final String productName;
   final double price;
+  final String productCode;
 
-  ProductEntity({
-    required this.id,
-    required this.productName,
-    required this.price,
-  });
+  ProductEntity(
+      {required this.id,
+      required this.productName,
+      required this.price,
+      required this.productCode});
 }

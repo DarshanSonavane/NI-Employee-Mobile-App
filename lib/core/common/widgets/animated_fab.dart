@@ -69,7 +69,7 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu> {
 
     if (userStatus == "0" && status != "0" && tag == "_calibration") {
       return [
-        _buildMenuButton('Generate and send', widget.onGenerateSend ?? () {}),
+        _buildMenuButton('Generate and Send', widget.onGenerateSend ?? () {}),
         _buildMenuButton('Delete', widget.onDelete ?? () {}),
       ];
     }
@@ -82,7 +82,7 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu> {
 
     if (status != "0" && userStatus != "0" && tag == "_calibration") {
       return [
-        _buildMenuButton('Generate and send', widget.onGenerateSend ?? () {}),
+        _buildMenuButton('Generate and Send', widget.onGenerateSend ?? () {}),
       ];
     }
 

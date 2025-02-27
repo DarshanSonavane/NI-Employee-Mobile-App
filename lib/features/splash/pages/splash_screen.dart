@@ -18,8 +18,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future:
-          Future.delayed(const Duration(seconds: 4), () => _checkIfLoggedIn()),
+      future: _checkIfLoggedIn(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return AnimatedSplashScreen(
@@ -28,7 +27,7 @@ class SplashScreen extends StatelessWidget {
             animationDuration: const Duration(seconds: 4),
             splashIconSize: 250,
           );
-        } else if (snapshot.data == true) {
+        } else if (snapshot.hasData && snapshot.data == true) {
           return const DashboardScreen();
         } else {
           return const SigninScreen();

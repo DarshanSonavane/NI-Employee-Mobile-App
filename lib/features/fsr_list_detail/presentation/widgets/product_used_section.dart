@@ -5,8 +5,14 @@ import 'package:employee_ni_service/features/home/domain/entities/entity_fsr_lis
 
 class ProductsUsedSection extends StatefulWidget {
   final List<ProductUsedEntity> productsUsed;
+  final String fsrFinalAmount;
+  final String fsrGstAmount;
 
-  const ProductsUsedSection({super.key, required this.productsUsed});
+  const ProductsUsedSection(
+      {super.key,
+      required this.productsUsed,
+      required this.fsrFinalAmount,
+      required this.fsrGstAmount});
 
   @override
   State<ProductsUsedSection> createState() => ProductsUsedSectionState();
@@ -14,9 +20,10 @@ class ProductsUsedSection extends StatefulWidget {
 
 class ProductsUsedSectionState extends State<ProductsUsedSection> {
   bool _isExpanded = false;
-
   @override
   Widget build(BuildContext context) {
+    debugPrint("FsrFinalAmount: ${widget.fsrFinalAmount}");
+    debugPrint("FsrGstAmount: ${widget.fsrGstAmount}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -87,7 +94,7 @@ class ProductsUsedSectionState extends State<ProductsUsedSection> {
                 alignment: Alignment.bottomRight,
                 child: CustomGlolbalText(
                   text:
-                      "Total: ₹${widget.productsUsed.fold(0, (sum, product) => sum + int.parse(product.gstAmount))}",
+                      "Total: ₹${(double.parse(widget.fsrFinalAmount).toStringAsFixed(2))}",
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: AppPallete.label3Color,

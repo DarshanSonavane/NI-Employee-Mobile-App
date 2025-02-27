@@ -17,8 +17,8 @@ class RequestCreateFSREntity {
   final String fsrLocation;
   final String fstStartTime;
   final String fsrEndTime;
-  final String chargable;
   final double finalTotalAmount;
+  final double totalGSTAmount;
   final String complaint;
 
   RequestCreateFSREntity(
@@ -40,8 +40,8 @@ class RequestCreateFSREntity {
       required this.fsrLocation,
       required this.fstStartTime,
       required this.fsrEndTime,
-      required this.chargable,
       required this.finalTotalAmount,
+      required this.totalGSTAmount,
       required this.complaint});
 }
 
@@ -50,15 +50,18 @@ class ProductUsedEntity {
   final int quantityUsed;
   final String rate;
   final double amount;
+  final String chargable;
   final double gstAmount;
   final String productId;
+  final String productCode;
 
-  ProductUsedEntity({
-    required this.productName,
-    required this.quantityUsed,
-    required this.rate,
-    required this.amount,
-    required this.gstAmount,
-    required this.productId,
-  });
+  ProductUsedEntity(
+      {required this.productName,
+      required this.quantityUsed,
+      required this.rate,
+      required this.amount,
+      required this.chargable,
+      required this.gstAmount,
+      required this.productId,
+      required this.productCode});
 }

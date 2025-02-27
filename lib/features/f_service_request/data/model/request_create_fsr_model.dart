@@ -21,42 +21,44 @@ class RequestCreateFSRModel extends RequestCreateFSREntity {
     required super.fstStartTime,
     required super.fsrEndTime,
     required super.finalTotalAmount,
-    required super.chargable,
     required super.complaint,
+    required super.totalGSTAmount,
   });
 
   factory RequestCreateFSRModel.fromJson(Map<String, dynamic> json) {
     return RequestCreateFSRModel(
-        customerCode: json['customerCode'],
-        contactPerson: json['contactPerson'],
-        designation: json['designation'],
-        employeeCode: json['employeeCode'],
-        model: json['model'],
-        employeeId: json['employeeId'],
-        complaintType: json['complaintType'],
-        natureOfCompliant: json['natureOfCall'],
-        productsUsed: (json['productsUsed'] as List)
-            .map((product) => ProductUsedEntity(
-                  productName: product['productName'],
-                  quantityUsed: product['quantityUsed'],
-                  rate: product['rate'],
-                  amount: product['amount'],
-                  gstAmount: product['gstAmount'],
-                  productId: product['_id'],
-                ))
-            .toList(),
-        remark: json['remark'],
-        correctiveAction: json['correctiveAction'],
-        status: json['status'],
-        serviceDetails: json['serviceDetails'],
-        employeeSignature: json['employeeSignature'],
-        customerSignature: json['customerSignature'],
-        fsrLocation: json['fsrLocation'],
-        fstStartTime: json['fsrStartTime'],
-        fsrEndTime: json['fsrEndTime'],
-        finalTotalAmount: json['fsrFinalAmount'],
-        chargable: json['isChargeable'],
-        complaint: json['complaint']);
+      customerCode: json['customerCode'],
+      contactPerson: json['contactPerson'],
+      designation: json['designation'],
+      employeeCode: json['employeeCode'],
+      model: json['model'],
+      employeeId: json['employeeId'],
+      complaintType: json['complaintType'],
+      natureOfCompliant: json['natureOfCall'],
+      productsUsed: (json['productsUsed'] as List)
+          .map((product) => ProductUsedEntity(
+              productName: product['productName'],
+              quantityUsed: product['quantityUsed'],
+              rate: product['rate'],
+              amount: product['amount'],
+              gstAmount: product['gstAmount'],
+              productId: product['_id'],
+              productCode: product['productCode'],
+              chargable: product['chargeable']))
+          .toList(),
+      remark: json['remark'],
+      correctiveAction: json['correctiveAction'],
+      status: json['status'],
+      serviceDetails: json['serviceDetails'],
+      employeeSignature: json['employeeSignature'],
+      customerSignature: json['customerSignature'],
+      fsrLocation: json['fsrLocation'],
+      fstStartTime: json['fsrStartTime'],
+      fsrEndTime: json['fsrEndTime'],
+      finalTotalAmount: json['fsrFinalAmount'],
+      complaint: json['complaint'],
+      totalGSTAmount: json['totalGSTAmount'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -77,6 +79,8 @@ class RequestCreateFSRModel extends RequestCreateFSREntity {
                 'amount': product.amount,
                 'gstAmount': product.gstAmount,
                 '_id': product.productId,
+                'productCode': product.productCode,
+                'chargeable': product.chargable
               })
           .toList(),
       'remark': remark,
@@ -89,8 +93,8 @@ class RequestCreateFSRModel extends RequestCreateFSREntity {
       'fsrStartTime': fstStartTime,
       'fsrEndTime': fsrEndTime,
       'fsrFinalAmount': finalTotalAmount,
-      'isChargeable': chargable,
-      'complaint': complaint
+      'complaint': complaint,
+      'totalGSTAmount': totalGSTAmount,
     };
   }
 }

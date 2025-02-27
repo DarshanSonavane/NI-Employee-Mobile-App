@@ -108,7 +108,7 @@ class _AssigningWorkWidgetState extends State<AssigningWorkWidget> {
               buttonText: Constants.proceed,
               startColor: AppPallete.buttonColor,
               endColor: AppPallete.gradientColor,
-              width: 395,
+              width: MediaQuery.of(context).size.width,
               height: 55,
               onPressed: () {
                 if (selectedProduct == null) {

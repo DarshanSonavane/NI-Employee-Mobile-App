@@ -8,14 +8,14 @@ List<PieChartSectionData> showingSections(
     ResponseHomeDetails homeDetailsValue) {
   double totalComplaintsValue = homeDetailsValue.totalComplaints!.toDouble();
   double closedComplaintsValue = homeDetailsValue.closeComplaints!.toDouble();
-  // double openComplaintsValue =
-  //     homeDetailsValue.openComplaints?.toDouble() ?? 0.0;
+  double openComplaintsValue =
+      homeDetailsValue.openComplaints?.toDouble() ?? 0.0;
 
   return [
     PieChartSectionData(
       color: AppPallete.pieCharOpen,
-      value: 700,
-      title: "700".toString(),
+      value: openComplaintsValue,
+      title: openComplaintsValue.toString(),
       radius: 60, // Adjusted the radius to fit within the container
       titleStyle: const TextStyle(
         fontSize: 16,

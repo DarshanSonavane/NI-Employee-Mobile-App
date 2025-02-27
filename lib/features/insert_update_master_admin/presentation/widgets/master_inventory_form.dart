@@ -107,137 +107,139 @@ class MasterInventoryFormState extends State<MasterInventoryForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Card(
-          color: AppPallete.backgroundColor,
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 30.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CustomGlolbalText(
-                  text: "Add or Update Products",
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppPallete.deepNavy,
-                ),
-                const SizedBox(height: 20),
-                CustomDropdown<String>(
-                  value: selectedProductId,
-                  hintText: "Choose Products",
-                  items: [
-                    const DropdownMenuItem<String>(
-                      value: "",
-                      child: Text("Choose Product"),
-                    ),
-                    ...widget.inventoryItems?.data
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item.id,
-                                  child: CustomGlolbalText(
-                                    text: item.productName,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppPallete.deepNavy,
-                                  ),
-                                ))
-                            .toList() ??
-                        [],
-                  ],
-                  onChanged: onProductSelected,
-                  isEnabled: newProductController.text.isEmpty,
-                  borderColor: AppPallete.gradientColor,
-                  iconColor: AppPallete.deepNavy,
-                  textColor: AppPallete.label3Color,
-                  dropdownColor: AppPallete.backgroundColor,
-                ),
-                const SizedBox(height: 10),
-                const Center(
-                  child: CustomGlolbalText(
-                    text: "---------- OR ----------",
-                    fontSize: 16,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Card(
+            color: AppPallete.backgroundColor,
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 30.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CustomGlolbalText(
+                    text: "Add or Update Products",
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: AppPallete.deepNavy,
                   ),
-                ),
-                const SizedBox(height: 10),
-                CustomTextFormField(
-                  labelText: "Enter New Product",
-                  controller: newProductController,
-                  textStyle: const TextStyle(
-                      color: AppPallete.label3Color, fontSize: 16),
-                  labelStyle: const TextStyle(color: AppPallete.deepNavy),
-                  fillColor: AppPallete.backgroundClosed,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  editableText: selectedProductId == null,
-                  onChanged: onTextFieldChanged,
-                  isDisabled: !isTextFieldEnabled,
-                ),
-              ],
+                  const SizedBox(height: 20),
+                  CustomDropdown<String>(
+                    value: selectedProductId,
+                    hintText: "Choose Products",
+                    items: [
+                      const DropdownMenuItem<String>(
+                        value: "",
+                        child: Text("Choose Product"),
+                      ),
+                      ...widget.inventoryItems?.data
+                              .map((item) => DropdownMenuItem<String>(
+                                    value: item.id,
+                                    child: CustomGlolbalText(
+                                      text: item.productName,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppPallete.deepNavy,
+                                    ),
+                                  ))
+                              .toList() ??
+                          [],
+                    ],
+                    onChanged: onProductSelected,
+                    isEnabled: newProductController.text.isEmpty,
+                    borderColor: AppPallete.gradientColor,
+                    iconColor: AppPallete.deepNavy,
+                    textColor: AppPallete.label3Color,
+                    dropdownColor: AppPallete.backgroundColor,
+                  ),
+                  const SizedBox(height: 10),
+                  const Center(
+                    child: CustomGlolbalText(
+                      text: "---------- OR ----------",
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppPallete.deepNavy,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextFormField(
+                    labelText: "Enter New Product",
+                    controller: newProductController,
+                    textStyle: const TextStyle(
+                        color: AppPallete.label3Color, fontSize: 16),
+                    labelStyle: const TextStyle(color: AppPallete.deepNavy),
+                    fillColor: AppPallete.backgroundClosed,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    editableText: selectedProductId == null,
+                    onChanged: onTextFieldChanged,
+                    isDisabled: !isTextFieldEnabled,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 15),
-        CustomTextFormField(
-          labelText: "Enter Product Code",
-          controller: productCodeController,
-          textStyle: const TextStyle(
-            color: AppPallete.label3Color,
-            fontSize: 16,
+          const SizedBox(height: 15),
+          CustomTextFormField(
+            labelText: "Enter Product Code",
+            controller: productCodeController,
+            textStyle: const TextStyle(
+              color: AppPallete.label3Color,
+              fontSize: 16,
+            ),
+            labelStyle: const TextStyle(color: AppPallete.deepNavy),
+            fillColor: AppPallete.backgroundClosed,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            editableText: isProductCodeEditable,
+            onChanged: (value) {
+              setState(() {
+                if (value.isNotEmpty) {
+                  selectedProductId =
+                      null; // If user types, reset dropdown selection
+                }
+              });
+            },
           ),
-          labelStyle: const TextStyle(color: AppPallete.deepNavy),
-          fillColor: AppPallete.backgroundClosed,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          editableText: isProductCodeEditable,
-          onChanged: (value) {
-            setState(() {
-              if (value.isNotEmpty) {
-                selectedProductId =
-                    null; // If user types, reset dropdown selection
-              }
-            });
-          },
-        ),
-        const SizedBox(height: 15),
-        CustomTextFormField(
-          labelText: "Enter Quantity",
-          controller: quantityController,
-          textStyle:
-              const TextStyle(color: AppPallete.label3Color, fontSize: 16),
-          labelStyle: const TextStyle(color: AppPallete.deepNavy),
-          fillColor: AppPallete.backgroundClosed,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          editableText: true,
-          isNumberField: true,
-        ),
-        const SizedBox(height: 15),
-        CustomTextFormField(
-          labelText: "Enter Price (Per Item)",
-          controller: priceController,
-          textStyle:
-              const TextStyle(color: AppPallete.label3Color, fontSize: 16),
-          labelStyle: const TextStyle(color: AppPallete.deepNavy),
-          fillColor: AppPallete.backgroundClosed,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          editableText: true,
-          isNumberField: true,
-        ),
-        const SizedBox(height: 25),
-        AuthGradientButton(
-          buttonText: "Submit",
-          startColor: AppPallete.buttonColor,
-          endColor: AppPallete.gradientColor,
-          width: MediaQuery.of(context).size.width,
-          height: 55,
-          onPressed: validateAndSubmit,
-        ),
-      ],
+          const SizedBox(height: 15),
+          CustomTextFormField(
+            labelText: "Enter Quantity",
+            controller: quantityController,
+            textStyle:
+                const TextStyle(color: AppPallete.label3Color, fontSize: 16),
+            labelStyle: const TextStyle(color: AppPallete.deepNavy),
+            fillColor: AppPallete.backgroundClosed,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            editableText: true,
+            isNumberField: true,
+          ),
+          const SizedBox(height: 15),
+          CustomTextFormField(
+            labelText: "Enter Price (Per Item)",
+            controller: priceController,
+            textStyle:
+                const TextStyle(color: AppPallete.label3Color, fontSize: 16),
+            labelStyle: const TextStyle(color: AppPallete.deepNavy),
+            fillColor: AppPallete.backgroundClosed,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            editableText: true,
+            isNumberField: true,
+          ),
+          const SizedBox(height: 25),
+          AuthGradientButton(
+            buttonText: "Submit",
+            startColor: AppPallete.buttonColor,
+            endColor: AppPallete.gradientColor,
+            width: MediaQuery.of(context).size.width,
+            height: 55,
+            onPressed: validateAndSubmit,
+          ),
+        ],
+      ),
     );
   }
 }

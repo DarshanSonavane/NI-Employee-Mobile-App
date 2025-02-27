@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/core/common/widgets/loader.dart';
 import 'package:employee_ni_service/features/products/presentation/bloc/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,7 @@ class ShowEmployeeProductsScreen extends StatelessWidget {
           child: BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
               if (state is ProductLoader) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: Loader());
               } else if (state is ProductSuccess) {
                 final productList = state.responseAssignedEmployeeProductList;
                 if (productList.employeeInventory.isEmpty) {

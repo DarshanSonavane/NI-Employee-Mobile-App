@@ -11,6 +11,7 @@ class ApiUrls {
       '${baseUrl}get-open-calibration-request-list';
   static const getClosedCalibrationDetails =
       '${baseUrl}get-close-calibration-request-list';
+  static const getAllCalibrationDetails = '${baseUrl}get-my-calibration-list';
   static const getCylinderDetails = '${baseUrl}get-cylinder-details';
   static const updateCylinderDetails = '${baseUrl}update-cylinder-details';
   static const deleteCalibrationItem = '${baseUrl}delete-calibration-request';

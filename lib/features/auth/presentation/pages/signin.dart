@@ -73,7 +73,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       ),
                       const SizedBox(height: 30),
                       AuthField(
-                        hintText: Constants.customerCode,
+                        hintText: Constants.employeeCode,
                         controller: customerCodeController,
                       ),
                       const SizedBox(height: 15),
@@ -132,7 +132,7 @@ void _handleSignInSuccess(
 ) async {
   await sl<HiveStorageService>().saveUser(user);
   if (!context.mounted) return;
-  Navigator.push(
+  Navigator.pushReplacement(
     context,
     DashboardScreen.route(),
   );

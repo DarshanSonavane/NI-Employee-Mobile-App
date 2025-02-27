@@ -100,14 +100,15 @@ class ProductModel extends ProductEntity {
     required super.id,
     required super.productName,
     required super.price,
+    required super.productCode,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['_id'],
-      productName: json['productName'],
-      price: json['price'].toDouble(),
-    );
+        id: json['_id'],
+        productName: json['productName'],
+        price: json['price'].toDouble(),
+        productCode: json['productCode']);
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +116,7 @@ class ProductModel extends ProductEntity {
       '_id': id,
       'productName': productName,
       'price': price,
+      'productCode': productCode
     };
   }
 }

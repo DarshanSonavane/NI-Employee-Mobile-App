@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/core/common/widgets/custom_global_text.dart';
 import 'package:employee_ni_service/features/calibration/data/model/model_add_machine/request_add_machine_model.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,7 @@ import '../../../../core/common/widgets/auth_gradient_button.dart';
 import '../../../../core/common/widgets/custom_text_field.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/machine_options.dart';
+import '../../../../core/utils/show_snackbar.dart';
 import 'machine_dropdown.dart';
 
 class AddMachineDialog extends StatefulWidget {
@@ -26,7 +28,11 @@ class _AddMachineDialogState extends State<AddMachineDialog> {
     double screenWidth = MediaQuery.of(context).size.width;
     return AlertDialog(
       backgroundColor: AppPallete.backgroundColor,
-      title: const Text(Constants.addMachineDetails),
+      title: const CustomGlolbalText(
+        text: Constants.addMachineDetails,
+        color: AppPallete.deepNavy,
+        fontWeight: FontWeight.bold,
+      ),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -45,13 +51,10 @@ class _AddMachineDialogState extends State<AddMachineDialog> {
               ),
               const SizedBox(height: 16),
               CustomTextFormField(
-                controller: machineNumberController,
                 labelText: Constants.machineNumber,
-                validator: (value) => value == null || value.isEmpty
-                    ? Constants.enterMachineNumber
-                    : null,
+                controller: machineNumberController,
                 textStyle: const TextStyle(
-                    color: AppPallete.label3Color, fontSize: 20),
+                    color: AppPallete.label3Color, fontSize: 16),
                 labelStyle: const TextStyle(color: AppPallete.label3Color),
                 fillColor: AppPallete.backgroundClosed,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -60,9 +63,6 @@ class _AddMachineDialogState extends State<AddMachineDialog> {
               CustomTextFormField(
                 controller: customerCodeController,
                 labelText: '${Constants.customerCode}*',
-                validator: (value) => value == null || value.isEmpty
-                    ? Constants.enterCustomerCode
-                    : null,
                 textStyle: const TextStyle(
                     color: AppPallete.label3Color, fontSize: 20),
                 labelStyle: const TextStyle(color: AppPallete.label3Color),
@@ -85,6 +85,14 @@ class _AddMachineDialogState extends State<AddMachineDialog> {
                   height: 55,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      if (machineNumberController.text.isEmpty ||
+                          customerCodeController.text.isEmpty) {
+                        showSnackBar(
+                            context, "Please fill in all required fields",
+                            backgroundColor: AppPallete.errorColor);
+                        return;
+                      }
+
                       Navigator.pop(context);
                       RequestAddMachineModel requestAddMachineModel =
                           RequestAddMachineModel(

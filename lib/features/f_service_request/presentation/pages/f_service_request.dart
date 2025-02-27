@@ -1,6 +1,7 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
+import 'package:employee_ni_service/core/common/widgets/custom_global_text.dart';
 import 'package:employee_ni_service/core/common/widgets/dialog_helper.dart';
-import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
+import 'package:employee_ni_service/core/common/widgets/loader.dart';
 import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:employee_ni_service/core/utils/machine_options.dart';
 import 'package:employee_ni_service/core/utils/show_snackbar.dart';
@@ -22,10 +23,8 @@ import '../../../../core/common/widgets/custom_text_field.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/location_permission.dart';
 import '../../../calibration/presentation/widgets/machine_dropdown.dart';
-import '../../../products/presentation/bloc/product_bloc.dart';
 import '../widgets/add_details_widget.dart';
 import '../widgets/signature_display.dart';
-import '../widgets/switch_chargable.dart';
 
 class FServiceRequest extends StatefulWidget {
   final String complaintId;
@@ -71,10 +70,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
   final correctiveActionController = TextEditingController();
   final detailsActionController = TextEditingController();
   double totalAmount = 0.0;
-  bool isChargable = false;
+  double totalAmountExclGST = 0.0;
+  double gstAmount = 0.0;
   int epochMillisecondsStart = 0;
   int epochMillisecondsEnd = 0;
   double totalAmountincGST = 0.0;
+  double gstPercentage = 18;
   String employeeSign = "";
   String customerSign = "";
   String fsrLocation = "";
@@ -168,11 +169,18 @@ class _FServiceRequestState extends State<FServiceRequest> {
 
     fsrLocation = await getCurrentLocation();
     epochMillisecondsEnd = DateTime.now().millisecondsSinceEpoch;
-    sendRequestForCreatingFSR();
     _showOtpDialog();
   }
 
   void _showOtpDialog() {
+    OtpDialog.showOtpDialog(
+        context: context,
+        onSubmitOtp: (String otpValue) {
+          context.read<FsrBloc>().add(VerifyOtp(
+              customerCode: customerCodeController.text,
+              otpValue: otpValue,
+              otpType: "complaint"));
+        });
     context.read<FsrBloc>().add(
           SendOtpRequest(
               customerCode: customerCodeController.text, otpType: "complaint"),
@@ -180,6 +188,8 @@ class _FServiceRequestState extends State<FServiceRequest> {
   }
 
   void sendRequestForCreatingFSR() {
+    gstAmount = (totalAmountincGST * gstPercentage) / 118;
+    totalAmountExclGST = totalAmountincGST - gstAmount;
     RequestCreateFSRModel requestCreateFsrModel = RequestCreateFSRModel(
       customerCode: customerCodeController.text,
       contactPerson: contactPersonController.text,
@@ -199,9 +209,9 @@ class _FServiceRequestState extends State<FServiceRequest> {
       fsrLocation: fsrLocation,
       fstStartTime: epochMillisecondsStart.toString(),
       fsrEndTime: epochMillisecondsEnd.toString(),
-      finalTotalAmount: totalAmountincGST,
-      chargable: isChargable == true ? "1" : "0",
+      finalTotalAmount: totalAmountExclGST,
       complaint: widget.complaintId,
+      totalGSTAmount: gstAmount,
     );
 
     context.read<FsrBloc>().add(
@@ -225,15 +235,21 @@ class _FServiceRequestState extends State<FServiceRequest> {
       correctiveActionController.clear();
       detailsActionController.clear();
       totalAmount = 0.0;
-      isChargable = false;
+      gstAmount = 0.0;
       epochMillisecondsStart = 0;
       epochMillisecondsEnd = 0;
-      totalAmountincGST = 0.0;
+      totalAmountincGST = 0.00;
+      totalAmountExclGST = 0.00;
       employeeSign = "";
       customerSign = "";
       fsrLocation = "";
       productsUsed = [];
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -248,28 +264,20 @@ class _FServiceRequestState extends State<FServiceRequest> {
               showSnackBar(context, state.message);
             }
             if (state is FsrSuccess<ResponseVerificationModel>) {
-              if (state.type == "sendVerification") {
-                OtpDialog.showOtpDialog(
-                    context: context,
-                    onSubmitOtp: (String otpValue) {
-                      context.read<FsrBloc>().add(VerifyOtp(
-                          customerCode: customerCodeController.text,
-                          otpValue: otpValue,
-                          otpType: "complaint"));
-                    });
-              } else if (state.type == "sendOTP") {
+              if (state.type == "sendOTP") {
                 sendRequestForCreatingFSR();
-              } else {
+              } else if (state.type == "createFSR") {
                 showSnackBar(context, state.data.message,
                     backgroundColor: AppPallete.gradientColor);
+                context.read<TotalAmountProvider>().resetTotalAmount();
                 _clearAllFields();
                 Navigator.pop(context);
               }
             }
           },
           child: BlocBuilder<FsrBloc, FsrState>(builder: (context, state) {
-            if (state is ProductLoader) {
-              return const Center(child: CircularProgressIndicator());
+            if (state is FsrLoader) {
+              return const Center(child: Loader());
             }
             return Padding(
               padding: const EdgeInsets.all(15.0),
@@ -399,13 +407,6 @@ class _FServiceRequestState extends State<FServiceRequest> {
                         options: statusOptions,
                       ),
                       const SizedBox(height: 5),
-                      SwitchChargable(
-                        onChargableChanged: (value) {
-                          setState(() {
-                            isChargable = value;
-                          });
-                        },
-                      ),
                       AddDetailsWidget(
                         onProductsChanged: (products) {
                           setState(() {
@@ -417,7 +418,7 @@ class _FServiceRequestState extends State<FServiceRequest> {
                         builder: (context, provider, child) {
                           double totalAmountincGST =
                               provider.getTotalAmountInclGst;
-                          if (isChargable) {
+                          if (natureOfComplaint == "Service Call") {
                             double gst = 2500 * 0.18;
                             totalAmountincGST += 2500 + gst;
                           }
@@ -429,9 +430,13 @@ class _FServiceRequestState extends State<FServiceRequest> {
                             alignment: Alignment.topLeft,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 4.0),
-                              child: setTextNormal(
-                                  '${Constants.totalAmountInclGst}${totalAmountincGST.toString()}/-',
-                                  1),
+                              child: CustomGlolbalText(
+                                text:
+                                    '${Constants.totalAmountInclGst}${totalAmountincGST.toStringAsFixed(2)}/-',
+                                color: AppPallete.gradientColor,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           );
                         },

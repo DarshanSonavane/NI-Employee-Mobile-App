@@ -2,7 +2,10 @@ class Constants {
   static const noConnectionErrorMessage = 'Not connected to a network';
   static const appLogo = 'assets/png_image/nilogo.png';
   static const gifLogo = 'assets/gif_image/ni_splash.gif';
+  static const loader = 'assets/git_image/loader.gif';
   static const mapIcon = 'assets/png_image/mapicon.png';
+  static const nodata = 'assets/webp_image/nodata.webp';
+  static const nodatafound = 'assets/webp_image/nodatafound.webp';
   static const pucServiceImage = 'assets/jpg_image/puc.jpeg';
   static const locationIcon = 'assets/png_image/locationicon.png';
   static const login = 'Login';
@@ -14,6 +17,7 @@ class Constants {
   static const noDataAvailable = 'No data available';
   static const confirmPassword = 'Confirm Password';
   static const customerCode = 'Customer Code';
+  static const employeeCode = 'Employee Code';
   static const contactPerson = 'Contact Person';
   static const otpScreen = 'OTP Number';
   static const designation = 'Designation';
@@ -41,7 +45,7 @@ class Constants {
   static const natureOfComplaint = 'Nature of call';
   static const profile = 'Profile';
   static const open = 'Open';
-  static const close = 'Closed';
+  static const close = 'Close';
   static const statusClose = 'Close';
   static const done = 'Done';
   static const partialydone = 'Partially Done';
