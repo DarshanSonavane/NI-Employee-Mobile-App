@@ -31,14 +31,14 @@ class _RowQuantityState extends State<RowQuantity> {
         Row(
           children: [
             IconButton(
-              onPressed: quantityProvider.getQuantity < widget.assignedQuantity
+              onPressed: quantityProvider.getQuantity > 0
                   ? () {
-                      quantityProvider.increment();
+                      quantityProvider.decrement();
                     }
                   : null,
               icon: const Icon(
-                Icons.add,
-                color: AppPallete.gradientColor,
+                Icons.remove,
+                color: AppPallete.errorColor,
                 weight: 16,
               ),
             ),
@@ -49,14 +49,14 @@ class _RowQuantityState extends State<RowQuantity> {
               fontWeight: FontWeight.bold,
             ),
             IconButton(
-              onPressed: quantityProvider.getQuantity > 0
+              onPressed: quantityProvider.getQuantity < widget.assignedQuantity
                   ? () {
-                      quantityProvider.decrement();
+                      quantityProvider.increment();
                     }
                   : null,
               icon: const Icon(
-                Icons.remove,
-                color: AppPallete.errorColor,
+                Icons.add,
+                color: AppPallete.gradientColor,
                 weight: 16,
               ),
             ),

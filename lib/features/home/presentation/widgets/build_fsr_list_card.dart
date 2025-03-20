@@ -30,9 +30,11 @@ class BuildFsrListCard extends StatelessWidget {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: fsrList!.fsrData.length,
+                itemCount:
+                    fsrList!.fsrData.length > 3 ? 3 : fsrList!.fsrData.length,
                 itemBuilder: (context, index) {
-                  final fsr = fsrList!.fsrData[index];
+                  final reversedIndex = fsrList!.fsrData.length - 1 - index;
+                  final fsr = fsrList!.fsrData[reversedIndex];
                   return FSRDetailsCard(fsr: fsr);
                 },
               )

@@ -7,7 +7,7 @@ final List<Map<String, dynamic>> machineOptions = [
 ];
 
 final List<Map<String, dynamic>> natureOfCallOptions = [
-  {"id": 1, "label": "Instin"},
+  {"id": 1, "label": "Installation"},
   {"id": 2, "label": "Warranty"},
   {"id": 3, "label": "Contract"},
   {"id": 4, "label": "Service Call"},

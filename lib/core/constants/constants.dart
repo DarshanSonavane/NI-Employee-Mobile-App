@@ -31,7 +31,7 @@ class Constants {
   static const labelRichText3 = 'and ';
   static const labelRichText4 = 'Privacy Policy';
   static const setResetPasswordLabel = 'Set / Reset Password';
-  static const appTitle = 'NI Employee';
+  static const appTitle = 'NI Engineer';
   static const appBarHome = 'Home';
   static const status = 'Status';
   static const appBarProfile = 'Profile';
@@ -52,6 +52,7 @@ class Constants {
   static const assigned = 'Assigned';
   static const diesel = 'Diesel';
   static const petrol = 'Petrol';
+  static const combo = 'Combo';
   static const enterComments = 'Enter your comments here...';
   static const statusComplaint = 'Status of complaint :';
   static const takeAction = 'Please select below options and add a comment ';

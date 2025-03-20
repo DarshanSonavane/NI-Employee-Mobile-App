@@ -22,8 +22,6 @@ class ProductsUsedSectionState extends State<ProductsUsedSection> {
   bool _isExpanded = false;
   @override
   Widget build(BuildContext context) {
-    debugPrint("FsrFinalAmount: ${widget.fsrFinalAmount}");
-    debugPrint("FsrGstAmount: ${widget.fsrGstAmount}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -63,28 +61,35 @@ class ProductsUsedSectionState extends State<ProductsUsedSection> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomGlolbalText(
-                            text: product.productName,
-                            fontSize: 14,
-                            color: AppPallete.label3Color,
-                          ),
-                          CustomGlolbalText(
-                            text: "Quantity: ${product.quantityUsed}",
-                            fontSize: 12,
-                            color: AppPallete.label2Color,
-                          ),
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomGlolbalText(
+                              text: product.productName,
+                              fontSize: 14,
+                              color: AppPallete.label3Color,
+                            ),
+                            CustomGlolbalText(
+                              text: "Quantity: ${product.quantityUsed}",
+                              fontSize: 12,
+                              color: AppPallete.label2Color,
+                            ),
+                          ],
+                        ),
                       ),
 
                       // Price
-                      CustomGlolbalText(
-                        text: "Price: ₹${product.gstAmount}",
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppPallete.label3Color,
+                      Flexible(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomGlolbalText(
+                            text: "Price: ₹${product.gstAmount}",
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppPallete.label3Color,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -93,8 +98,7 @@ class ProductsUsedSectionState extends State<ProductsUsedSection> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: CustomGlolbalText(
-                  text:
-                      "Total: ₹${(double.parse(widget.fsrFinalAmount).toStringAsFixed(2))}",
+                  text: "Total: ₹${((widget.fsrFinalAmount))}",
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: AppPallete.label3Color,

@@ -72,8 +72,8 @@ class _FServiceRequestState extends State<FServiceRequest> {
   double totalAmount = 0.0;
   double totalAmountExclGST = 0.0;
   double gstAmount = 0.0;
-  int epochMillisecondsStart = 0;
-  int epochMillisecondsEnd = 0;
+  String epochMillisecondsStart = "";
+  String epochMillisecondsEnd = "";
   double totalAmountincGST = 0.0;
   double gstPercentage = 18;
   String employeeSign = "";
@@ -83,7 +83,8 @@ class _FServiceRequestState extends State<FServiceRequest> {
 
   @override
   void initState() {
-    epochMillisecondsStart = DateTime.now().millisecondsSinceEpoch;
+    epochMillisecondsStart =
+        "${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
     super.initState();
   }
 
@@ -109,14 +110,11 @@ class _FServiceRequestState extends State<FServiceRequest> {
         accuracy: LocationAccuracy.high,
         distanceFilter: 10,
       ));
-      debugPrint(
-          "Current location: ${position.latitude}, ${position.longitude}");
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
       Placemark place = placemarks[0];
       String fullAddress =
           "${place.street}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.country}, ${place.postalCode}";
-      debugPrint("Full address: $fullAddress");
       return fullAddress;
     } catch (e) {
       debugPrint("Error getting location: $e");
@@ -168,7 +166,8 @@ class _FServiceRequestState extends State<FServiceRequest> {
     }
 
     fsrLocation = await getCurrentLocation();
-    epochMillisecondsEnd = DateTime.now().millisecondsSinceEpoch;
+    epochMillisecondsEnd =
+        "${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
     _showOtpDialog();
   }
 
@@ -199,7 +198,7 @@ class _FServiceRequestState extends State<FServiceRequest> {
       employeeId: fetchUserId(),
       complaintType: complaintTypeController.text,
       natureOfCompliant: natureOfComplaint.toString(),
-      productsUsed: productsUsed,
+      productsUsed: productsUsed.isEmpty ? [] : productsUsed,
       remark: remarkController.text,
       correctiveAction: correctiveActionController.text,
       status: status.toString(),
@@ -209,9 +208,9 @@ class _FServiceRequestState extends State<FServiceRequest> {
       fsrLocation: fsrLocation,
       fstStartTime: epochMillisecondsStart.toString(),
       fsrEndTime: epochMillisecondsEnd.toString(),
-      finalTotalAmount: totalAmountExclGST,
+      finalTotalAmount: totalAmountExclGST.toString(),
       complaint: widget.complaintId,
-      totalGSTAmount: gstAmount,
+      totalGSTAmount: gstAmount.toString(),
     );
 
     context.read<FsrBloc>().add(
@@ -236,8 +235,8 @@ class _FServiceRequestState extends State<FServiceRequest> {
       detailsActionController.clear();
       totalAmount = 0.0;
       gstAmount = 0.0;
-      epochMillisecondsStart = 0;
-      epochMillisecondsEnd = 0;
+      epochMillisecondsStart = "";
+      epochMillisecondsEnd = "";
       totalAmountincGST = 0.00;
       totalAmountExclGST = 0.00;
       employeeSign = "";
@@ -300,6 +299,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
                         fillColor: AppPallete.backgroundClosed,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         editableText: false,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Customer code is required';
+                          }
+                          return null;
+                        },
                       ),
                       CustomTextFormField(
                         labelText: Constants.contactPerson,
@@ -311,6 +316,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
                         fillColor: AppPallete.backgroundClosed,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         editableText: false,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Contact Person is required';
+                          }
+                          return null;
+                        },
                       ),
                       CustomTextFormField(
                         labelText: Constants.designation,
@@ -320,6 +331,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
                         labelStyle: const TextStyle(color: AppPallete.deepNavy),
                         fillColor: AppPallete.backgroundClosed,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Designation is required';
+                          }
+                          return null;
+                        },
                       ),
                       CustomTextFormField(
                         labelText: Constants.engEmpCode,
@@ -331,6 +348,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
                         fillColor: AppPallete.backgroundClosed,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         editableText: false,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Employee Code is required';
+                          }
+                          return null;
+                        },
                       ),
                       GenericDropdown(
                         dropDownType: Constants.selectMachine,
@@ -354,6 +377,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
                         editableText: false,
                         minLines: 1,
                         maxLines: null,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Complaint type is required';
+                          }
+                          return null;
+                        },
                       ),
                       GenericDropdown(
                         dropDownType: Constants.natureOfComplaint,
@@ -373,6 +402,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
                         labelStyle: const TextStyle(color: AppPallete.deepNavy),
                         fillColor: AppPallete.backgroundClosed,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Remark is required';
+                          }
+                          return null;
+                        },
                       ),
                       CustomTextFormField(
                         labelText: Constants.detailsOfAction,
@@ -384,6 +419,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         maxLines: null,
                         minLines: 3,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Details are required';
+                          }
+                          return null;
+                        },
                       ),
                       CustomTextFormField(
                         labelText: Constants.correctiveAction,
@@ -395,6 +436,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         maxLines: null,
                         minLines: 3,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Corrective action is required';
+                          }
+                          return null;
+                        },
                       ),
                       GenericDropdown(
                         dropDownType: Constants.status,

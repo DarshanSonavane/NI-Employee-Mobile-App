@@ -68,8 +68,10 @@ class _ComplaintCardState extends State<ComplaintCard> {
   setFuelType(String? fuelType) {
     if (fuelType == '1') {
       return const BuildLegends(Constants.diesel, AppPallete.errorColor);
-    } else {
+    } else if (fuelType == '0') {
       return const BuildLegends(Constants.petrol, AppPallete.gradientColor);
+    } else {
+      return const BuildLegends(Constants.combo, AppPallete.blueColor);
     }
   }
 

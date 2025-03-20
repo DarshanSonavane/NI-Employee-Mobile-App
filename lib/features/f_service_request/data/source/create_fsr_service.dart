@@ -21,7 +21,7 @@ class CreateFSRServiceImpl extends CreateFSRService {
           ResponseVerificationModel.fromJson(response.data);
       return Right(getFSRCreateResponse);
     } on DioException catch (e) {
-      return left(e.message);
+      return Left(e.response?.data ?? e.message);
     }
   }
 }

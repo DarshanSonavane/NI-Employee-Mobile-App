@@ -85,7 +85,8 @@ class OtpDialog {
                   Navigator.pop(context);
                   onSubmitOtp(otpController.text.replaceAll(" - ", ''));
                 } else {
-                  showSnackBar(context, "Invalid OTP! Enter 4 digits.");
+                  showSnackBar(context, "Invalid OTP! Enter 4 digits.",
+                      backgroundColor: AppPallete.errorColor);
                 }
               },
             ),

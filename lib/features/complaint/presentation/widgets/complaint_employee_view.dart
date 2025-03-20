@@ -11,7 +11,7 @@ import 'complaint_card.dart';
 
 class ComplaintEmployeeView extends StatefulWidget {
   final EmployeeComplaintModel? complaintDetails;
-  final bool isOpenTab; // Add this to determine which tab we're in
+  final bool isOpenTab;
 
   const ComplaintEmployeeView({
     super.key,

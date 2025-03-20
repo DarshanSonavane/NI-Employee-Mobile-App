@@ -58,9 +58,11 @@ class FsrDataModel extends FsrDataEntity {
       employeeCode: json['employeeCode'],
       complaintType: json['complaintType'],
       natureOfCompliant: json['natureOfCall'] ?? "",
-      productsUsed: List<ProductUsedModel>.from(
-        json['productsUsed'].map((x) => ProductUsedModel.fromJson(x)),
-      ),
+      productsUsed: json['productsUsed'] != null
+          ? List<ProductUsedModel>.from(
+              json['productsUsed'].map((x) => ProductUsedModel.fromJson(x)),
+            )
+          : [],
       remark: json['remark'],
       correctiveAction: json['correctiveAction'],
       status: json['status'],

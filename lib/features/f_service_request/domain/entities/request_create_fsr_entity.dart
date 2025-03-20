@@ -7,7 +7,7 @@ class RequestCreateFSREntity {
   final String employeeId;
   final String complaintType;
   final String natureOfCompliant;
-  final List<ProductUsedEntity> productsUsed;
+  final List<ProductUsedEntity>? productsUsed;
   final String remark;
   final String correctiveAction;
   final String status;
@@ -17,8 +17,8 @@ class RequestCreateFSREntity {
   final String fsrLocation;
   final String fstStartTime;
   final String fsrEndTime;
-  final double finalTotalAmount;
-  final double totalGSTAmount;
+  final String finalTotalAmount;
+  final String totalGSTAmount;
   final String complaint;
 
   RequestCreateFSREntity(

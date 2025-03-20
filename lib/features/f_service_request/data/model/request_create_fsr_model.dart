@@ -25,42 +25,6 @@ class RequestCreateFSRModel extends RequestCreateFSREntity {
     required super.totalGSTAmount,
   });
 
-  factory RequestCreateFSRModel.fromJson(Map<String, dynamic> json) {
-    return RequestCreateFSRModel(
-      customerCode: json['customerCode'],
-      contactPerson: json['contactPerson'],
-      designation: json['designation'],
-      employeeCode: json['employeeCode'],
-      model: json['model'],
-      employeeId: json['employeeId'],
-      complaintType: json['complaintType'],
-      natureOfCompliant: json['natureOfCall'],
-      productsUsed: (json['productsUsed'] as List)
-          .map((product) => ProductUsedEntity(
-              productName: product['productName'],
-              quantityUsed: product['quantityUsed'],
-              rate: product['rate'],
-              amount: product['amount'],
-              gstAmount: product['gstAmount'],
-              productId: product['_id'],
-              productCode: product['productCode'],
-              chargable: product['chargeable']))
-          .toList(),
-      remark: json['remark'],
-      correctiveAction: json['correctiveAction'],
-      status: json['status'],
-      serviceDetails: json['serviceDetails'],
-      employeeSignature: json['employeeSignature'],
-      customerSignature: json['customerSignature'],
-      fsrLocation: json['fsrLocation'],
-      fstStartTime: json['fsrStartTime'],
-      fsrEndTime: json['fsrEndTime'],
-      finalTotalAmount: json['fsrFinalAmount'],
-      complaint: json['complaint'],
-      totalGSTAmount: json['totalGSTAmount'],
-    );
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'customerCode': customerCode,
@@ -71,18 +35,20 @@ class RequestCreateFSRModel extends RequestCreateFSREntity {
       'employeeId': employeeId,
       'complaintType': complaintType,
       'natureOfCall': natureOfCompliant,
-      'productsUsed': productsUsed
-          .map((product) => {
-                'productName': product.productName,
-                'quantityUsed': product.quantityUsed,
-                'rate': product.rate,
-                'amount': product.amount,
-                'gstAmount': product.gstAmount,
-                '_id': product.productId,
-                'productCode': product.productCode,
-                'chargeable': product.chargable
-              })
-          .toList(),
+      'productsUsed': productsUsed!.isEmpty
+          ? null
+          : productsUsed!
+              .map((product) => {
+                    'productName': product.productName,
+                    'quantityUsed': product.quantityUsed,
+                    'rate': product.rate,
+                    'amount': product.amount,
+                    'gstAmount': product.gstAmount,
+                    '_id': product.productId,
+                    'productCode': product.productCode,
+                    'chargeable': product.chargable
+                  })
+              .toList(),
       'remark': remark,
       'correctiveAction': correctiveAction,
       'status': status,

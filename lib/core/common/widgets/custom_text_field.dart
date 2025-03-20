@@ -1,3 +1,4 @@
+import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -73,9 +74,16 @@ class CustomTextFormField extends StatelessWidget {
             labelStyle: labelStyle,
             hintText: value?.isEmpty ?? true ? 'Enter $labelText' : null,
             filled: true,
+            errorStyle: const TextStyle(
+              color: AppPallete.errorColor,
+              fontWeight: FontWeight.bold,
+            ),
+            errorBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red),
+            ),
             alignLabelWithHint: true,
             fillColor: fillColor,
-            border: const UnderlineInputBorder(),
+            border: const OutlineInputBorder(),
             floatingLabelBehavior: disabled
                 ? FloatingLabelBehavior.never
                 : FloatingLabelBehavior.auto,
