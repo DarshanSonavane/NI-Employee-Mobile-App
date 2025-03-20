@@ -43,3 +43,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+**/generated_plugin_registrant.dart
+**/ios/Flutter/flutter_export_environment.sh
+**/android/Flutter/flutter_export_environment.sh
+pubspec.lock
