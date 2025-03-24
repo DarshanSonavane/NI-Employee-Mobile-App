@@ -56,6 +56,7 @@ app.*.map.json
 **/android/local.properties
 
 android/app/.cxx/
+configure_fingerprint.bin
 
 **/generated_plugin_registrant.dart
 **/ios/Flutter/flutter_export_environment.sh
