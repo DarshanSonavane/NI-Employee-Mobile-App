@@ -29,6 +29,7 @@ dependencies:
   flutter_svg: ^2.0.16
   geolocator: ^13.0.2
   geocoding: ^3.0.0
+  shorebird_code_push: ^2.0.3
   
 
 dev_dependencies:
