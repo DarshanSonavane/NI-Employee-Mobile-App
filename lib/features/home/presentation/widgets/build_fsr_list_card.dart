@@ -56,7 +56,7 @@ class BuildFsrListCard extends StatelessWidget {
                 child: Center(
                   child: fsrList != null && fsrList!.fsrData.isNotEmpty
                       ? const CustomGlolbalText(
-                          text: "View FSR in Detail",
+                          text: "View FSR's in Detail",
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.normal,

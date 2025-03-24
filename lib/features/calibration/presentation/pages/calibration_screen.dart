@@ -339,8 +339,9 @@ class _CalibrationScreenState extends State<CalibrationScreen>
                     } else {
                       // New filtering logic for fetchUser != "0"
                       final openCalibrationList = calibrationDetails?.data
-                              ?.where(
-                                  (calibration) => calibration.status == "1")
+                              ?.where((calibration) =>
+                                  calibration.status == "2" ||
+                                  calibration.status == "1")
                               .toList() ??
                           [];
 

@@ -36,7 +36,7 @@ class GetCalibrationDetailsApiServiceImpl
           ResponseCalibrationDetails.fromMap(response.data);
       return Right(getCalibrationDetailsResponse);
     } on DioException catch (e) {
-      return left(e.message);
+      return Left(e.message);
     }
   }
 }
