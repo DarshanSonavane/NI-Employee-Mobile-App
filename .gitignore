@@ -9,6 +9,12 @@
 .buildlog/
 .history
 .svn/
+.android/
+.ios/
+.idea/
+.vscode/
+bin/
+build/
 .swiftpm/
 migrate_working_dir/
 
@@ -48,6 +54,8 @@ app.*.map.json
 **/android/.cxx/
 **/android/.gradle/
 **/android/local.properties
+
+android/app/.cxx/
 
 **/generated_plugin_registrant.dart
 **/ios/Flutter/flutter_export_environment.sh
