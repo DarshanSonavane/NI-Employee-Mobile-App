@@ -44,6 +44,11 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Native build artifacts
+**/android/.cxx/
+**/android/.gradle/
+**/android/local.properties
+
 **/generated_plugin_registrant.dart
 **/ios/Flutter/flutter_export_environment.sh
 **/android/Flutter/flutter_export_environment.sh
