@@ -50,7 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           },
           builder: (context, state) {
-            if (state is HomeBlocLoader || homeDetailsValue == null) {
+            if (state is HomeBlocLoader ||
+                homeDetailsValue == null ||
+                fsrList == null) {
               return const Loader();
             }
 
@@ -69,10 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: setTextNormal(
-                        "Field Survey Report(FSR)", ScalingFactor.scale(1.2),
+                        "Field Survey Report(FSR's)", ScalingFactor.scale(1.2),
                         color: AppPallete.label3Color),
                   ),
-                  (fsrList != null && fsrList!.fsrData.isNotEmpty)
+                  (fsrList!.fsrData.isNotEmpty)
                       ? BuildFsrListCard(fsrList)
                       : const NoProductAvailable(),
                 ],

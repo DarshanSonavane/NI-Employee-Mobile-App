@@ -62,7 +62,7 @@ class _FServiceRequestState extends State<FServiceRequest> {
   String? natureOfComplaint;
   String? status;
   final customerCodeController = TextEditingController();
-  final contactPersonController = TextEditingController();
+  var contactPersonController = TextEditingController();
   final designationController = TextEditingController();
   final engEmpCodeController = TextEditingController();
   final complaintTypeController = TextEditingController();
@@ -85,6 +85,7 @@ class _FServiceRequestState extends State<FServiceRequest> {
   void initState() {
     epochMillisecondsStart =
         "${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
+    contactPersonController = TextEditingController(text: widget.customerName);
     super.initState();
   }
 
@@ -248,6 +249,14 @@ class _FServiceRequestState extends State<FServiceRequest> {
 
   @override
   void dispose() {
+    contactPersonController.dispose();
+    customerCodeController.dispose();
+    designationController.dispose();
+    engEmpCodeController.dispose();
+    complaintTypeController.dispose();
+    remarkController.dispose();
+    correctiveActionController.dispose();
+    detailsActionController.dispose();
     super.dispose();
   }
 
@@ -308,14 +317,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
                       ),
                       CustomTextFormField(
                         labelText: Constants.contactPerson,
-                        value: widget.customerName,
                         controller: contactPersonController,
                         textStyle: const TextStyle(
                             color: AppPallete.label3Color, fontSize: 16),
                         labelStyle: const TextStyle(color: AppPallete.deepNavy),
                         fillColor: AppPallete.backgroundClosed,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        editableText: false,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return 'Contact Person is required';
