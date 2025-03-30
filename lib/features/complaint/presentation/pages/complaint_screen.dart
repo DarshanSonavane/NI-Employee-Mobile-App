@@ -125,6 +125,10 @@ class _ComplaintScreenState extends State<ComplaintScreen>
                         (selectedEmployee) {
                           assignComplaints(complaintId, selectedEmployee);
                         },
+                        () {
+                          _fetchDataForTab(
+                              _tabController.index); // Refresh on close
+                        },
                       );
                     } else if (state.data is EmployeeComplaintModel) {
                       employeeComplaintDetails = state.data;

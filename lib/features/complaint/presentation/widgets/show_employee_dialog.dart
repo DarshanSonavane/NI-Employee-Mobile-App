@@ -11,6 +11,7 @@ void showEmployeeDialog(
   BuildContext context,
   List<EmployeeData> employees,
   SubmitCallback onSubmitCallback,
+  VoidCallback onClose,
 ) {
   final formKey = GlobalKey<FormState>();
 
@@ -80,6 +81,7 @@ void showEmployeeDialog(
             endColor: AppPallete.gradientColor,
             width: MediaQuery.of(context).size.width > 600 ? 200 : 100,
             height: 55,
+            fontSize: 12,
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 onSubmitCallback(selectedEmployeeId);
@@ -94,8 +96,10 @@ void showEmployeeDialog(
             endColor: AppPallete.label3Color,
             width: MediaQuery.of(context).size.width > 600 ? 200 : 100,
             height: 55,
+            fontSize: 12,
             onPressed: () {
               Navigator.pop(context);
+              onClose();
             },
           ),
         ],
