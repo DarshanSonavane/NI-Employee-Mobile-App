@@ -1,6 +1,7 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
 import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
+import 'package:employee_ni_service/core/utils/fuel_utiles.dart';
 import 'package:employee_ni_service/features/complaint/presentation/widgets/show_take_action_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -65,16 +66,6 @@ class _ComplaintCardState extends State<ComplaintCard> {
     }
   }
 
-  setFuelType(String? fuelType) {
-    if (fuelType == '1') {
-      return const BuildLegends(Constants.diesel, AppPallete.errorColor);
-    } else if (fuelType == '0') {
-      return const BuildLegends(Constants.petrol, AppPallete.gradientColor);
-    } else {
-      return const BuildLegends(Constants.combo, AppPallete.blueColor);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -126,7 +117,7 @@ class _ComplaintCardState extends State<ComplaintCard> {
                           children: [
                             setComplaintStatus(widget.status),
                             SizedBox(width: 8 * scalingFactor),
-                            setFuelType(widget.fuelType),
+                            fuelUtils(widget.fuelType),
                           ],
                         ),
                       ],

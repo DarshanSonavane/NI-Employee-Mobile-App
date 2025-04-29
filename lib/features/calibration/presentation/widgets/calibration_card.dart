@@ -1,6 +1,7 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
 import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
+import 'package:employee_ni_service/core/utils/fuel_utiles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/common/widgets/animated_fab.dart';
@@ -58,14 +59,6 @@ class _CalibrationCardState extends State<CalibrationCard> {
     }
   }
 
-  setFuelType(String? fuelType) {
-    if (fuelType == '1') {
-      return const BuildLegends(Constants.diesel, AppPallete.errorColor);
-    } else {
-      return const BuildLegends(Constants.petrol, AppPallete.gradientColor);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -106,7 +99,7 @@ class _CalibrationCardState extends State<CalibrationCard> {
                           children: [
                             setComplaintStatus(widget.status),
                             SizedBox(width: 8 * scalingFactor),
-                            setFuelType(widget.fuelType),
+                            fuelUtils(widget.fuelType),
                           ],
                         ),
                       ],

@@ -9,11 +9,13 @@ class ResponseFsrModel extends FsrEntity {
 
   factory ResponseFsrModel.fromJson(Map<String, dynamic> json) {
     return ResponseFsrModel(
-      message: json['message'],
-      code: json['code'],
-      fsrData: List<FsrDataModel>.from(
-        json['fsrData'].map((x) => FsrDataModel.fromJson(x)),
-      ),
+      message: json['message'] ?? '',
+      code: json['code'] ?? 0,
+      fsrData: json['fsrData'] != null
+          ? List<FsrDataModel>.from(
+              (json['fsrData'] as List).map((x) => FsrDataModel.fromJson(x)),
+            )
+          : [],
     );
   }
 
@@ -51,29 +53,34 @@ class FsrDataModel extends FsrDataEntity {
 
   factory FsrDataModel.fromJson(Map<String, dynamic> json) {
     return FsrDataModel(
-      id: json['_id'],
-      customerCode: json['customerCode'],
-      contactPerson: json['contactPerson'],
-      designation: json['designation'],
-      employeeCode: json['employeeCode'],
-      complaintType: json['complaintType'],
+      id: json['_id'] ?? "",
+      customerCode: json['customerCode'] ?? "",
+      contactPerson: json['contactPerson'] ?? "",
+      designation: json['designation'] ?? "",
+      employeeCode: json['employeeCode'] ?? "",
+      complaintType: json['complaintType'] ?? "",
       natureOfCompliant: json['natureOfCall'] ?? "",
       productsUsed: json['productsUsed'] != null
           ? List<ProductUsedModel>.from(
-              json['productsUsed'].map((x) => ProductUsedModel.fromJson(x)),
+              (json['productsUsed'] as List)
+                  .map((x) => ProductUsedModel.fromJson(x)),
             )
           : [],
-      remark: json['remark'],
-      correctiveAction: json['correctiveAction'],
-      status: json['status'],
-      serviceDetails: json['serviceDetails'],
-      fsrLocation: json['fsrLocation'],
-      fsrStatus: json['fsrStatus'],
-      customerInfo: CustomerInfoModel.fromJson(json['customerInfo']),
-      employeeInfo: EmployeeInfoModel.fromJson(json['employeeInfo']),
-      fsrFinalAmount: json['fsrFinalAmount'],
-      fsrFinalGstAmount: json['totalGSTAmount'],
-      serviceCharge: json['serviceVisit'],
+      remark: json['remark'] ?? "",
+      correctiveAction: json['correctiveAction'] ?? "",
+      status: json['status'] ?? "",
+      serviceDetails: json['serviceDetails'] ?? "",
+      fsrLocation: json['fsrLocation'] ?? "",
+      fsrStatus: json['fsrStatus'] ?? "",
+      customerInfo: json['customerInfo'] != null
+          ? CustomerInfoModel.fromJson(json['customerInfo'])
+          : CustomerInfoModel.empty(),
+      employeeInfo: json['employeeInfo'] != null
+          ? EmployeeInfoModel.fromJson(json['employeeInfo'])
+          : EmployeeInfoModel.empty(),
+      fsrFinalAmount: json['fsrFinalAmount'] ?? "",
+      fsrFinalGstAmount: json['totalGSTAmount'] ?? "",
+      serviceCharge: json['serviceVisit'] ?? "",
     );
   }
 
@@ -117,7 +124,7 @@ class ProductUsedModel extends ProductUsedEntity {
   factory ProductUsedModel.fromJson(Map<String, dynamic> json) {
     return ProductUsedModel(
       productName: json['productName'] ?? "",
-      quantityUsed: json['quantityUsed'] ?? "",
+      quantityUsed: int.tryParse(json['quantityUsed']?.toString() ?? "0") ?? 0,
       chargeable: json['chargeable'] ?? "",
       rate: json['rate'] ?? "",
       amount: json['amount'] ?? "",
@@ -154,6 +161,15 @@ class CustomerInfoModel extends CustomerInfoEntity {
     );
   }
 
+  // Adding an empty constructor to handle null cases
+  factory CustomerInfoModel.empty() {
+    return CustomerInfoModel(
+      stateCode: '',
+      customerName: '',
+      city: '',
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'stateCode': stateCode,
@@ -171,8 +187,16 @@ class EmployeeInfoModel extends EmployeeInfoEntity {
 
   factory EmployeeInfoModel.fromJson(Map<String, dynamic> json) {
     return EmployeeInfoModel(
-      firstName: json['firstName'],
-      lastName: json['lastName'],
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+    );
+  }
+
+  // Adding an empty constructor to handle null cases
+  factory EmployeeInfoModel.empty() {
+    return EmployeeInfoModel(
+      firstName: '',
+      lastName: '',
     );
   }
 
