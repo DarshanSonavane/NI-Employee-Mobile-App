@@ -114,7 +114,7 @@ class _SetResetPasswordState extends State<SetResetPassword> {
                           if (formKey.currentState!.validate()) {
                             context.read<SetResetPasswordBloc>().add(
                                   EventSetResetPassword(
-                                    customerCode:
+                                    employeeCode:
                                         employeeCodeController.text.trim(),
                                     password: passwordController.text.trim(),
                                   ),

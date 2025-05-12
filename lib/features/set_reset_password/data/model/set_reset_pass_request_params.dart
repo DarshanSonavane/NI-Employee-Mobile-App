@@ -2,13 +2,13 @@ import 'package:employee_ni_service/features/set_reset_password/domain/entities/
 
 class SetResetPassRequestParams extends SetResetPasswordEntity {
   SetResetPassRequestParams({
-    required super.customerCode,
+    required super.employeeCode,
     required super.password,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'customerCode': customerCode,
+      'employeeCode': employeeCode,
       'password': password,
     };
   }

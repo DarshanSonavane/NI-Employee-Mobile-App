@@ -93,7 +93,7 @@ class _ComplaintEmployeeViewState extends State<ComplaintEmployeeView> {
           additionalRequest: complaint.serviceRequestId?.additionalReq ?? '',
           feedback: complaint.serviceRequestId?.employeeFeedback ?? '',
           status: complaint.serviceRequestId?.status ?? '',
-          complaintId: complaint.id ?? '',
+          complaintId: complaint.serviceRequestId?.id ?? '',
           onClose: widget.isOpenTab ? closeComplaint : null,
           onGenerateFSR: widget.isOpenTab
               ? (

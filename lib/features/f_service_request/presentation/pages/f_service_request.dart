@@ -5,6 +5,7 @@ import 'package:employee_ni_service/core/common/widgets/loader.dart';
 import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:employee_ni_service/core/utils/machine_options.dart';
 import 'package:employee_ni_service/core/utils/show_snackbar.dart';
+import 'package:employee_ni_service/features/complaint/presentation/bloc/complaint_bloc.dart';
 import 'package:employee_ni_service/features/dashboard/widgets/app_bar_widget.dart';
 import 'package:employee_ni_service/features/f_service_request/data/model/request_create_fsr_model.dart';
 import 'package:employee_ni_service/features/f_service_request/data/model/response_verification_model.dart';
@@ -279,6 +280,8 @@ class _FServiceRequestState extends State<FServiceRequest> {
                     backgroundColor: AppPallete.gradientColor);
                 context.read<TotalAmountProvider>().resetTotalAmount();
                 _clearAllFields();
+                context.read<ComplaintBloc>().add(GetAllComplaintList(
+                    complaintType: Constants.activeComplaints));
                 Navigator.pop(context);
               }
             }

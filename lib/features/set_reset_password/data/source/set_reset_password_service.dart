@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:employee_ni_service/features/set_reset_password/data/model/set_reset_password_response.dart';
 
 import '../../../../core/constants/api_urls.dart';
 import '../../../../core/network/dio_client.dart';
@@ -19,7 +20,9 @@ class SetResetPasswordServiceImpl extends SetResetPasswordService {
       var response = await sl<DioClient>()
           .post(ApiUrls.updateCustomerPassword, data: params.toMap());
 
-      return Right(response);
+      var updatedPasswordResponse =
+          ResponseUpdatePasswordModel.fromJson(response.data);
+      return Right(updatedPasswordResponse);
     } on DioException catch (e) {
       return left(e.message);
     }

@@ -4,11 +4,11 @@ part of 'set_reset_password_bloc.dart';
 sealed class SetResetPasswordEvent {}
 
 final class EventSetResetPassword extends SetResetPasswordEvent {
-  final String customerCode;
+  final String employeeCode;
   final String password;
 
   EventSetResetPassword({
-    required this.customerCode,
+    required this.employeeCode,
     required this.password,
   });
 }

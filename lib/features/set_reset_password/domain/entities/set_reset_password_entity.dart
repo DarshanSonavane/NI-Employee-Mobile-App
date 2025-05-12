@@ -1,9 +1,9 @@
 class SetResetPasswordEntity {
-  final String customerCode;
+  final String employeeCode;
   final String password;
 
   SetResetPasswordEntity({
-    required this.customerCode,
+    required this.employeeCode,
     required this.password,
   });
 }

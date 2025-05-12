@@ -1,7 +1,7 @@
 class ApiUrls {
   static const baseUrl = 'http://13.49.111.133:3000/';
   static const login = '${baseUrl}login';
-  static const updateCustomerPassword = '${baseUrl}update-customer-password';
+  static const updateCustomerPassword = '${baseUrl}update-employee-password';
   static const getHomeDetails = '${baseUrl}get-admin-dashboard-details';
   static const getComplaintDetails = '${baseUrl}get-all-complaints';
   static const getClosedComplaintDetails = '${baseUrl}get-all-close-complaints';

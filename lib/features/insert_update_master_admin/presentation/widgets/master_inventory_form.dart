@@ -53,11 +53,14 @@ class MasterInventoryFormState extends State<MasterInventoryForm> {
             widget.inventoryItems?.data.firstWhere((item) => item.id == value);
         selectedProductName = selectedProduct?.productName;
         productCodeController.text = selectedProduct?.productCode ?? "";
+        priceController.text = selectedProduct?.price.toString() ?? "";
+        selectedProduct?.price.toString() ?? "";
         newProductController.clear();
         isProductCodeEditable = false;
         isTextFieldEnabled = false;
       } else {
         productCodeController.clear();
+        priceController.clear();
         isProductCodeEditable = true;
         selectedProductId = null;
         selectedProductName = null;
@@ -226,7 +229,7 @@ class MasterInventoryFormState extends State<MasterInventoryForm> {
             labelStyle: const TextStyle(color: AppPallete.deepNavy),
             fillColor: AppPallete.backgroundClosed,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            editableText: true,
+            editableText: isProductCodeEditable,
             isNumberField: true,
           ),
           const SizedBox(height: 25),

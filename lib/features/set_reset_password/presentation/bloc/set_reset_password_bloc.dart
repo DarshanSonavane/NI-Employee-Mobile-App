@@ -22,7 +22,7 @@ class SetResetPasswordBloc
   ) async {
     final res = await sl<SetResetPasswordUsecase>().call(
       params: SetResetPassRequestParams(
-        customerCode: event.customerCode,
+        employeeCode: event.employeeCode,
         password: event.password,
       ),
     );
