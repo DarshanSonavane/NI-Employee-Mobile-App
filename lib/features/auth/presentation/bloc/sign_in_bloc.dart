@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:employee_ni_service/core/error/failure.dart';
 import 'package:employee_ni_service/features/auth/data/models/login_request_params.dart';
 import 'package:employee_ni_service/features/auth/data/models/login_response_params.dart';
 import 'package:employee_ni_service/features/auth/domain/usecases/user_login.dart';

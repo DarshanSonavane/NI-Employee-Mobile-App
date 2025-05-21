@@ -16,9 +16,12 @@ final class SignInFailure extends SignInState {
   final String message;
 
   SignInFailure(dynamic failure)
-      : message = failure is DioException
-            ? (failure.type == DioExceptionType.connectionError
-                ? "No internet connection!"
-                : failure.message ?? "Something went wrong!")
-            : (failure is String ? failure : "An unknown error occurred.");
+      : message = switch (failure) {
+          DioException dio => dio.type == DioExceptionType.connectionError
+              ? "No internet connection!"
+              : dio.message ?? "Something went wrong!",
+          Failure f => f.message,
+          String s => s,
+          _ => "An unknown error occurred.",
+        };
 }

@@ -161,6 +161,14 @@ class _FServiceRequestState extends State<FServiceRequest> {
       return;
     }
 
+    bool hasZeroQuantity =
+        productsUsed.any((product) => product.quantityUsed == 0);
+    if (hasZeroQuantity) {
+      showSnackBar(context, "You can't add products with 0 quantity",
+          backgroundColor: AppPallete.errorColor);
+      return;
+    }
+
     bool permissionGranted = await handleLocationPermission();
     if (!permissionGranted) {
       showPermissionDeniedDialog();
