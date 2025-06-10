@@ -5,9 +5,17 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.android/
+.ios/
+.idea/
+.vscode/
+bin/
+build/
+.swiftpm/
 migrate_working_dir/
 
 # IntelliJ related
@@ -41,3 +49,27 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Native build artifacts
+**/android/.cxx/
+**/android/.gradle/
+**/android/local.properties
+
+android/app/.cxx/
+android/app/.cxx/Debug/4x22w4f2/arm64-v8a/configure_fingerprint.bin
+android/app/.cxx/Debug/4x22w4f2/armeabi-v7a/configure_fingerprint.bin
+
+
+
+
+
+
+
+
+
+
+
+**/generated_plugin_registrant.dart
+**/ios/Flutter/flutter_export_environment.sh
+**/android/Flutter/flutter_export_environment.sh
+pubspec.lock

@@ -1,0 +1,205 @@
+import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
+import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
+import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
+import 'package:employee_ni_service/core/utils/fuel_utiles.dart';
+import 'package:employee_ni_service/features/complaint/presentation/widgets/show_take_action_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../../../../core/common/widgets/build_legends.dart';
+import '../../../../core/constants/constants.dart';
+import '../../../../core/common/widgets/animated_fab.dart';
+import '../../../../core/common/widgets/set_heading_text.dart';
+
+class ComplaintCard extends StatefulWidget {
+  final String? name;
+  final String? customerCode;
+  final String? date;
+  final String? fuelType;
+  final String? location;
+  final String? state;
+  final String? complaintType;
+  final String? additionalRequest;
+  final String? feedback;
+  final String? status;
+  final String? complaintId;
+  final Function(String)? onClose;
+  final Function(String)? onAssign;
+  final Function(String, String, String, String, String)? onGenerateFSR;
+
+  const ComplaintCard({
+    required this.name,
+    required this.customerCode,
+    required this.date,
+    required this.fuelType,
+    required this.location,
+    required this.state,
+    required this.complaintType,
+    required this.additionalRequest,
+    required this.feedback,
+    required this.status,
+    required this.complaintId,
+    this.onClose,
+    this.onAssign,
+    this.onGenerateFSR,
+    super.key,
+  });
+
+  @override
+  State<ComplaintCard> createState() => _ComplaintCardState();
+}
+
+class _ComplaintCardState extends State<ComplaintCard> {
+  String setDateFormat(String dateString) {
+    final DateTime parsedDate = DateTime.parse(dateString);
+    final DateFormat formatter = DateFormat('dd-MMM-yyyy');
+    return formatter.format(parsedDate);
+  }
+
+  setComplaintStatus(String? status) {
+    if (status == '1') {
+      return const BuildLegends(Constants.open, AppPallete.pieCharOpen);
+    } else if (status == '2') {
+      return const BuildLegends(
+          Constants.assigned, AppPallete.pieCharInProcess);
+    } else {
+      return const BuildLegends(Constants.close, AppPallete.pieCharInProcess);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final scalingFactor = screenWidth < 600 ? 0.75 : 1.0;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Card(
+        color: AppPallete.backgroundColor,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(25.0 * scalingFactor),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.name!,
+                          style: TextStyle(
+                            color: AppPallete.label3Color,
+                            fontSize: 24 * scalingFactor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        setHeadingText(
+                            null,
+                            widget.customerCode.toString().trim(),
+                            Constants.customerCode,
+                            scalingFactor,
+                            20,
+                            AppPallete.label2Color,
+                            AppPallete.label2Color),
+                        setTextNormal('${widget.location!}, ${widget.state}',
+                            scalingFactor,
+                            color: AppPallete.label2Color, fontSize: 18),
+                        SizedBox(height: 16 * scalingFactor),
+                        Row(
+                          children: [
+                            setComplaintStatus(widget.status),
+                            SizedBox(width: 8 * scalingFactor),
+                            fuelUtils(widget.fuelType),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        setTextNormal(
+                            setDateFormat(widget.date!.substring(0, 10)),
+                            scalingFactor,
+                            color: AppPallete.label2Color),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8 * scalingFactor),
+              const Divider(),
+              SizedBox(height: 8 * scalingFactor),
+              setHeadingText(
+                  null,
+                  widget.complaintType.toString().trim(),
+                  Constants.complaintTypeHeader,
+                  scalingFactor,
+                  22,
+                  AppPallete.label2Color,
+                  AppPallete.label3Color),
+              SizedBox(height: 8 * scalingFactor),
+              setHeadingText(
+                  null,
+                  widget.additionalRequest.toString().trim(),
+                  Constants.additionReqHeader,
+                  scalingFactor,
+                  22,
+                  AppPallete.label2Color,
+                  AppPallete.label3Color),
+              SizedBox(height: 8 * scalingFactor),
+              setHeadingText(
+                  null,
+                  widget.feedback.toString().trim(),
+                  Constants.feedbackHeader,
+                  scalingFactor,
+                  22,
+                  AppPallete.label2Color,
+                  AppPallete.label3Color),
+              SizedBox(height: 8 * scalingFactor),
+              Visibility(
+                visible: widget.status != '0',
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: AnimatedFabMenu(
+                    onAssignTap: () {
+                      widget.onAssign!(widget.complaintId!);
+                    },
+                    onCloseTap: () {
+                      widget.onClose!(widget.complaintId!);
+                    },
+                    onTakeAction: () {
+                      showTakeActionDialog(context);
+                    },
+                    onGenerateFSR: () {
+                      widget.onGenerateFSR!(
+                        widget.complaintId!,
+                        widget.customerCode!,
+                        widget.name!,
+                        hiveStorageService.getUser()!.employeeCode,
+                        widget.complaintType.toString().trim(),
+                      );
+                    },
+                    status: widget.status!,
+                    userStatus: fetchUserRole(),
+                    tag: '_complaints',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
