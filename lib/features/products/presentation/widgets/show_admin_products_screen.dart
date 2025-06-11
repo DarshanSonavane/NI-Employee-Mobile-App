@@ -1,4 +1,5 @@
 import 'package:employee_ni_service/features/assign_product_by_admin/presentation/pages/assign_product_screen.dart';
+import 'package:employee_ni_service/features/check_assigned_products/presentation/pages/check_assigned_products.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/app_theme/app_pallete.dart';
@@ -26,8 +27,10 @@ class ShowAdminProductScreen extends StatelessWidget {
                 if (index == 0) {
                   Navigator.push(
                       context, InsertUpdateMasterInventoryScreen.route());
-                } else {
+                } else if (index == 1) {
                   Navigator.push(context, AssignProductScreen.route());
+                } else {
+                  Navigator.push(context, CheckAssignedProducts.route());
                 }
               },
               child: Card(
