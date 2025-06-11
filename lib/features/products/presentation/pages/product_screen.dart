@@ -14,6 +14,7 @@ class _ProductScreenState extends State<ProductScreen> {
   final List<String> listOfProductsInventoryUseCases = [
     "Insert/Update Master Inventory",
     "Assign Products to Employees",
+    "Check Assigned Products to Employees"
   ];
 
   @override

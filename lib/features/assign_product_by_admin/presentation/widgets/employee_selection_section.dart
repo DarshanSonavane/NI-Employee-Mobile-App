@@ -8,25 +8,28 @@ class EmployeeSelectionSection extends StatelessWidget {
   final String? selectedEmployee;
   final ResponseEmployeeModel? employeeModel;
   final Function(String?) onEmployeeSelected;
+  final bool? isHeaderVisible;
 
-  const EmployeeSelectionSection({
-    super.key,
-    required this.selectedEmployee,
-    required this.employeeModel,
-    required this.onEmployeeSelected,
-  });
+  const EmployeeSelectionSection(
+      {super.key,
+      required this.selectedEmployee,
+      required this.employeeModel,
+      required this.onEmployeeSelected,
+      this.isHeaderVisible = true});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CustomGlolbalText(
-          text: "Select Employee",
-          fontSize: 24.0,
-          fontWeight: FontWeight.bold,
-          color: AppPallete.label3Color,
-        ),
+        isHeaderVisible == true
+            ? const CustomGlolbalText(
+                text: "Select Employee",
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+                color: AppPallete.label3Color,
+              )
+            : const SizedBox.shrink(),
         const SizedBox(height: 16),
         CustomDropdown<String>(
           value: selectedEmployee,
