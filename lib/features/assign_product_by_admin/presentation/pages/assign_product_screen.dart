@@ -42,6 +42,7 @@ class _AssignProductScreenState extends State<AssignProductScreen> {
       appBar: const AppBarWidget(
         title: "Assign Product",
         isBackButtonVisible: true,
+        isMoreButtonVisible: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

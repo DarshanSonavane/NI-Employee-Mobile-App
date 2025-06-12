@@ -1,6 +1,6 @@
 import 'package:employee_ni_service/core/common/widgets/loader.dart';
 import 'package:employee_ni_service/core/utils/show_snackbar.dart';
-import 'package:employee_ni_service/features/assign_product_by_admin/presentation/widgets/employee_selection_section.dart';
+import 'package:employee_ni_service/core/common/widgets/employee_selection_section.dart';
 import 'package:employee_ni_service/features/complaint/data/models/model_fetch_employee/response_employee_model.dart';
 import 'package:employee_ni_service/features/products/presentation/bloc/product_bloc.dart';
 import 'package:employee_ni_service/features/products/presentation/widgets/employee_assigned_product_layout.dart';

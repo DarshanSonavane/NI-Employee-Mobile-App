@@ -6,41 +6,48 @@ import '../../data/model/response_home_details.dart';
 
 List<PieChartSectionData> showingSections(
     ResponseHomeDetails homeDetailsValue) {
-  double totalComplaintsValue = homeDetailsValue.totalComplaints!.toDouble();
-  double closedComplaintsValue = homeDetailsValue.closeComplaints!.toDouble();
-  double openComplaintsValue =
-      homeDetailsValue.openComplaints?.toDouble() ?? 0.0;
+  final openRaw = homeDetailsValue.openComplaints?.toDouble() ?? 0;
+  final closedRaw = homeDetailsValue.closeComplaints?.toDouble() ?? 0;
+  final inProcessRaw = homeDetailsValue.totalComplaints?.toDouble() ?? 0;
+  final total = openRaw + closedRaw + inProcessRaw;
+  const double minDisplayValue = 300;
+
+  double adjustForDisplay(double value) {
+    if (value == 0) return 0;
+    double percent = (value / total) * 100;
+    return percent < 2 ? minDisplayValue : value;
+  }
 
   return [
     PieChartSectionData(
       color: AppPallete.pieCharOpen,
-      value: openComplaintsValue,
-      title: openComplaintsValue.toString(),
-      radius: 60, // Adjusted the radius to fit within the container
+      value: adjustForDisplay(openRaw),
+      title: openRaw.toInt().toString(),
+      radius: 60,
       titleStyle: const TextStyle(
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
     ),
     PieChartSectionData(
       color: AppPallete.orangeColor,
-      value: totalComplaintsValue,
-      title: totalComplaintsValue.toString(),
+      value: adjustForDisplay(inProcessRaw),
+      title: inProcessRaw.toInt().toString(),
       radius: 60,
       titleStyle: const TextStyle(
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
     ),
     PieChartSectionData(
       color: AppPallete.pieCharClosed,
-      value: closedComplaintsValue,
-      title: closedComplaintsValue.toString(),
+      value: adjustForDisplay(closedRaw),
+      title: closedRaw.toInt().toString(),
       radius: 60,
       titleStyle: const TextStyle(
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),

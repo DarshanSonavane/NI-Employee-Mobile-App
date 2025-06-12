@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../core/app_theme/app_pallete.dart';
-import '../../../../core/common/widgets/custom_drop_down.dart';
-import '../../../../core/common/widgets/custom_global_text.dart';
-import '../../../complaint/data/models/model_fetch_employee/response_employee_model.dart';
+import '../../app_theme/app_pallete.dart';
+import 'custom_drop_down.dart';
+import 'custom_global_text.dart';
+import '../../../features/complaint/data/models/model_fetch_employee/response_employee_model.dart';
 
 class EmployeeSelectionSection extends StatelessWidget {
   final String? selectedEmployee;

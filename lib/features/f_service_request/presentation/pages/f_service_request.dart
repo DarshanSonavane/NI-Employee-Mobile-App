@@ -273,8 +273,11 @@ class _FServiceRequestState extends State<FServiceRequest> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppPallete.screenBackground,
-        appBar:
-            const AppBarWidget(title: Constants.fsr, isBackButtonVisible: true),
+        appBar: const AppBarWidget(
+          title: Constants.fsr,
+          isBackButtonVisible: true,
+          isMoreButtonVisible: false,
+        ),
         body: BlocListener<FsrBloc, FsrState>(
           listener: (context, state) {
             if (state is FsrFailure) {

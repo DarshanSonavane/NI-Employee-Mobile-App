@@ -37,6 +37,7 @@ class _CheckAssignedProductsState extends State<CheckAssignedProducts> {
       appBar: const AppBarWidget(
         title: "Employee Products",
         isBackButtonVisible: true,
+        isMoreButtonVisible: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

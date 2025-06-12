@@ -59,6 +59,7 @@ class _InsertUpdateMasterInventoryScreenState
       appBar: const AppBarWidget(
         title: "Add/Update Inventory",
         isBackButtonVisible: true,
+        isMoreButtonVisible: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

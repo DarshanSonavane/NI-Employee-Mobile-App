@@ -18,3 +18,5 @@ final List<Map<String, dynamic>> statusOptions = [
   {"id": 2, "label": "Partialy Done"},
   {"id": 3, "label": "Done"}
 ];
+
+final List<String> gender = ["Male", "Female"];
