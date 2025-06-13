@@ -7,7 +7,7 @@ import 'package:employee_ni_service/core/common/widgets/custom_global_text.dart'
 import 'package:employee_ni_service/core/constants/constants.dart';
 import 'package:employee_ni_service/core/utils/app_transition.dart';
 import 'package:employee_ni_service/core/utils/machine_options.dart';
-import 'package:employee_ni_service/features/dashboard/widgets/app_bar_widget.dart';
+import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';

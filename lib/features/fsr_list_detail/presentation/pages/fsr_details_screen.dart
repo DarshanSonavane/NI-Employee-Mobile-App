@@ -1,7 +1,7 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/utils/app_transition.dart';
-import '../../../dashboard/widgets/app_bar_widget.dart';
+import '../../../../core/common/widgets/app_bar_widget.dart';
 import '../../../home/data/model/response_fsr_model.dart';
 import '../../../home/presentation/widgets/fsr_details_card.dart';
 

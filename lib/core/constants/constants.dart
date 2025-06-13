@@ -111,4 +111,5 @@ class Constants {
       'Location permission is required to use this app. Please enable it from the app settings.';
   static const addCustomer = "Add Customer";
   static const addEmployee = "Add Employee";
+  static const addNotification = "Add Notification";
 }

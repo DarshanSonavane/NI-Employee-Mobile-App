@@ -1,4 +1,5 @@
 import 'package:employee_ni_service/core/app_theme/app_theme.dart';
+import 'package:employee_ni_service/core/utils/permissions.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/presentation/bloc/assign_product_to_employee_bloc.dart';
 import 'package:employee_ni_service/features/auth/data/models/login_response_params.dart';
 import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc.dart';
@@ -25,6 +26,7 @@ import 'service_locator_dependecies.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Geolocator.requestPermission();
+  handleGalleryPermission();
   await initDependecies();
   await Hive.openBox<LoginResponseParams>(Constants.loginHiveBox);
   runApp(

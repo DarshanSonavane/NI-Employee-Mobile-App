@@ -1,5 +1,7 @@
 import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:employee_ni_service/features/add_employee/presentation/pages/add_employee.dart';
+import 'package:employee_ni_service/features/add_notification.dart/presentation/pages/add_notification.dart';
+import 'package:employee_ni_service/features/notification_profile/presentation/pages/notifications_list.dart';
 import 'package:employee_ni_service/features/auth/presentation/pages/signin.dart';
 import 'package:employee_ni_service/features/add_customer/presentation/pages/add_customer.dart';
 import 'package:employee_ni_service/features/customer_profile/presentation/pages/customer_profile_page.dart';
@@ -7,10 +9,10 @@ import 'package:employee_ni_service/features/dashboard/widgets/more_option_menu.
 import 'package:employee_ni_service/features/employee_profile/presentation/pages/employee_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../core/app_theme/app_pallete.dart';
-import '../../../core/database/hive_storage_service.dart';
+import '../../app_theme/app_pallete.dart';
+import '../../database/hive_storage_service.dart';
 import '../../../service_locator_dependecies.dart';
-import '../provider/dashboard_state.dart';
+import '../../../features/dashboard/provider/dashboard_state.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -36,13 +38,16 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         Navigator.push(context, EmployeeProfilePage.route());
         break;
       case "notification":
-        debugPrint("notific");
+        Navigator.push(context, NotificationsList.route());
         break;
       case "addEmployee":
         Navigator.push(context, AddEmployee.route());
         break;
       case "addCustomer":
         Navigator.push(context, AddCustomer.route());
+        break;
+      case "addNotification":
+        Navigator.push(context, AddNotification.route());
         break;
       case "logout":
         logout(context);

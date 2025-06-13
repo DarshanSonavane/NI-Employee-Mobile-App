@@ -1,4 +1,4 @@
-import 'package:employee_ni_service/features/dashboard/widgets/app_bar_widget.dart';
+import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
 import 'package:employee_ni_service/features/insert_update_master_admin/data/model/insert_update_product_model.dart';
 import 'package:employee_ni_service/features/insert_update_master_admin/data/model/response_insert_update_model.dart';
 import 'package:employee_ni_service/features/insert_update_master_admin/presentation/bloc/master_inventory_bloc.dart';

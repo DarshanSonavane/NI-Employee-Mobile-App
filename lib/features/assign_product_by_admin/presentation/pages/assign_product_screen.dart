@@ -2,7 +2,7 @@ import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/data/models/model_master_inventory.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/presentation/bloc/assign_product_to_employee_bloc.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/presentation/widgets/assigning_work_widget.dart';
-import 'package:employee_ni_service/features/dashboard/widgets/app_bar_widget.dart';
+import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
