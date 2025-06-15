@@ -7,6 +7,7 @@ import 'package:employee_ni_service/features/add_customer/presentation/pages/add
 import 'package:employee_ni_service/features/customer_profile/presentation/pages/customer_profile_page.dart';
 import 'package:employee_ni_service/features/dashboard/widgets/more_option_menu.dart';
 import 'package:employee_ni_service/features/employee_profile/presentation/pages/employee_profile_page.dart';
+import 'package:employee_ni_service/features/profile/presentation/pages/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../app_theme/app_pallete.dart';
@@ -49,6 +50,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       case "addNotification":
         Navigator.push(context, AddNotification.route());
         break;
+      case "details":
+        Navigator.push(context, ProfileScreen.route());
       case "logout":
         logout(context);
       default:

@@ -42,11 +42,9 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
           padding: const EdgeInsets.all(16.0),
           child: Stack(
             children: [
-              // Main content
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top row: name and space for icons
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -61,13 +59,13 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       const SizedBox(width: 8),
                       IconButton(
                         icon: const Icon(Icons.edit,
-                            size: 20, color: Colors.blue),
+                            size: 20, color: AppPallete.gradientColor),
                         onPressed: widget.onEdit,
                         tooltip: 'Edit',
                       ),
                       IconButton(
                         icon: const Icon(Icons.delete,
-                            size: 20, color: Colors.red),
+                            size: 20, color: AppPallete.errorColor),
                         onPressed: widget.onDelete,
                         tooltip: 'Delete',
                       ),

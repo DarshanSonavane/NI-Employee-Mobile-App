@@ -27,4 +27,10 @@ class AppPallete {
   static const Color deepNavy = Color(0xFF1C2331);
   static final Color locationBackgroundWithOpacity =
       const Color(0xFF00FF00).withValues(alpha: 0.1);
+  static final Color cardBackgroundWithOpacity =
+      Colors.white.withValues(alpha: 0.15);
+  static final List<Color> gradientColorCard = [
+    const Color(0xFF42A5F5),
+    const Color(0xFF1976D2)
+  ];
 }

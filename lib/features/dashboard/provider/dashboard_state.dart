@@ -70,9 +70,11 @@ class DashboardState with ChangeNotifier {
             : null;
         break;
       case 3:
-        context
-            .read<ProfileBloc>()
-            .add(GetEmployeeProfileEvent(employeeId: fetchUserId()));
+        fetchUserRole() != "0"
+            ? context
+                .read<ProfileBloc>()
+                .add(GetEmployeeProfileEvent(employeeId: fetchUserId()))
+            : null;
         break;
       default:
         debugPrint('Invalid tab index');

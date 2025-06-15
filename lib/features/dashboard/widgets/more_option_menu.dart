@@ -17,8 +17,7 @@ class MoreOptionMenu extends StatelessWidget {
         color: AppPallete.gradientColor,
       ),
       itemBuilder: (BuildContext context) => [
-        buildItem(Icons.person_outline, 'Customer', 'customer'),
-        buildItem(Icons.manage_accounts, 'Employee', 'employee'),
+        buildItem(Icons.account_box, 'Account Details', 'details'),
         buildItem(Icons.edit_notifications, 'Notification', 'notification'),
         buildItem(Icons.logout, 'Logout', 'logout'),
       ],

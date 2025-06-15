@@ -1,4 +1,5 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
+import 'package:employee_ni_service/core/common/widgets/custom_search_field.dart';
 import 'package:employee_ni_service/core/utils/app_transition.dart';
 import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
 import 'package:employee_ni_service/features/employee_profile/presentation/widgets/employee_list_widget.dart';
@@ -16,6 +17,9 @@ class EmployeeProfilePage extends StatefulWidget {
 }
 
 class _EmployeeProfilePageState extends State<EmployeeProfilePage> {
+  final TextEditingController searchController = TextEditingController();
+  late List<Map<String, String>> visibleEmployees;
+
   final List<Map<String, String>> dummyEmployee = [
     {
       'firstName': 'John',
@@ -60,6 +64,31 @@ class _EmployeeProfilePageState extends State<EmployeeProfilePage> {
   ];
 
   @override
+  void initState() {
+    visibleEmployees = List.from(dummyEmployee);
+    super.initState();
+  }
+
+  void filter(String query) {
+    final q = query.trim().toLowerCase();
+    setState(() {
+      visibleEmployees = q.isEmpty
+          ? List.from(dummyEmployee)
+          : dummyEmployee.where((e) {
+              final first = (e['firstName'] ?? '').toLowerCase();
+              final last = (e['lastName'] ?? '').toLowerCase();
+              return first.contains(q) || last.contains(q);
+            }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppPallete.screenBackground,
@@ -70,12 +99,36 @@ class _EmployeeProfilePageState extends State<EmployeeProfilePage> {
         isMoreButtonVisible: false,
         navigateTo: "addEmployee",
       ),
-      body: ListView.builder(
-        itemCount: dummyEmployee.length,
-        itemBuilder: (context, index) {
-          final item = dummyEmployee[index];
-          return EmployeeListWidget(item: item);
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: CustomSearchField(
+              controller: searchController,
+              onChanged: filter,
+            ),
+          ),
+          Expanded(
+            child: visibleEmployees.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No Employee Found',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: AppPallete.label2Color,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: visibleEmployees.length,
+                    itemBuilder: (context, index) {
+                      final item = visibleEmployees[index];
+                      return EmployeeListWidget(item: item);
+                    },
+                  ),
+          ),
+        ],
       ),
     );
   }

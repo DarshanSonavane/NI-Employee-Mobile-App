@@ -1,4 +1,5 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
+import 'package:employee_ni_service/core/common/widgets/custom_search_field.dart';
 import 'package:employee_ni_service/core/utils/app_transition.dart';
 import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
 import 'package:employee_ni_service/features/customer_profile/presentation/widgets/customer_list_widget.dart';
@@ -16,6 +17,8 @@ class CustomerProfilePage extends StatefulWidget {
 }
 
 class _CustomerProfilePageState extends State<CustomerProfilePage> {
+  final TextEditingController searchController = TextEditingController();
+  late List<Map<String, String>> visibleCustomers;
   final List<Map<String, String>> customerList = [
     {
       "custCode": "108012",
@@ -98,6 +101,30 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
   ];
 
   @override
+  void initState() {
+    visibleCustomers = List.from(customerList);
+    super.initState();
+  }
+
+  void filter(String query) {
+    final q = query.trim().toLowerCase();
+    setState(() {
+      visibleCustomers = q.isEmpty
+          ? List.from(customerList)
+          : customerList.where((c) {
+              final name = (c['custName'] ?? '').toLowerCase();
+              return name.contains(q);
+            }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppPallete.screenBackground,
@@ -108,16 +135,41 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
         isMoreButtonVisible: false,
         navigateTo: "addCustomer",
       ),
-      body: ListView.builder(
-        itemCount: customerList.length,
-        itemBuilder: (context, index) {
-          final item = customerList[index];
-          return Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-            child: CustomerListWidget(item: item),
-          );
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20, top: 10),
+            child: CustomSearchField(
+              controller: searchController,
+              onChanged: filter,
+              hintText: 'Search by customer name',
+            ),
+          ),
+          Expanded(
+            child: visibleCustomers.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No Customer Found',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: AppPallete.label2Color,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: visibleCustomers.length,
+                    itemBuilder: (context, index) {
+                      final item = visibleCustomers[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        child: CustomerListWidget(item: item),
+                      );
+                    },
+                  ),
+          ),
+        ],
       ),
     );
   }
