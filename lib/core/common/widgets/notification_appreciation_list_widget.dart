@@ -2,10 +2,10 @@ import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/custom_global_text.dart';
 import 'package:flutter/material.dart';
 
-class NotificationListWidget extends StatelessWidget {
+class NotificationAppreciationListWidget extends StatelessWidget {
   final Map<String, String> item;
   final bool hasImage;
-  const NotificationListWidget({
+  const NotificationAppreciationListWidget({
     super.key,
     required this.item,
     required this.hasImage,
@@ -26,11 +26,24 @@ class NotificationListWidget extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: CustomGlolbalText(
-                  text: item['text'] ?? '',
-                  color: AppPallete.label3Color,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 4,
+                  children: [
+                    CustomGlolbalText(
+                      text: item['text'] ?? '',
+                      color: AppPallete.label3Color,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                    ),
+                    CustomGlolbalText(
+                      text: item['date'] ?? '',
+                      color: AppPallete.label3Color,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(width: 12),

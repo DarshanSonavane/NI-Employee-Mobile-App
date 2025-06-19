@@ -24,50 +24,69 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
+    super.initState();
+    _fetchEmployeeProfile();
+  }
+
+  void _fetchEmployeeProfile() {
     final id = fetchUserId();
     if (id.isNotEmpty) {
       context.read<ProfileBloc>().add(
-            GetEmployeeProfileEvent(
-              employeeId: id,
-            ),
+            GetEmployeeProfileEvent(employeeId: id),
           );
     }
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppPallete.screenBackground,
-      appBar: fetchUserRole() == "0"
-          ? const AppBarWidget(
-              title: 'Account Details',
-              isBackButtonVisible: true,
-              isMoreButtonVisible: false,
-              isFromMoreIcon: false,
-            )
-          : null,
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: BlocListener<ProfileBloc, ProfileState>(
-          listener: (context, state) {
-            if (state is ProfileFailure) {
-              showSnackBar(context, state.message);
-            }
-          },
-          child: BlocBuilder<ProfileBloc, ProfileState>(
-            builder: (context, state) {
-              if (state is ProfileLoader) {
-                return const Loader();
-              } else if (state is ProfileSuccess) {
-                return ProfileCard(empData: state.responseEmployeeProfile.data);
-              } else {
-                return const Text('No profile data available.');
-              }
-            },
-          ),
+      appBar: _buildAppBar(),
+      body: _buildBody(),
+    );
+  }
+
+  PreferredSizeWidget? _buildAppBar() {
+    return fetchUserRole() == "0"
+        ? const AppBarWidget(
+            title: 'Account Details',
+            isBackButtonVisible: true,
+            isMoreButtonVisible: false,
+            isFromMoreIcon: false,
+          )
+        : null;
+  }
+
+  Widget _buildBody() {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: BlocListener<ProfileBloc, ProfileState>(
+        listener: _handleStateChanges,
+        child: BlocBuilder<ProfileBloc, ProfileState>(
+          builder: _buildStateWidget,
         ),
       ),
     );
+  }
+
+  void _handleStateChanges(BuildContext context, ProfileState state) {
+    if (state is ProfileFailure) {
+      showSnackBar(context, state.message);
+    }
+  }
+
+  Widget _buildStateWidget(BuildContext context, ProfileState state) {
+    if (state is ProfileLoader) {
+      return const Loader();
+    } else if (state is ProfileSuccess) {
+      return ProfileCard(empData: state.responseEmployeeProfile.data);
+    } else {
+      return const Center(
+        child: Text(
+          'No profile data available.',
+          style: TextStyle(fontSize: 16),
+        ),
+      );
+    }
   }
 }

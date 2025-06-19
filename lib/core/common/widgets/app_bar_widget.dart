@@ -1,6 +1,7 @@
 import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:employee_ni_service/features/add_employee/presentation/pages/add_employee.dart';
-import 'package:employee_ni_service/features/add_notification.dart/presentation/pages/add_notification.dart';
+import 'package:employee_ni_service/features/add_notification_appreciation.dart/presentation/pages/add_notification_or_appreciation.dart';
+import 'package:employee_ni_service/features/appreciation_profile.dart/pages/appreciation_list.dart';
 import 'package:employee_ni_service/features/notification_profile/presentation/pages/notifications_list.dart';
 import 'package:employee_ni_service/features/auth/presentation/pages/signin.dart';
 import 'package:employee_ni_service/features/add_customer/presentation/pages/add_customer.dart';
@@ -41,6 +42,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       case "notification":
         Navigator.push(context, NotificationsList.route());
         break;
+      case "appreciation":
+        Navigator.push(context, AppreciationList.route());
+        break;
       case "addEmployee":
         Navigator.push(context, AddEmployee.route());
         break;
@@ -48,7 +52,12 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         Navigator.push(context, AddCustomer.route());
         break;
       case "addNotification":
-        Navigator.push(context, AddNotification.route());
+        Navigator.push(
+            context, AddNotificationOrAppreciation.route("notification"));
+        break;
+      case "addAppreciation":
+        Navigator.push(
+            context, AddNotificationOrAppreciation.route("appreciation"));
         break;
       case "details":
         Navigator.push(context, ProfileScreen.route());

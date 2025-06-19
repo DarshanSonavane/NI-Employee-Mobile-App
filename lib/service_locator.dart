@@ -356,23 +356,18 @@ void _initSetResetPassword() {
 }
 
 void _initGetProfileData() {
-  //Repository
-  sl.registerSingleton<EmployeeProfileRepository>(
-    EmployeeProfileRepositoryImpl(),
-  );
-
-  //service
-  sl.registerSingleton<EmployeeProfileDetailsService>(
-    EmployeeProfileDetailsServiceImpl(),
-  );
-
-  //UseCase
-  sl.registerSingleton<FetchEmployeeProfileUsecase>(
-    FetchEmployeeProfileUsecase(),
-  );
-
-  //Bloc
-  sl.registerFactory<ProfileBloc>(
-    () => ProfileBloc(fetchEmployeeProfileUseCase: sl()),
-  );
+  sl
+    //service
+    ..registerLazySingleton<EmployeeProfileDetailsService>(
+        () => EmployeeProfileDetailsServiceImpl())
+    //Repository
+    ..registerLazySingleton<EmployeeProfileRepository>(
+        () => EmployeeProfileRepositoryImpl())
+    //UseCase
+    ..registerLazySingleton<FetchEmployeeProfileUsecase>(
+        () => FetchEmployeeProfileUsecase())
+    //Bloc
+    ..registerFactory<ProfileBloc>(() => ProfileBloc(
+          fetchEmployeeProfileUseCase: sl(),
+        ));
 }

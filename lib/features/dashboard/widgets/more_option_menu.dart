@@ -18,6 +18,7 @@ class MoreOptionMenu extends StatelessWidget {
       ),
       itemBuilder: (BuildContext context) => [
         buildItem(Icons.account_box, 'Account Details', 'details'),
+        buildItem(Icons.celebration, 'Appreciation Post', 'appreciation'),
         buildItem(Icons.edit_notifications, 'Notification', 'notification'),
         buildItem(Icons.logout, 'Logout', 'logout'),
       ],

@@ -112,4 +112,5 @@ class Constants {
   static const addCustomer = "Add Customer";
   static const addEmployee = "Add Employee";
   static const addNotification = "Add Notification";
+  static const addAppreciation = "Add Appreciation";
 }

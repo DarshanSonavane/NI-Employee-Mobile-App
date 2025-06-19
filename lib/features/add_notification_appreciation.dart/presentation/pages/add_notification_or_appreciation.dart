@@ -4,31 +4,38 @@ import 'package:employee_ni_service/core/common/widgets/custom_form_builder_text
 import 'package:employee_ni_service/core/constants/constants.dart';
 import 'package:employee_ni_service/core/utils/app_transition.dart';
 import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
-import 'package:employee_ni_service/features/add_notification.dart/presentation/widgets/image_chooser_widget.dart';
+import 'package:employee_ni_service/features/add_notification_appreciation.dart/presentation/widgets/image_chooser_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-class AddNotification extends StatefulWidget {
-  const AddNotification({super.key});
+class AddNotificationOrAppreciation extends StatefulWidget {
+  final String type;
+  const AddNotificationOrAppreciation({super.key, required this.type});
 
-  static Route route() {
-    return createSlideTransitionRoute(const AddNotification());
+  static Route route(String type) {
+    return createSlideTransitionRoute(AddNotificationOrAppreciation(
+      type: type,
+    ));
   }
 
   @override
-  State<AddNotification> createState() => _AddNotificationState();
+  State<AddNotificationOrAppreciation> createState() =>
+      _AddNotificationOrAppreciationState();
 }
 
-class _AddNotificationState extends State<AddNotification> {
+class _AddNotificationOrAppreciationState
+    extends State<AddNotificationOrAppreciation> {
   final notificationFormKey = GlobalKey<FormBuilderState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppPallete.screenBackground,
-      appBar: const AppBarWidget(
-        title: "Add Notification",
+      appBar: AppBarWidget(
+        title: widget.type != "appreciation"
+            ? Constants.addNotification
+            : Constants.addAppreciation,
         isBackButtonVisible: true,
         isMoreButtonVisible: false,
         isFromMoreIcon: false,
@@ -47,9 +54,9 @@ class _AddNotificationState extends State<AddNotification> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: CustomFormBuilderTextField(
-                          name: 'Notes',
-                          label: 'Notes',
-                          hintText: 'Enter your Notes',
+                          name: 'Post',
+                          label: 'Post',
+                          hintText: 'Enter your Post',
                           keyboardType: TextInputType.multiline,
                           maxLine: 5,
                           textInputAction: TextInputAction.done,
@@ -67,7 +74,9 @@ class _AddNotificationState extends State<AddNotification> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: AuthGradientButton(
-                buttonText: Constants.addNotification,
+                buttonText: widget.type != "appreciation"
+                    ? Constants.addNotification
+                    : Constants.addAppreciation,
                 startColor: AppPallete.buttonColor,
                 endColor: AppPallete.gradientColor,
                 width: MediaQuery.of(context).size.width,
