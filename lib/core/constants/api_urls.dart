@@ -32,4 +32,6 @@ class ApiUrls {
       '${baseUrl}employee-inventory-list';
   static const assignedProductToEmp =
       '${baseUrl}insert-update-employee-inventory';
+  static const createEmployee = '${baseUrl}create-employee';
+  static const deleteEmployee = '${baseUrl}delete-employee';
 }

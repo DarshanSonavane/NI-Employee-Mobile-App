@@ -54,9 +54,9 @@ class _AddNotificationOrAppreciationState
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: CustomFormBuilderTextField(
-                          name: 'Post',
-                          label: 'Post',
-                          hintText: 'Enter your Post',
+                          name: 'Message',
+                          label: 'Message',
+                          hintText: 'Enter your Message',
                           keyboardType: TextInputType.multiline,
                           maxLine: 5,
                           textInputAction: TextInputAction.done,

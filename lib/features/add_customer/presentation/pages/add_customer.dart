@@ -1,9 +1,8 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/auth_gradient_button.dart';
 import 'package:employee_ni_service/core/common/widgets/custom_date_picker.dart';
-import 'package:employee_ni_service/core/common/widgets/custom_drop_down.dart';
 import 'package:employee_ni_service/core/common/widgets/custom_form_builder_text_field.dart';
-import 'package:employee_ni_service/core/common/widgets/custom_global_text.dart';
+import 'package:employee_ni_service/core/common/widgets/custom_radio_button.dart';
 import 'package:employee_ni_service/core/constants/constants.dart';
 import 'package:employee_ni_service/core/utils/app_transition.dart';
 import 'package:employee_ni_service/core/utils/machine_options.dart';
@@ -26,12 +25,19 @@ class AddCustomer extends StatefulWidget {
 class _AddCustomerState extends State<AddCustomer> {
   final customerFormKey = GlobalKey<FormBuilderState>();
   String? selectedState;
+  bool showGenderError = false;
+  String? selectedGender;
 
   void onStateSelected(String? value) {
     setState(() {
       selectedState = value;
     });
   }
+
+  void onGenderChanged(String? v) => setState(() {
+        selectedGender = v;
+        showGenderError = false;
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -83,25 +89,13 @@ class _AddCustomerState extends State<AddCustomer> {
                             FormBuilderValidators.required(),
                           ],
                         ),
-                        CustomDropdown<String>(
-                          value: selectedState,
-                          hintText: "State",
-                          items: gender
-                              .map((state) => DropdownMenuItem<String>(
-                                    value: state,
-                                    child: CustomGlolbalText(
-                                      text: state,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppPallete.label3Color,
-                                    ),
-                                  ))
-                              .toList(),
-                          onChanged: onStateSelected,
-                          borderColor: AppPallete.gradientColor,
-                          iconColor: AppPallete.deepNavy,
-                          textColor: AppPallete.label2Color,
-                          dropdownColor: AppPallete.backgroundColor,
+                        CustomRadioGroup<String>(
+                          label: 'Gender',
+                          options: genders,
+                          value: selectedGender,
+                          onChanged: onGenderChanged,
+                          errorText:
+                              showGenderError ? 'Please select gender' : null,
                         ),
                         CustomFormBuilderTextField(
                           name: 'Email',

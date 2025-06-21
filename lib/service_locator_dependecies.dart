@@ -1,4 +1,9 @@
 import 'package:employee_ni_service/core/network/dio_client.dart';
+import 'package:employee_ni_service/features/add_employee/data/repository/add_emp_repostiory_impl.dart';
+import 'package:employee_ni_service/features/add_employee/data/source/create_employee_service.dart';
+import 'package:employee_ni_service/features/add_employee/domain/repository/add_employee_repository.dart';
+import 'package:employee_ni_service/features/add_employee/domain/usecases/add_employee_usecase.dart';
+import 'package:employee_ni_service/features/add_employee/presentation/bloc/add_employee_bloc.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/data/repository/fetch_master_inventory_repository_impl.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/domain/repository/fetch_master_inventory_repository.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/domain/usecases/fetch_master_inventory_usecase.dart';
@@ -33,6 +38,11 @@ import 'package:employee_ni_service/features/complaint/domain/repository/close_c
 import 'package:employee_ni_service/features/complaint/domain/repository/fetch_employee_repository.dart';
 import 'package:employee_ni_service/features/complaint/domain/usecases/fetch_complaint_data.dart';
 import 'package:employee_ni_service/features/complaint/domain/usecases/fetch_employee_data.dart';
+import 'package:employee_ni_service/features/employee_profile/data/repository/delete_employee_profile_repository_impl.dart';
+import 'package:employee_ni_service/features/employee_profile/data/source/delete_employee_service.dart';
+import 'package:employee_ni_service/features/employee_profile/domain/repository/delete_employee_profile_repository.dart';
+import 'package:employee_ni_service/features/employee_profile/domain/usecases/delete_profile_usecase.dart';
+import 'package:employee_ni_service/features/employee_profile/presentation/bloc/employee_profile_bloc.dart';
 import 'package:employee_ni_service/features/f_service_request/data/repository/create_fsr_repository_impl.dart';
 import 'package:employee_ni_service/features/f_service_request/data/repository/send_otp_respository_impl.dart';
 import 'package:employee_ni_service/features/f_service_request/data/repository/send_verification_repository_impl.dart';

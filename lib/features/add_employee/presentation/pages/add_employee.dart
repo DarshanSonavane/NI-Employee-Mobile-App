@@ -1,16 +1,16 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/auth_gradient_button.dart';
-import 'package:employee_ni_service/core/common/widgets/custom_date_picker.dart';
-import 'package:employee_ni_service/core/common/widgets/custom_drop_down.dart';
-import 'package:employee_ni_service/core/common/widgets/custom_form_builder_text_field.dart';
-import 'package:employee_ni_service/core/common/widgets/custom_global_text.dart';
+import 'package:employee_ni_service/core/common/widgets/loader.dart';
 import 'package:employee_ni_service/core/constants/constants.dart';
 import 'package:employee_ni_service/core/utils/app_transition.dart';
-import 'package:employee_ni_service/core/utils/machine_options.dart';
 import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
+import 'package:employee_ni_service/core/utils/show_snackbar.dart';
+import 'package:employee_ni_service/features/add_employee/presentation/bloc/add_employee_bloc.dart';
+import 'package:employee_ni_service/features/add_employee/presentation/widgets/create_emp_form.dart';
+import 'package:employee_ni_service/features/assign_product_by_admin/presentation/bloc/assign_product_to_employee_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 
 class AddEmployee extends StatefulWidget {
   const AddEmployee({super.key});
@@ -25,12 +25,42 @@ class AddEmployee extends StatefulWidget {
 
 class _AddEmployeeState extends State<AddEmployee> {
   final employeeFormKey = GlobalKey<FormBuilderState>();
-  String? selectedState;
+  String? selectedGender;
+  String? selectedRole;
+  bool showGenderError = false;
+  bool showRoleError = false;
 
-  void onStateSelected(String? value) {
+  void onGenderChanged(String? v) => setState(() {
+        selectedGender = v;
+        showGenderError = false;
+      });
+  void onRoleChanged(String? v) => setState(() {
+        selectedRole = v;
+        showRoleError = false;
+      });
+
+  void validateAndSubmit() {
+    final validForm = employeeFormKey.currentState?.saveAndValidate() ?? false;
     setState(() {
-      selectedState = value;
+      showGenderError = selectedGender == null;
+      showRoleError = selectedRole == null;
     });
+
+    if (validForm && !showGenderError && !showRoleError) {
+      final data = {
+        ...?employeeFormKey.currentState?.value,
+        'gender': selectedGender == "Male" ? "1" : "0",
+        'role': selectedRole == "Admin" ? "0" : "1",
+        'isActive': "1",
+        'employeeCode': ""
+      };
+
+      context.read<AddEmployeeBloc>().add(
+            AddEmployeeEve(data: data),
+          );
+    } else {
+      debugPrint('Form is invalid');
+    }
   }
 
   @override
@@ -53,75 +83,31 @@ class _AddEmployeeState extends State<AddEmployee> {
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      spacing: 10,
-                      children: [
-                        CustomFormBuilderTextField(
-                          name: 'First Name',
-                          label: 'First Name',
-                          hintText: 'Enter your First Name',
-                          keyboardType: TextInputType.text,
-                          validators: [
-                            FormBuilderValidators.required(),
-                          ],
-                        ),
-                        CustomFormBuilderTextField(
-                          name: 'Last Name',
-                          label: 'Last Name',
-                          hintText: 'Enter your Last Name',
-                          keyboardType: TextInputType.text,
-                          validators: [
-                            FormBuilderValidators.required(),
-                          ],
-                        ),
-                        CustomFormBuilderTextField(
-                          name: 'Email',
-                          label: 'Email',
-                          hintText: 'Enter your Email Address',
-                          keyboardType: TextInputType.emailAddress,
-                          validators: [
-                            FormBuilderValidators.required(),
-                            FormBuilderValidators.email(),
-                          ],
-                        ),
-                        CustomFormBuilderTextField(
-                          name: 'Mobile Number',
-                          label: 'Mobile Number',
-                          hintText: 'Enter your Mobile Number',
-                          keyboardType: TextInputType.number,
-                          validators: [
-                            FormBuilderValidators.required(),
-                          ],
-                        ),
-                        CustomDatePicker(
-                          name: 'Date of Birth',
-                          label: 'DOB',
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime(2050),
-                          prefixIcon: Icons.calendar_today,
-                          validators: [FormBuilderValidators.required()],
-                        ),
-                        CustomDropdown<String>(
-                          value: selectedState,
-                          hintText: "Gender",
-                          items: gender
-                              .map((state) => DropdownMenuItem<String>(
-                                    value: state,
-                                    child: CustomGlolbalText(
-                                      text: state,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppPallete.label3Color,
-                                    ),
-                                  ))
-                              .toList(),
-                          onChanged: onStateSelected,
-                          borderColor: AppPallete.gradientColor,
-                          iconColor: AppPallete.deepNavy,
-                          textColor: AppPallete.label2Color,
-                          dropdownColor: AppPallete.backgroundColor,
-                        ),
-                      ],
+                    child: BlocConsumer<AddEmployeeBloc, AddEmployeeState>(
+                      listener: (context, state) {
+                        if (state is AddEmployeeSuccess) {
+                          showSnackBar(context, state.message);
+                          context.read<AssignProductToEmployeeBloc>().add(
+                                GetAllEmployeesList(),
+                              );
+                          Navigator.pop(context);
+                        } else if (state is AddEmployeeFailure) {
+                          showSnackBar(context, state.error);
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is AddEmployeeLoading) {
+                          return const Loader();
+                        }
+                        return CreateEmpForm(
+                          selectedGender: selectedGender,
+                          selectedRole: selectedRole,
+                          showGenderError: showGenderError,
+                          showRoleError: showRoleError,
+                          onGenderChanged: onGenderChanged,
+                          onRoleChanged: onRoleChanged,
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -135,7 +121,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                 endColor: AppPallete.gradientColor,
                 width: MediaQuery.of(context).size.width,
                 height: 55,
-                onPressed: () {},
+                onPressed: validateAndSubmit,
               ),
             ),
           ],

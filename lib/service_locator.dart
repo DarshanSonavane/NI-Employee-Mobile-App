@@ -19,6 +19,8 @@ Future<void> initDependecies() async {
   _initAssignProductFromMasterInventory();
   _initFSRScreen();
   _initMasterInventory();
+  _initAddEmployee();
+  _initDeleteEmployee();
 }
 
 void _initMasterInventory() {
@@ -369,5 +371,36 @@ void _initGetProfileData() {
     //Bloc
     ..registerFactory<ProfileBloc>(() => ProfileBloc(
           fetchEmployeeProfileUseCase: sl(),
+        ));
+}
+
+void _initAddEmployee() {
+  sl
+    //service
+    ..registerLazySingleton<CreateEmployeeService>(
+        () => CreateEmployeeServiceImpl())
+    //Repository
+    ..registerLazySingleton<AddEmployeeRepository>(() => AddEmpRepostioryImpl())
+    //UseCase
+    ..registerLazySingleton<AddEmployeeUsecase>(() => AddEmployeeUsecase())
+    //Bloc
+    ..registerFactory<AddEmployeeBloc>(() => AddEmployeeBloc(
+          addEmployeeUsecase: sl(),
+        ));
+}
+
+void _initDeleteEmployee() {
+  sl
+    //service
+    ..registerLazySingleton<DeleteEmployeeService>(
+        () => DeleteEmployeeServiceImpl())
+    //Repository
+    ..registerLazySingleton<DeleteEmployeeProfileRepository>(
+        () => DeleteEmployeeProfileRepositoryImpl())
+    //UseCase
+    ..registerLazySingleton<DeleteProfileUsecase>(() => DeleteProfileUsecase())
+    //Bloc
+    ..registerFactory<EmployeeProfileBloc>(() => EmployeeProfileBloc(
+          deleteEmployeeUsecase: sl(),
         ));
 }

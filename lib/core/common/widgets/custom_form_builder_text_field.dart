@@ -14,6 +14,7 @@ class CustomFormBuilderTextField extends StatelessWidget {
   final int? maxLine;
   final bool? autoFocus;
   final TextInputAction? textInputAction;
+  final int? maxLength;
 
   const CustomFormBuilderTextField({
     super.key,
@@ -27,6 +28,7 @@ class CustomFormBuilderTextField extends StatelessWidget {
     this.maxLine,
     this.autoFocus,
     this.textInputAction,
+    this.maxLength,
   });
 
   @override
@@ -37,9 +39,11 @@ class CustomFormBuilderTextField extends StatelessWidget {
         name: name,
         maxLines: maxLine,
         autofocus: autoFocus ?? false,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: keyboardType,
         obscureText: obscureText,
         textInputAction: textInputAction,
+        maxLength: maxLength,
         decoration: InputDecoration(
           labelText: label,
           hintText: hintText,
@@ -68,6 +72,10 @@ class CustomFormBuilderTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             borderSide:
                 const BorderSide(color: AppPallete.errorColor, width: 2),
+          ),
+          errorStyle: const TextStyle(
+            color: AppPallete.errorColor,
+            fontSize: 14,
           ),
           filled: true,
           fillColor: Colors.white,

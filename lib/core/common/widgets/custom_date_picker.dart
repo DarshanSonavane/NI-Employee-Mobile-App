@@ -34,6 +34,7 @@ class CustomDatePicker extends StatelessWidget {
         initialValue: initialValue,
         inputType: InputType.date,
         format: DateFormat('dd-MM-yyyy'),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         firstDate: firstDate,
         lastDate: lastDate,
         decoration: InputDecoration(
@@ -66,6 +67,10 @@ class CustomDatePicker extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             borderSide:
                 const BorderSide(color: AppPallete.errorColor, width: 2),
+          ),
+          errorStyle: const TextStyle(
+            color: AppPallete.errorColor,
+            fontSize: 14,
           ),
         ),
         style: const TextStyle(fontSize: 16, color: AppPallete.label3Color),
