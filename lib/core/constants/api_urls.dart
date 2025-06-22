@@ -34,4 +34,6 @@ class ApiUrls {
       '${baseUrl}insert-update-employee-inventory';
   static const createEmployee = '${baseUrl}create-employee';
   static const deleteEmployee = '${baseUrl}delete-employee';
+  static const getAllCustomers = '${baseUrl}get-all-customers';
+  static const getAllStates = '${baseUrl}state-list';
 }

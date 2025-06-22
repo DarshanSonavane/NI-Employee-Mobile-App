@@ -21,6 +21,8 @@ Future<void> initDependecies() async {
   _initMasterInventory();
   _initAddEmployee();
   _initDeleteEmployee();
+  _initFetchCustomerProfile();
+  _initFetchStates();
 }
 
 void _initMasterInventory() {
@@ -403,4 +405,37 @@ void _initDeleteEmployee() {
     ..registerFactory<EmployeeProfileBloc>(() => EmployeeProfileBloc(
           deleteEmployeeUsecase: sl(),
         ));
+}
+
+void _initFetchCustomerProfile() {
+  sl
+    //service
+    ..registerLazySingleton<FetchCustomerProfileService>(
+        () => FetchCustomerProfileServiceImpl())
+    //Repository
+    ..registerLazySingleton<FetchCustomerProfileRepository>(
+        () => FetchCustomerProfileRepositoryImpl())
+    //UseCase
+    ..registerLazySingleton<FetchCustomerUsecase>(() => FetchCustomerUsecase())
+    //Bloc
+    ..registerFactory<CustomerProfileBloc>(() => CustomerProfileBloc(
+          fetchCustomerUsecase: sl(),
+        ));
+}
+
+void _initFetchStates() {
+  //service
+  sl
+    ..registerLazySingleton<FetchStatesService>(() => FetchStatesServiceImpl())
+    //Repository
+    ..registerLazySingleton<FetchStatesRepository>(
+        () => FetchStatesRepositoryImpl())
+    //UseCase
+    ..registerLazySingleton<FetchStatesUsecase>(() => FetchStatesUsecase())
+    //Bloc
+    ..registerFactory<AddCustomerBloc>(
+      () => AddCustomerBloc(
+        fetchStatesUsecase: sl(),
+      ),
+    );
 }

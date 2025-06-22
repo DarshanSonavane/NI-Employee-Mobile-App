@@ -1,9 +1,15 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/custom_search_field.dart';
+import 'package:employee_ni_service/core/common/widgets/loader.dart';
 import 'package:employee_ni_service/core/utils/app_transition.dart';
 import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
+import 'package:employee_ni_service/core/utils/show_snackbar.dart';
+import 'package:employee_ni_service/features/customer_profile/data/model/model_customer_profile.dart';
+import 'package:employee_ni_service/features/customer_profile/domain/entities/entity_customer_profile.dart';
+import 'package:employee_ni_service/features/customer_profile/presentation/bloc/customer_profile_bloc.dart';
 import 'package:employee_ni_service/features/customer_profile/presentation/widgets/customer_list_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerProfilePage extends StatefulWidget {
   static Route route() {
@@ -18,103 +24,30 @@ class CustomerProfilePage extends StatefulWidget {
 
 class _CustomerProfilePageState extends State<CustomerProfilePage> {
   final TextEditingController searchController = TextEditingController();
-  late List<Map<String, String>> visibleCustomers;
-  final List<Map<String, String>> customerList = [
-    {
-      "custCode": "108012",
-      "custName": "Asian Petroleum Centre. Thane",
-      "city": "CHAROTI",
-      "state": "",
-      "email": "",
-      "mobileNo": "",
-      "gstNo": "",
-      "amcDue": "",
-      "petrolMachNo": "",
-      "dieselMachNo": "",
-      "comboMachNo": "",
-    },
-    {
-      "custCode": "108013",
-      "custName": "Aishwarya PUC Centre",
-      "city": "Kalyan",
-      "state": "MH",
-      "email": "lakeshrid@gmail.com",
-      "mobileNo": "9969485454",
-      "gstNo": "27ABCDE1234F1Z5",
-      "amcDue": "2026-02-06",
-      "petrolMachNo": "733",
-      "dieselMachNo": "2167",
-      "comboMachNo": "",
-    },
-    {
-      "custCode": "108068",
-      "custName": "Broadway Automobiles",
-      "city": "THANE",
-      "state": "MH",
-      "email": "dealer@broadwayautomobiles.com",
-      "mobileNo": "9320273426",
-      "gstNo": "27XYZPQ4567K2Z9",
-      "amcDue": "2025-09-18",
-      "petrolMachNo": "1276",
-      "dieselMachNo": "3048",
-      "comboMachNo": "",
-    },
-    {
-      "custCode": "108075",
-      "custName": "Velocity Fuel Station",
-      "city": "Navi Mumbai",
-      "state": "MH",
-      "email": "contact@velocityfuel.in",
-      "mobileNo": "9867452311",
-      "gstNo": "27MNBVC7890L3Z7",
-      "amcDue": "2026-01-12",
-      "petrolMachNo": "842",
-      "dieselMachNo": "3190",
-      "comboMachNo": "221",
-    },
-    {
-      "custCode": "108079",
-      "custName": "Green Energy Fuel Stop",
-      "city": "Pune",
-      "state": "MH",
-      "email": "greenfuel@gefs.com",
-      "mobileNo": "9012345678",
-      "gstNo": "27GHJKE4561W8Z2",
-      "amcDue": "2025-12-28",
-      "petrolMachNo": "953",
-      "dieselMachNo": "4102",
-      "comboMachNo": "",
-    },
-    {
-      "custCode": "108083",
-      "custName": "Orbit Fuel Services",
-      "city": "Nashik",
-      "state": "MH",
-      "email": "orbitfuels@service.in",
-      "mobileNo": "8123456789",
-      "gstNo": "27QWERT9876Y5Z3",
-      "amcDue": "2025-10-15",
-      "petrolMachNo": "1021",
-      "dieselMachNo": "",
-      "comboMachNo": "345",
-    },
-  ];
+  ModelCustomerProfile? customerProfile;
+  List<CustomerProfileData> visibleCustomers = [];
 
   @override
   void initState() {
-    visibleCustomers = List.from(customerList);
+    fetchCustomerProfileData();
     super.initState();
+  }
+
+  void fetchCustomerProfileData() {
+    context.read<CustomerProfileBloc>().add(GetAllCustomers());
   }
 
   void filter(String query) {
     final q = query.trim().toLowerCase();
     setState(() {
-      visibleCustomers = q.isEmpty
-          ? List.from(customerList)
-          : customerList.where((c) {
-              final name = (c['custName'] ?? '').toLowerCase();
-              return name.contains(q);
-            }).toList();
+      if (q.isEmpty) {
+        visibleCustomers = List.from(customerProfile?.data ?? []);
+      } else {
+        visibleCustomers = (customerProfile?.data ?? []).where((e) {
+          final first = e.customerName?.toLowerCase();
+          return first?.contains(q) ?? false;
+        }).toList();
+      }
     });
   }
 
@@ -146,29 +79,47 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
             ),
           ),
           Expanded(
-            child: visibleCustomers.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No Customer Found',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppPallete.label2Color,
-                        fontWeight: FontWeight.w600,
-                      ),
+              child: BlocConsumer<CustomerProfileBloc, CustomerProfileState>(
+            listener: (context, state) {
+              if (state is CustomerProfileFailure) {
+                showSnackBar(context, state.errorMessage);
+              }
+              if (state is CustomerProfileSuccess) {
+                customerProfile = state.customerProfile;
+                visibleCustomers = List.from(customerProfile?.data ?? []);
+              }
+            },
+            builder: (context, state) {
+              if (state is CustomerProfileLoading) {
+                return const Loader();
+              }
+
+              if (visibleCustomers.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No Customer Found',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppPallete.label2Color,
+                      fontWeight: FontWeight.w600,
                     ),
-                  )
-                : ListView.builder(
-                    itemCount: visibleCustomers.length,
-                    itemBuilder: (context, index) {
-                      final item = visibleCustomers[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 2),
-                        child: CustomerListWidget(item: item),
-                      );
-                    },
                   ),
-          ),
+                );
+              }
+
+              return ListView.builder(
+                itemCount: visibleCustomers.length,
+                itemBuilder: (context, index) {
+                  final item = visibleCustomers[index];
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    child: CustomerListWidget(item: item),
+                  );
+                },
+              );
+            },
+          )),
         ],
       ),
     );

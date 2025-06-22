@@ -1,11 +1,13 @@
 import 'package:employee_ni_service/core/app_theme/app_theme.dart';
 import 'package:employee_ni_service/core/utils/permissions.dart';
+import 'package:employee_ni_service/features/add_customer/presentation/bloc/add_customer_bloc.dart';
 import 'package:employee_ni_service/features/add_employee/presentation/bloc/add_employee_bloc.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/presentation/bloc/assign_product_to_employee_bloc.dart';
 import 'package:employee_ni_service/features/auth/data/models/login_response_params.dart';
 import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc.dart';
 import 'package:employee_ni_service/features/calibration/presentation/bloc/calibration_bloc.dart';
 import 'package:employee_ni_service/features/complaint/presentation/bloc/complaint_bloc.dart';
+import 'package:employee_ni_service/features/customer_profile/presentation/bloc/customer_profile_bloc.dart';
 import 'package:employee_ni_service/features/dashboard/provider/dashboard_state.dart';
 import 'package:employee_ni_service/features/employee_profile/presentation/bloc/employee_profile_bloc.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/bloc/fsr_bloc.dart';
@@ -69,6 +71,12 @@ void main() async {
         ),
         BlocProvider(
           create: (_) => sl<EmployeeProfileBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<CustomerProfileBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<AddCustomerBloc>(),
         )
       ],
       child: MultiProvider(
