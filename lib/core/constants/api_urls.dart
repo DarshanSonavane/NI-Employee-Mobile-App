@@ -33,7 +33,10 @@ class ApiUrls {
   static const assignedProductToEmp =
       '${baseUrl}insert-update-employee-inventory';
   static const createEmployee = '${baseUrl}create-employee';
+  static const createAndUpdateCustomer =
+      '${baseUrl}create-update-customer-details';
   static const deleteEmployee = '${baseUrl}delete-employee';
+  static const deleteCustomer = '${baseUrl}delete-customer-by-id';
   static const getAllCustomers = '${baseUrl}get-all-customers';
   static const getAllStates = '${baseUrl}state-list';
 }

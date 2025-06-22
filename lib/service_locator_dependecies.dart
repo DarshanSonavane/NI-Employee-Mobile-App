@@ -1,7 +1,11 @@
 import 'package:employee_ni_service/core/network/dio_client.dart';
+import 'package:employee_ni_service/features/add_customer/data/repository/create_customer_repository_impl.dart';
 import 'package:employee_ni_service/features/add_customer/data/repository/fetch_states_repository_impl.dart';
+import 'package:employee_ni_service/features/add_customer/data/source/create_customer_service.dart';
 import 'package:employee_ni_service/features/add_customer/data/source/fetch_states_service.dart';
+import 'package:employee_ni_service/features/add_customer/domain/repository/create_customer_repository.dart';
 import 'package:employee_ni_service/features/add_customer/domain/repository/fetch_states_repository.dart';
+import 'package:employee_ni_service/features/add_customer/domain/usecases/add_customer_usecase.dart';
 import 'package:employee_ni_service/features/add_customer/domain/usecases/fetch_states_usecase.dart';
 import 'package:employee_ni_service/features/add_customer/presentation/bloc/add_customer_bloc.dart';
 import 'package:employee_ni_service/features/add_employee/data/repository/add_emp_repostiory_impl.dart';
@@ -43,9 +47,13 @@ import 'package:employee_ni_service/features/complaint/domain/repository/close_c
 import 'package:employee_ni_service/features/complaint/domain/repository/fetch_employee_repository.dart';
 import 'package:employee_ni_service/features/complaint/domain/usecases/fetch_complaint_data.dart';
 import 'package:employee_ni_service/features/complaint/domain/usecases/fetch_employee_data.dart';
+import 'package:employee_ni_service/features/customer_profile/data/repository/delete_customer_profile_repository_impl.dart';
 import 'package:employee_ni_service/features/customer_profile/data/repository/fetch_customer_profile_repository_impl.dart';
+import 'package:employee_ni_service/features/customer_profile/data/source/delete_customer_service.dart';
 import 'package:employee_ni_service/features/customer_profile/data/source/fetch_customer_profile_service.dart';
+import 'package:employee_ni_service/features/customer_profile/domain/repository/delete_customer_profile_repository.dart';
 import 'package:employee_ni_service/features/customer_profile/domain/repository/fetch_customer_profile_repository.dart';
+import 'package:employee_ni_service/features/customer_profile/domain/usecases/delete_customer_usecase.dart';
 import 'package:employee_ni_service/features/customer_profile/domain/usecases/fetch_customer_usecase.dart';
 import 'package:employee_ni_service/features/customer_profile/presentation/bloc/customer_profile_bloc.dart';
 import 'package:employee_ni_service/features/employee_profile/data/repository/delete_employee_profile_repository_impl.dart';

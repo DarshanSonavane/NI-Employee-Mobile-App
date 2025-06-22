@@ -87,6 +87,10 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
               if (state is CustomerProfileSuccess) {
                 customerProfile = state.customerProfile;
                 visibleCustomers = List.from(customerProfile?.data ?? []);
+              } else if (state is DeleteCustomerProfileSuccess) {
+                showSnackBar(context, state.message.message);
+                searchController.clear();
+                fetchCustomerProfileData();
               }
             },
             builder: (context, state) {
@@ -114,7 +118,14 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                   return Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    child: CustomerListWidget(item: item),
+                    child: CustomerListWidget(
+                      item: item,
+                      onDelete: (id) {
+                        context.read<CustomerProfileBloc>().add(
+                              DeleteCustomerEvent(customerId: id),
+                            );
+                      },
+                    ),
                   );
                 },
               );

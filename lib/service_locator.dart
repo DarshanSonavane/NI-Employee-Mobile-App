@@ -22,7 +22,7 @@ Future<void> initDependecies() async {
   _initAddEmployee();
   _initDeleteEmployee();
   _initFetchCustomerProfile();
-  _initFetchStates();
+  _initAddCustomer();
 }
 
 void _initMasterInventory() {
@@ -412,30 +412,43 @@ void _initFetchCustomerProfile() {
     //service
     ..registerLazySingleton<FetchCustomerProfileService>(
         () => FetchCustomerProfileServiceImpl())
+    ..registerLazySingleton<DeleteCustomerService>(
+        () => DeleteCustomerServiceImpl())
     //Repository
     ..registerLazySingleton<FetchCustomerProfileRepository>(
         () => FetchCustomerProfileRepositoryImpl())
+    ..registerLazySingleton<DeleteCustomerProfileRepository>(
+        () => DeleteCustomerProfileRepositoryImpl())
     //UseCase
     ..registerLazySingleton<FetchCustomerUsecase>(() => FetchCustomerUsecase())
+    ..registerLazySingleton<DeleteCustomerUsecase>(
+        () => DeleteCustomerUsecase())
     //Bloc
     ..registerFactory<CustomerProfileBloc>(() => CustomerProfileBloc(
           fetchCustomerUsecase: sl(),
+          deleteCustomerUsecase: sl(),
         ));
 }
 
-void _initFetchStates() {
+void _initAddCustomer() {
   //service
   sl
     ..registerLazySingleton<FetchStatesService>(() => FetchStatesServiceImpl())
+    ..registerLazySingleton<CreateCustomerService>(
+        () => CreateCustomerServiceImpl())
     //Repository
     ..registerLazySingleton<FetchStatesRepository>(
         () => FetchStatesRepositoryImpl())
+    ..registerLazySingleton<CreateCustomerRepository>(
+        () => CreateCustomerRepositoryImpl())
     //UseCase
     ..registerLazySingleton<FetchStatesUsecase>(() => FetchStatesUsecase())
+    ..registerLazySingleton<AddCustomerUsecase>(() => AddCustomerUsecase())
     //Bloc
     ..registerFactory<AddCustomerBloc>(
       () => AddCustomerBloc(
         fetchStatesUsecase: sl(),
+        addCustomerUsecase: sl(),
       ),
     );
 }

@@ -1,22 +1,14 @@
 import 'package:employee_ni_service/core/common/widgets/custom_date_picker.dart';
 import 'package:employee_ni_service/core/common/widgets/custom_form_builder_text_field.dart';
-import 'package:employee_ni_service/core/common/widgets/custom_radio_button.dart';
-import 'package:employee_ni_service/core/utils/machine_options.dart';
 import 'package:employee_ni_service/features/add_customer/presentation/widgets/state_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class CreateCustomerForm extends StatefulWidget {
-  final String? selectedGender;
-  final bool showGenderError;
-  final ValueChanged<String?> onGenderChanged;
   final String? selectedState;
   final ValueChanged<String?> onStateChanged;
   const CreateCustomerForm({
     super.key,
-    required this.selectedGender,
-    required this.showGenderError,
-    required this.onGenderChanged,
     required this.selectedState,
     required this.onStateChanged,
   });
@@ -37,7 +29,8 @@ class _CreateCustomerFormState extends State<CreateCustomerForm> {
           hintText: 'Enter your Customer Code',
           keyboardType: TextInputType.text,
           validators: [
-            FormBuilderValidators.required(),
+            FormBuilderValidators.required(
+                errorText: "Please enter Customer Code"),
           ],
         ),
         CustomFormBuilderTextField(
@@ -46,7 +39,8 @@ class _CreateCustomerFormState extends State<CreateCustomerForm> {
           hintText: 'Enter your Customer Name',
           keyboardType: TextInputType.text,
           validators: [
-            FormBuilderValidators.required(),
+            FormBuilderValidators.required(
+                errorText: "Please enter Customer Name"),
           ],
         ),
         CustomFormBuilderTextField(
@@ -55,19 +49,12 @@ class _CreateCustomerFormState extends State<CreateCustomerForm> {
           hintText: 'Enter your City',
           keyboardType: TextInputType.text,
           validators: [
-            FormBuilderValidators.required(),
+            FormBuilderValidators.required(errorText: "Please enter City"),
           ],
         ),
         StateDropdownWidget(
           selectedState: widget.selectedState,
           onStateChanged: widget.onStateChanged,
-        ),
-        CustomRadioGroup<String>(
-          label: 'Gender',
-          options: genders,
-          value: widget.selectedGender,
-          onChanged: widget.onGenderChanged,
-          errorText: widget.showGenderError ? 'Please select gender' : null,
         ),
         CustomFormBuilderTextField(
           name: 'Email',
@@ -75,16 +62,26 @@ class _CreateCustomerFormState extends State<CreateCustomerForm> {
           hintText: 'Enter your Email Address',
           keyboardType: TextInputType.emailAddress,
           validators: [
-            FormBuilderValidators.email(),
+            FormBuilderValidators.email(
+                errorText: "Please enter a valid email address"),
           ],
         ),
         CustomFormBuilderTextField(
           name: 'Mobile Number',
           label: 'Mobile Number',
           hintText: 'Enter your Mobile Number',
+          maxLength: 10,
           keyboardType: TextInputType.number,
           validators: [
-            FormBuilderValidators.required(),
+            FormBuilderValidators.required(
+                errorText: 'Mobile Number is required'),
+            FormBuilderValidators.phoneNumber(
+              errorText: 'Please enter a valid phone number',
+            ),
+            FormBuilderValidators.equalLength(
+              10,
+              errorText: 'Mobile number must be exactly 10 digits',
+            ),
           ],
         ),
         const CustomFormBuilderTextField(
@@ -99,7 +96,9 @@ class _CreateCustomerFormState extends State<CreateCustomerForm> {
           firstDate: DateTime(2025),
           lastDate: DateTime(2050),
           prefixIcon: Icons.calendar_today,
-          validators: [FormBuilderValidators.required()],
+          validators: [
+            FormBuilderValidators.required(errorText: "Please select a date")
+          ],
         ),
         const CustomFormBuilderTextField(
           name: 'Petrol Machine No.',

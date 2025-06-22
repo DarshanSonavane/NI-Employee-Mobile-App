@@ -12,6 +12,11 @@ final class CustomerProfileSuccess extends CustomerProfileState {
   CustomerProfileSuccess(this.customerProfile);
 }
 
+final class DeleteCustomerProfileSuccess extends CustomerProfileState {
+  final ModelDeleteCustomerResponse message;
+  DeleteCustomerProfileSuccess(this.message);
+}
+
 final class CustomerProfileFailure extends CustomerProfileState {
   final String errorMessage;
 

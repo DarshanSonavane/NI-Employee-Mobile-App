@@ -21,7 +21,7 @@ class StateDropdownWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocSelector<AddCustomerBloc, AddCustomerState, ModelStateList?>(
       selector: (state) {
-        if (state is AddCustomerSuccess) {
+        if (state is FetchStateSuccess) {
           return state.modelStateList;
         }
         return null;
@@ -32,7 +32,7 @@ class StateDropdownWidget extends StatelessWidget {
         if (statesData != null) {
           items = statesData.data
               .map((item) => DropdownMenuItem<String>(
-                    value: item.id,
+                    value: item.code,
                     child: CustomGlolbalText(
                       text: item.name ?? '',
                       fontSize: 16,

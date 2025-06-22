@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class CustomerListWidget extends StatefulWidget {
   final CustomerProfileData item;
   final VoidCallback? onEdit;
-  final VoidCallback? onDelete;
+  final Function(String)? onDelete;
 
   const CustomerListWidget({
     super.key,
@@ -68,7 +68,8 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       IconButton(
                         icon: const Icon(Icons.delete,
                             size: 20, color: AppPallete.errorColor),
-                        onPressed: widget.onDelete,
+                        onPressed: () =>
+                            widget.onDelete!(widget.item.sId ?? ""),
                         tooltip: 'Delete',
                       ),
                     ],
