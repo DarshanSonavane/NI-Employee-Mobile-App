@@ -110,6 +110,7 @@ class Constants {
   static const locationDeniedMessage =
       'Location permission is required to use this app. Please enable it from the app settings.';
   static const addCustomer = "Add Customer";
+  static const updateCustomer = "Update Customer";
   static const addEmployee = "Add Employee";
   static const addNotification = "Add Notification";
   static const addAppreciation = "Add Appreciation";

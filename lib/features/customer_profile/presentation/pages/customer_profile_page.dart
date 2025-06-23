@@ -4,6 +4,7 @@ import 'package:employee_ni_service/core/common/widgets/loader.dart';
 import 'package:employee_ni_service/core/utils/app_transition.dart';
 import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
 import 'package:employee_ni_service/core/utils/show_snackbar.dart';
+import 'package:employee_ni_service/features/add_customer/presentation/pages/add_customer.dart';
 import 'package:employee_ni_service/features/customer_profile/data/model/model_customer_profile.dart';
 import 'package:employee_ni_service/features/customer_profile/domain/entities/entity_customer_profile.dart';
 import 'package:employee_ni_service/features/customer_profile/presentation/bloc/customer_profile_bloc.dart';
@@ -124,6 +125,9 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                         context.read<CustomerProfileBloc>().add(
                               DeleteCustomerEvent(customerId: id),
                             );
+                      },
+                      onEdit: (item) {
+                        Navigator.push(context, AddCustomer.route(item));
                       },
                     ),
                   );

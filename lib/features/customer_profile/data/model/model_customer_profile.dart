@@ -52,7 +52,7 @@ class ModelCustomerProfileData extends CustomerProfileData {
       petrolMachineNumber: json["petrolMachineNumber"] ?? "",
       dieselMachineNumber: json["dieselMachineNumber"] ?? "",
       comboMachineNumber: json["comboMachineNumber"] ?? "",
-      state: json["state"] ?? "",
+      state: json["stateCode"] ?? "",
     );
   }
 }

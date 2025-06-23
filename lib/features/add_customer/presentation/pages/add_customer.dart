@@ -7,16 +7,19 @@ import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
 import 'package:employee_ni_service/core/utils/show_snackbar.dart';
 import 'package:employee_ni_service/features/add_customer/presentation/bloc/add_customer_bloc.dart';
 import 'package:employee_ni_service/features/add_customer/presentation/widgets/create_customer_form.dart';
+import 'package:employee_ni_service/features/customer_profile/domain/entities/entity_customer_profile.dart';
 import 'package:employee_ni_service/features/customer_profile/presentation/bloc/customer_profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class AddCustomer extends StatefulWidget {
-  const AddCustomer({super.key});
+  final CustomerProfileData? item;
 
-  static Route route() {
-    return createSlideTransitionRoute(const AddCustomer());
+  const AddCustomer({super.key, this.item});
+
+  static Route route([CustomerProfileData? item]) {
+    return createSlideTransitionRoute(AddCustomer(item: item));
   }
 
   @override
@@ -41,7 +44,7 @@ class _AddCustomerState extends State<AddCustomer> {
       final data = {
         ...?customerFormKey.currentState?.value,
         'state': selectedState,
-        'customerId': ""
+        'customerId': widget.item?.sId ?? "",
       };
       context.read<AddCustomerBloc>().add(
             CreateCustomer(data: data),
@@ -56,6 +59,11 @@ class _AddCustomerState extends State<AddCustomer> {
   @override
   void initState() {
     context.read<AddCustomerBloc>().add(GetStatesEvent());
+    if (widget.item != null &&
+        widget.item!.state != null &&
+        widget.item!.state!.isNotEmpty) {
+      selectedState = widget.item!.state;
+    }
     super.initState();
   }
 
@@ -63,60 +71,61 @@ class _AddCustomerState extends State<AddCustomer> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppPallete.screenBackground,
-      appBar: const AppBarWidget(
-        title: "Add Customer",
+      appBar: AppBarWidget(
+        title: widget.item != null ? "Edit Customer" : "Add Customer",
         isBackButtonVisible: true,
         isMoreButtonVisible: false,
         isFromMoreIcon: false,
       ),
       body: SafeArea(
-        child: Column(
-          spacing: 15,
-          children: [
-            Expanded(
-              child: FormBuilder(
-                key: customerFormKey,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: BlocConsumer<AddCustomerBloc, AddCustomerState>(
-                      listener: (context, state) {
-                        if (state is AddCustomerSuccess) {
-                          showSnackBar(context, state.message);
-                          context
-                              .read<CustomerProfileBloc>()
-                              .add(GetAllCustomers());
-                          Navigator.pop(context);
-                        } else if (state is AddCustomerFailure) {
-                          showSnackBar(context, state.message);
-                        }
-                      },
-                      builder: (context, state) {
-                        if (state is AddCustomerLoading) {
-                          return const Loader();
-                        }
-                        return CreateCustomerForm(
+        child: BlocConsumer<AddCustomerBloc, AddCustomerState>(
+          listener: (context, state) {
+            if (state is AddCustomerSuccess) {
+              showSnackBar(context, state.message);
+              context.read<CustomerProfileBloc>().add(GetAllCustomers());
+              Navigator.pop(context);
+            } else if (state is AddCustomerFailure) {
+              showSnackBar(context, state.message);
+            }
+          },
+          builder: (context, state) {
+            if (state is AddCustomerLoading) {
+              return const Loader();
+            }
+            return Column(
+              spacing: 15,
+              children: [
+                Expanded(
+                  child: FormBuilder(
+                    key: customerFormKey,
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: CreateCustomerForm(
                           selectedState: selectedState,
                           onStateChanged: onStateSelected,
-                        );
-                      },
+                          item: widget.item,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: AuthGradientButton(
-                buttonText: Constants.addCustomer,
-                startColor: AppPallete.buttonColor,
-                endColor: AppPallete.gradientColor,
-                width: MediaQuery.of(context).size.width,
-                height: 55,
-                onPressed: validateAndSubmit,
-              ),
-            ),
-          ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: AuthGradientButton(
+                    buttonText: widget.item != null
+                        ? Constants.updateCustomer
+                        : Constants.addCustomer,
+                    startColor: AppPallete.buttonColor,
+                    endColor: AppPallete.gradientColor,
+                    width: MediaQuery.of(context).size.width,
+                    height: 55,
+                    onPressed: validateAndSubmit,
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
