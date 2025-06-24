@@ -40,7 +40,9 @@ class DashboardState with ChangeNotifier {
   void selectFab(BuildContext context) {
     context.read<HomeBloc>().add(GetAllHomeDetails());
     context.read<HomeBloc>().add(GetFSRList(
-        employeeId: hiveStorageService.getUser()!.id, role: fetchUserRole()));
+        employeeId: hiveStorageService.getUser()!.id,
+        role: fetchUserRole(),
+        type: Constants.showLatestFSR));
     _selectedIndex = 4;
     _isFabSelected = true;
     notifyListeners();

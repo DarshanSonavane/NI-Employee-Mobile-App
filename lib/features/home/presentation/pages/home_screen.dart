@@ -1,6 +1,7 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/loader.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
+import 'package:employee_ni_service/core/constants/constants.dart';
 import 'package:employee_ni_service/core/utils/scaling_factor.dart';
 import 'package:employee_ni_service/features/home/data/model/response_fsr_model.dart';
 import 'package:employee_ni_service/features/home/data/model/response_home_details.dart';
@@ -29,7 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     context.read<HomeBloc>().add(GetAllHomeDetails());
     context.read<HomeBloc>().add(GetFSRList(
-        employeeId: hiveStorageService.getUser()!.id, role: fetchUserRole()));
+        employeeId: hiveStorageService.getUser()!.id,
+        role: fetchUserRole(),
+        type: Constants.showLatestFSR));
     super.initState();
   }
 
@@ -46,7 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
             } else if (state is HomeBlocSuccess<ResponseHomeDetails>) {
               homeDetailsValue = state.data;
             } else if (state is HomeBlocSuccess<ResponseFsrModel>) {
-              fsrList = state.data;
+              final data = state.data;
+              if (data.requestType == Constants.showLatestFSR) {
+                fsrList = data;
+              }
             }
           },
           builder: (context, state) {

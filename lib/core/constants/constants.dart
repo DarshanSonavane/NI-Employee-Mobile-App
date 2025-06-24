@@ -114,4 +114,7 @@ class Constants {
   static const addEmployee = "Add Employee";
   static const addNotification = "Add Notification";
   static const addAppreciation = "Add Appreciation";
+  static const showLatestFSR = "ShowLatestFSR";
+  static const showAllFSR = "ShowAllFSR";
+  static const somethingWentWrong = "Something went wrong";
 }

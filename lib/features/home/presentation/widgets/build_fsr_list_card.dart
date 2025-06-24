@@ -50,7 +50,7 @@ class BuildFsrListCard extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    FsrDetailsScreen.route(fsrList),
+                    FsrDetailsScreen.route(),
                   );
                 },
                 child: Center(

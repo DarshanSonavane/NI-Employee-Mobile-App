@@ -37,13 +37,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     final res = await sl<FetchFsrUsecase>().call(
         params: RequestFsrModel(
-      employeeId: event.employeeId,
-      role: event.role,
-    ));
+          employeeId: event.employeeId,
+          role: event.role,
+          type: event.type,
+        ),
+        page: event.page);
 
-    res.fold(
-      (failure) => emit(HomeBlocFailure(failure.toString())),
-      (success) => emit(HomeBlocSuccess<ResponseFsrModel>(success)),
-    );
+    res.fold((failure) => emit(HomeBlocFailure(failure.toString())),
+        (success) => emit(HomeBlocSuccess<ResponseFsrModel>(success)));
   }
 }

@@ -22,6 +22,7 @@ class ApiUrls {
   static const assignComplaints = '${baseUrl}assign-complaint';
   static const getEmployeeDetails = '${baseUrl}get-employee-details';
   static const getAssignedComplaint = '${baseUrl}get-assigned-complaints';
+  static const getFSRListLatest = '${baseUrl}fetch-latest-fsrs';
   static const getFSRList = '${baseUrl}fsr-list';
   static const fetchMasterInventory = '${baseUrl}fetch-master-inventory';
   static const sendVerificationCode = '${baseUrl}send-verification-code';
