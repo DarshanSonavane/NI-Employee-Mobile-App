@@ -17,3 +17,8 @@ class ParamsAsValue {
   String value;
   ParamsAsValue({required this.value});
 }
+
+class ParamsWithPage {
+  final int page;
+  ParamsWithPage({required this.page});
+}

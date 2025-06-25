@@ -49,12 +49,16 @@ import 'package:employee_ni_service/features/complaint/domain/usecases/fetch_com
 import 'package:employee_ni_service/features/complaint/domain/usecases/fetch_employee_data.dart';
 import 'package:employee_ni_service/features/customer_profile/data/repository/delete_customer_profile_repository_impl.dart';
 import 'package:employee_ni_service/features/customer_profile/data/repository/fetch_customer_profile_repository_impl.dart';
+import 'package:employee_ni_service/features/customer_profile/data/repository/search_customer_profile_repository_impl.dart';
 import 'package:employee_ni_service/features/customer_profile/data/source/delete_customer_service.dart';
 import 'package:employee_ni_service/features/customer_profile/data/source/fetch_customer_profile_service.dart';
+import 'package:employee_ni_service/features/customer_profile/data/source/search_customer_profile_service.dart';
 import 'package:employee_ni_service/features/customer_profile/domain/repository/delete_customer_profile_repository.dart';
 import 'package:employee_ni_service/features/customer_profile/domain/repository/fetch_customer_profile_repository.dart';
+import 'package:employee_ni_service/features/customer_profile/domain/repository/search_customer_profile_repository.dart';
 import 'package:employee_ni_service/features/customer_profile/domain/usecases/delete_customer_usecase.dart';
 import 'package:employee_ni_service/features/customer_profile/domain/usecases/fetch_customer_usecase.dart';
+import 'package:employee_ni_service/features/customer_profile/domain/usecases/search_customer_usecase.dart';
 import 'package:employee_ni_service/features/customer_profile/presentation/bloc/customer_profile_bloc.dart';
 import 'package:employee_ni_service/features/employee_profile/data/repository/delete_employee_profile_repository_impl.dart';
 import 'package:employee_ni_service/features/employee_profile/data/source/delete_employee_service.dart';

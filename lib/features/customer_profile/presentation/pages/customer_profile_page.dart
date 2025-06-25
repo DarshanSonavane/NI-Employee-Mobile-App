@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/custom_search_field.dart';
 import 'package:employee_ni_service/core/common/widgets/loader.dart';
@@ -27,34 +29,58 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
   final TextEditingController searchController = TextEditingController();
   ModelCustomerProfile? customerProfile;
   List<CustomerProfileData> visibleCustomers = [];
+  final ScrollController _scrollController = ScrollController();
+  int _currentPage = 1;
+  bool _isLoadingMore = false;
+  bool _hasMoreData = true;
+  Timer? _debounce;
 
   @override
   void initState() {
-    fetchCustomerProfileData();
     super.initState();
+    fetchCustomerProfileData(page: _currentPage);
+    _scrollController.addListener(() {
+      final triggerPosition = _scrollController.position.maxScrollExtent - 100;
+
+      if (_scrollController.position.pixels >= triggerPosition &&
+          !_isLoadingMore &&
+          _hasMoreData) {
+        _isLoadingMore = true;
+        _currentPage += 1;
+        fetchCustomerProfileData(page: _currentPage);
+      }
+    });
   }
 
-  void fetchCustomerProfileData() {
-    context.read<CustomerProfileBloc>().add(GetAllCustomers());
+  void fetchCustomerProfileData({int page = 1}) {
+    context.read<CustomerProfileBloc>().add(GetAllCustomers(page: page));
   }
 
   void filter(String query) {
-    final q = query.trim().toLowerCase();
-    setState(() {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      final q = query.trim();
+
       if (q.isEmpty) {
-        visibleCustomers = List.from(customerProfile?.data ?? []);
-      } else {
-        visibleCustomers = (customerProfile?.data ?? []).where((e) {
-          final first = e.customerName?.toLowerCase();
-          return first?.contains(q) ?? false;
-        }).toList();
+        // When cleared, reload first page
+        _currentPage = 1;
+        _hasMoreData = true;
+        visibleCustomers.clear();
+        fetchCustomerProfileData(page: _currentPage);
+        return;
       }
+
+      // Remote API search, assuming no pagination needed for search
+      context.read<CustomerProfileBloc>().add(SearchCustomers(query: q));
     });
   }
 
   @override
   void dispose() {
+    _debounce?.cancel();
     searchController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -76,7 +102,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
             child: CustomSearchField(
               controller: searchController,
               onChanged: filter,
-              hintText: 'Search by customer name',
+              hintText: 'Customer name or code',
             ),
           ),
           Expanded(
@@ -86,16 +112,36 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                 showSnackBar(context, state.errorMessage);
               }
               if (state is CustomerProfileSuccess) {
+                final newData = state.customerProfile.data;
+
+                if (_currentPage == 1) {
+                  visibleCustomers.clear();
+                  _hasMoreData = true;
+                  visibleCustomers.addAll(newData);
+                } else {
+                  if (newData.isEmpty) {
+                    _hasMoreData = false;
+                  } else {
+                    visibleCustomers.addAll(newData);
+                  }
+                }
+
                 customerProfile = state.customerProfile;
-                visibleCustomers = List.from(customerProfile?.data ?? []);
+                _isLoadingMore = false;
+                debugPrint(
+                    "Loaded page $_currentPage | Total items: ${visibleCustomers.length}");
               } else if (state is DeleteCustomerProfileSuccess) {
                 showSnackBar(context, state.message.message);
                 searchController.clear();
+                _currentPage = 1;
+                visibleCustomers.clear();
                 fetchCustomerProfileData();
               }
             },
             builder: (context, state) {
-              if (state is CustomerProfileLoading) {
+              if (state is CustomerProfileLoading &&
+                  _currentPage == 1 &&
+                  visibleCustomers.isEmpty) {
                 return const Loader();
               }
 
@@ -113,24 +159,32 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
               }
 
               return ListView.builder(
-                itemCount: visibleCustomers.length,
+                controller: _scrollController,
+                itemCount: visibleCustomers.length + (_isLoadingMore ? 1 : 0),
                 itemBuilder: (context, index) {
-                  final item = visibleCustomers[index];
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    child: CustomerListWidget(
-                      item: item,
-                      onDelete: (id) {
-                        context.read<CustomerProfileBloc>().add(
-                              DeleteCustomerEvent(customerId: id),
-                            );
-                      },
-                      onEdit: (item) {
-                        Navigator.push(context, AddCustomer.route(item));
-                      },
-                    ),
-                  );
+                  if (index < visibleCustomers.length) {
+                    final item = visibleCustomers[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
+                      child: CustomerListWidget(
+                        item: item,
+                        onDelete: (id) {
+                          context
+                              .read<CustomerProfileBloc>()
+                              .add(DeleteCustomerEvent(customerId: id));
+                        },
+                        onEdit: (item) {
+                          Navigator.push(context, AddCustomer.route(item));
+                        },
+                      ),
+                    );
+                  } else {
+                    return const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Loader(),
+                    );
+                  }
                 },
               );
             },

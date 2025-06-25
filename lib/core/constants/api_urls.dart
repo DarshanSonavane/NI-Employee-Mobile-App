@@ -38,6 +38,7 @@ class ApiUrls {
       '${baseUrl}create-update-customer-details';
   static const deleteEmployee = '${baseUrl}delete-employee';
   static const deleteCustomer = '${baseUrl}delete-customer-by-id';
-  static const getAllCustomers = '${baseUrl}get-all-customers';
+  static const getAllCustomers = '${baseUrl}get-all-customers-mobile';
   static const getAllStates = '${baseUrl}state-list';
+  static const searchCustomer = '${baseUrl}search-customer';
 }

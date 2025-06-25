@@ -414,19 +414,26 @@ void _initFetchCustomerProfile() {
         () => FetchCustomerProfileServiceImpl())
     ..registerLazySingleton<DeleteCustomerService>(
         () => DeleteCustomerServiceImpl())
+    ..registerLazySingleton<SearchCustomerProfileService>(
+        () => SearchCustomerProfileServiceImpl())
     //Repository
     ..registerLazySingleton<FetchCustomerProfileRepository>(
         () => FetchCustomerProfileRepositoryImpl())
     ..registerLazySingleton<DeleteCustomerProfileRepository>(
         () => DeleteCustomerProfileRepositoryImpl())
+    ..registerLazySingleton<SearchCustomerProfileRepository>(
+        () => SearchCustomerProfileRepositoryImpl())
     //UseCase
     ..registerLazySingleton<FetchCustomerUsecase>(() => FetchCustomerUsecase())
     ..registerLazySingleton<DeleteCustomerUsecase>(
         () => DeleteCustomerUsecase())
+    ..registerLazySingleton<SearchCustomerUsecase>(
+        () => SearchCustomerUsecase())
     //Bloc
     ..registerFactory<CustomerProfileBloc>(() => CustomerProfileBloc(
           fetchCustomerUsecase: sl(),
           deleteCustomerUsecase: sl(),
+          searchCustomerUsecase: sl(),
         ));
 }
 
@@ -444,7 +451,6 @@ void _initAddCustomer() {
     //UseCase
     ..registerLazySingleton<FetchStatesUsecase>(() => FetchStatesUsecase())
     ..registerLazySingleton<AddCustomerUsecase>(() => AddCustomerUsecase())
-    //Bloc
     ..registerFactory<AddCustomerBloc>(
       () => AddCustomerBloc(
         fetchStatesUsecase: sl(),

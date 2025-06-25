@@ -7,7 +7,7 @@ import '../../../../service_locator_dependecies.dart';
 class FetchCustomerProfileRepositoryImpl
     extends FetchCustomerProfileRepository {
   @override
-  Future<Either> fetchCustomerRepository() {
-    return sl<FetchCustomerProfileService>().fetchCustomer();
+  Future<Either> fetchCustomerRepository({int page = 1}) {
+    return sl<FetchCustomerProfileService>().fetchCustomer(page: page);
   }
 }

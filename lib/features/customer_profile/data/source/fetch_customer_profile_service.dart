@@ -7,14 +7,15 @@ import '../../../../core/network/dio_client.dart';
 import '../../../../service_locator_dependecies.dart';
 
 abstract class FetchCustomerProfileService {
-  Future<Either> fetchCustomer();
+  Future<Either> fetchCustomer({int page = 1});
 }
 
 class FetchCustomerProfileServiceImpl extends FetchCustomerProfileService {
   @override
-  Future<Either> fetchCustomer() async {
+  Future<Either> fetchCustomer({int page = 1}) async {
     try {
-      var response = await sl<DioClient>().get(ApiUrls.getAllCustomers);
+      var response = await sl<DioClient>()
+          .get(ApiUrls.getAllCustomers, queryParameters: {'page': page});
       var responseCustomerProfile =
           ModelCustomerProfile.fromJson(response.data);
       return Right(responseCustomerProfile);
