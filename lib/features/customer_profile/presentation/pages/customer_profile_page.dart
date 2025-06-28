@@ -128,8 +128,6 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
 
                 customerProfile = state.customerProfile;
                 _isLoadingMore = false;
-                debugPrint(
-                    "Loaded page $_currentPage | Total items: ${visibleCustomers.length}");
               } else if (state is DeleteCustomerProfileSuccess) {
                 showSnackBar(context, state.message.message);
                 searchController.clear();

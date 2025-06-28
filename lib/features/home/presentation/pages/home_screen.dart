@@ -6,6 +6,7 @@ import 'package:employee_ni_service/core/utils/scaling_factor.dart';
 import 'package:employee_ni_service/features/home/data/model/response_fsr_model.dart';
 import 'package:employee_ni_service/features/home/data/model/response_home_details.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
+import 'package:employee_ni_service/features/home/presentation/widgets/appreciation_card.dart';
 import 'package:employee_ni_service/features/home/presentation/widgets/build_home_details_card.dart';
 import 'package:employee_ni_service/features/home/presentation/widgets/build_pie_char_card.dart';
 import 'package:employee_ni_service/features/products/presentation/widgets/no_product_available.dart';
@@ -26,6 +27,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   ResponseHomeDetails? homeDetailsValue;
   ResponseFsrModel? fsrList;
+  bool hasAppreciation = true;
+  final String appreciationMessage =
+      "We appreciate your incredible effort this week, John!";
+  final String description =
+      "John consistently demonstrated outstanding professionalism and team spirit. His contributions were critical to our success this week. We truly value your efforts!'";
   @override
   void initState() {
     context.read<HomeBloc>().add(GetAllHomeDetails());
@@ -38,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isAdmin = fetchUserRole() == "0";
     return Scaffold(
       backgroundColor: AppPallete.screenBackground,
       body: Padding(
@@ -67,12 +74,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  fetchUserRole() == "0"
-                      ? BuildHomeDetailsCard(homeDetailsValue)
-                      : const SizedBox.shrink(),
-                  fetchUserRole() == "0"
-                      ? BuildPieCharCard(homeDetailsValue)
-                      : const SizedBox.shrink(),
+                  AppreciationCard(
+                    hasData: hasAppreciation,
+                    message: appreciationMessage,
+                    description: description,
+                  ),
+                  if (isAdmin) BuildHomeDetailsCard(homeDetailsValue),
+                  if (isAdmin) BuildPieCharCard(homeDetailsValue),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),

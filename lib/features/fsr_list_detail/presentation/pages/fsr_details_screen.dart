@@ -72,6 +72,8 @@ class _FsrDetailsScreenState extends State<FsrDetailsScreen> {
       appBar: const AppBarWidget(
         title: "FSR Details",
         isBackButtonVisible: true,
+        isMoreButtonVisible: false,
+        isLogoutOptionVisible: false,
       ),
       body: BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
         if (state is HomeBlocFailure) {

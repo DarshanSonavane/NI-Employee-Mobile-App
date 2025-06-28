@@ -21,6 +21,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final bool isBackButtonVisible;
   final bool? isMoreButtonVisible;
   final bool? isFromMoreIcon;
+  final bool? isLogoutOptionVisible;
   final String? navigateTo;
   const AppBarWidget({
     super.key,
@@ -28,6 +29,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     this.isBackButtonVisible = false,
     this.isMoreButtonVisible = true,
     this.isFromMoreIcon = false,
+    this.isLogoutOptionVisible = true,
     this.navigateTo,
   });
 
@@ -68,7 +70,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
-  Widget buildAppBarAction({
+  Widget buildAdminAppBar({
     required bool? isMoreButtonVisible,
     required bool? isFromMoreIcon,
     required void Function(String option) onSelected,
@@ -93,6 +95,22 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             color: AppPallete.backgroundColor,
           ),
         ),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
+  }
+
+  Widget buildEmployeeAppBar(
+      {required bool? isLogoutOptionVisible, BuildContext? context}) {
+    if (isLogoutOptionVisible == true) {
+      return IconButton(
+        icon: const Icon(
+          Icons.logout,
+          size: 28,
+          color: AppPallete.gradientColor,
+        ),
+        onPressed: () => logout(context!),
       );
     } else {
       return const SizedBox.shrink();
@@ -141,15 +159,11 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(top: 4.0, right: 8.0),
           child: fetchUserRole() != "0"
-              ? IconButton(
-                  icon: const Icon(
-                    Icons.logout,
-                    size: 28,
-                    color: AppPallete.gradientColor,
-                  ),
-                  onPressed: () => logout(context),
+              ? buildEmployeeAppBar(
+                  isLogoutOptionVisible: isLogoutOptionVisible,
+                  context: context,
                 )
-              : buildAppBarAction(
+              : buildAdminAppBar(
                   isMoreButtonVisible: isMoreButtonVisible,
                   isFromMoreIcon: isFromMoreIcon,
                   onSelected: (option) => handleMenuOption(option, context),

@@ -25,10 +25,17 @@ class AppPallete {
   static const Color backgroundClosed = Color(0xFFF0F9F1);
   static const Color backgroundOpen = Color(0xFFFEF0EC);
   static const Color deepNavy = Color(0xFF1C2331);
+  static const Color appreciationGlow = Color(0xFFB2FF59); // Neon Lime
+  static const Color appreciationBackgroundStart =
+      Color(0xFFE8F5E9); // Soft green
+  static const Color appreciationBackgroundEnd =
+      Color(0xFFC8E6C9); // Richer green
   static final Color locationBackgroundWithOpacity =
       const Color(0xFF00FF00).withValues(alpha: 0.1);
   static final Color cardBackgroundWithOpacity =
       Colors.white.withValues(alpha: 0.15);
+  static final Color gradientColorWithOpacity =
+      const Color(0xFF4CAF50).withValues(alpha: 0.15);
   static final List<Color> gradientColorCard = [
     const Color(0xFF42A5F5),
     const Color(0xFF1976D2)

@@ -277,6 +277,7 @@ class _FServiceRequestState extends State<FServiceRequest> {
           title: Constants.fsr,
           isBackButtonVisible: true,
           isMoreButtonVisible: false,
+          isLogoutOptionVisible: false,
         ),
         body: BlocListener<FsrBloc, FsrState>(
           listener: (context, state) {
