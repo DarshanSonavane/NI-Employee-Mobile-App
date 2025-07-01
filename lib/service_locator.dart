@@ -30,40 +30,52 @@ Future<void> initDependecies() async {
 
 void _initFetchAllAppreciation() {
   sl
+    //Service
     ..registerSingleton<GetAllAppreciationService>(
         GetAllAppreciationServiceImpl())
+    //Repository
     ..registerSingleton<GetAllAppreciationRepository>(
         GetAllAppreciationRepositoryImpl())
+    //Usecase
     ..registerSingleton<GetAllAppreciationUsecase>(
       GetAllAppreciationUsecase(),
     )
+    //Bloc
     ..registerFactory<FetchAppriciationBloc>(
         () => FetchAppriciationBloc(getAllAppreciationUsecase: sl()));
 }
 
 void _initFetchNotification() {
   sl
+    //Service
     ..registerSingleton<GetAllNotificationService>(
         GetAllNotificationServiceImpl())
+    //Repository
     ..registerSingleton<GetAllNotificationRepository>(
         GetAllNotificationRepositoryImpl())
+    //Usecase
     ..registerSingleton<GetAllNotificationUsecase>(
       GetAllNotificationUsecase(),
     )
+    //Bloc
     ..registerFactory<FetchNotificationBloc>(
         () => FetchNotificationBloc(getAllNotificationUsecase: sl()));
 }
 
 void _initAddNotificationAppreciation() {
   sl
+    //Service
     ..registerSingleton<AddNotificationService>(AddNotificationServiceImpl())
     ..registerSingleton<AddAppreciationService>(AddAppreciationServiceImpl())
+    //Repository
     ..registerSingleton<AddNotificationRepository>(
         AddNotificationRepositoryImpl())
     ..registerSingleton<AddAppreciationRepository>(
         AddAppreciationRepositoryImpl())
+    //Usecase
     ..registerSingleton<AddAppreciationUsecase>(AddAppreciationUsecase())
     ..registerSingleton<AddNotificationUsecase>(AddNotificationUsecase())
+    //Bloc
     ..registerFactory<AddNotificationAppreciationBloc>(
       () => AddNotificationAppreciationBloc(
         addNotificationUsecase: sl(),
@@ -73,6 +85,7 @@ void _initAddNotificationAppreciation() {
 }
 
 void _initMasterInventory() {
+  //Service
   sl.registerSingleton<UpdateProductsInventoryService>(
     UpdateProductsInventoryServiceImpl(),
   );
@@ -85,7 +98,7 @@ void _initMasterInventory() {
   sl.registerSingleton<InsertUpdateProductUsecase>(
     InsertUpdateProductUsecase(),
   );
-
+  //Bloc
   sl.registerFactory<MasterInventoryBloc>(
     () => MasterInventoryBloc(
       fetchMasterInventoryUsecase: sl(),
@@ -494,8 +507,8 @@ void _initFetchCustomerProfile() {
 }
 
 void _initAddCustomer() {
-  //service
   sl
+    //service
     ..registerLazySingleton<FetchStatesService>(() => FetchStatesServiceImpl())
     ..registerLazySingleton<CreateCustomerService>(
         () => CreateCustomerServiceImpl())
@@ -507,6 +520,7 @@ void _initAddCustomer() {
     //UseCase
     ..registerLazySingleton<FetchStatesUsecase>(() => FetchStatesUsecase())
     ..registerLazySingleton<AddCustomerUsecase>(() => AddCustomerUsecase())
+    //Bloc
     ..registerFactory<AddCustomerBloc>(
       () => AddCustomerBloc(
         fetchStatesUsecase: sl(),
