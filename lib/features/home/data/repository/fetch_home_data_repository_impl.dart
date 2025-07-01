@@ -10,3 +10,10 @@ class FetchDashboardDataRepositoryImpl extends FetchHomeRepository {
     return sl<GetHomeDetailsApiService>().getHomeDetails();
   }
 }
+
+class FetchLastetRewardRepositoryImpl extends FetchLatestRewardRepository {
+  @override
+  Future<Either> getLatestReward() {
+    return sl<GetLatestRewardApiService>().getLatestRewardDetails();
+  }
+}

@@ -62,6 +62,7 @@ class _AppreciationCardState extends State<AppreciationCard> {
           ? AppreciationCardContent(
               description: widget.description,
               message: widget.message,
+              imageUrl: widget.imageUrl,
             )
           : _buildNoDataContent(),
     );

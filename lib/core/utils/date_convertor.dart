@@ -39,3 +39,16 @@ DateTime? parseDate(String? dateString) {
 
   return null;
 }
+
+extension DateFormatExtension on String {
+  String toDisplayDate() {
+    try {
+      final dateTime = DateTime.parse(this);
+      return "${dateTime.day.toString().padLeft(2, '0')}-"
+          "${dateTime.month.toString().padLeft(2, '0')}-"
+          "${dateTime.year}";
+    } catch (e) {
+      return this;
+    }
+  }
+}

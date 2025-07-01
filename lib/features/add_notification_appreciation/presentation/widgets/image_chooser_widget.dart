@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
@@ -6,42 +7,49 @@ import 'package:employee_ni_service/core/common/widgets/dialog_helper.dart';
 import 'package:employee_ni_service/core/utils/show_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ImageChooserWidget extends StatefulWidget {
-  const ImageChooserWidget({super.key});
+  final void Function(File file, String base64, String extension)
+      onFileSelected;
+  const ImageChooserWidget({super.key, required this.onFileSelected});
 
   @override
   State<ImageChooserWidget> createState() => _ImageChooserWidgetState();
 }
 
 class _ImageChooserWidgetState extends State<ImageChooserWidget> {
-  File? selectedImage;
+  File? selectedFile;
   bool isLoading = false;
 
-  Future<void> pickImage() async {
+  Future<void> pickMedia() async {
     setState(() {
       isLoading = true;
     });
 
     try {
-      final picker = ImagePicker();
-      final pickedFile = await picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 80,
-        maxWidth: 1024,
-        maxHeight: 1024,
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'mov'],
       );
 
-      if (pickedFile != null && mounted) {
-        setState(() {
-          selectedImage = File(pickedFile.path);
-        });
+      if (result != null && result.files.single.path != null) {
+        File file = File(result.files.single.path!);
+        final extension = file.path.split('.').last.toLowerCase();
+
+        final bytes = await file.readAsBytes();
+        final base64 = base64Encode(bytes);
+
+        if (mounted) {
+          setState(() {
+            selectedFile = file;
+          });
+          widget.onFileSelected(file, base64, extension);
+        }
       } else if (mounted) {
         const permission = Permission.photos;
         final status = await permission.status;
-
         if (status.isDenied || status.isPermanentlyDenied) {
           if (mounted) {
             DialogHelper.showPermissionDialog(context: context);
@@ -50,12 +58,7 @@ class _ImageChooserWidgetState extends State<ImageChooserWidget> {
       }
     } catch (e) {
       if (mounted) {
-        if (e.toString().contains('permission') ||
-            e.toString().contains('denied')) {
-          DialogHelper.showPermissionDialog(context: context);
-        } else {
-          showSnackBar(context, "Error selecting image: Please try again");
-        }
+        showSnackBar(context, "Error selecting file. Try again.");
       }
     } finally {
       if (mounted) {
@@ -66,14 +69,18 @@ class _ImageChooserWidgetState extends State<ImageChooserWidget> {
     }
   }
 
-  void removeImage() {
+  void removeFile() {
     setState(() {
-      selectedImage = null;
+      selectedFile = null;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final fileExtension = selectedFile?.path.split('.').last.toLowerCase();
+    final isImage = ['jpg', 'jpeg', 'png', 'gif'].contains(fileExtension);
+    final isVideo = ['mp4', 'mov'].contains(fileExtension);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
@@ -90,13 +97,13 @@ class _ImageChooserWidgetState extends State<ImageChooserWidget> {
           child: Column(
             children: [
               const CustomGlolbalText(
-                text: "Choose an Image",
+                text: "Choose Image, GIF or Video",
                 color: AppPallete.label3Color,
               ),
               const SizedBox(height: 12),
               Center(
                 child: GestureDetector(
-                  onTap: selectedImage == null && !isLoading ? pickImage : null,
+                  onTap: selectedFile == null && !isLoading ? pickMedia : null,
                   child: Stack(
                     alignment: Alignment.topRight,
                     children: [
@@ -110,14 +117,15 @@ class _ImageChooserWidgetState extends State<ImageChooserWidget> {
                             width: 2,
                           ),
                           borderRadius: BorderRadius.circular(18),
-                          image: selectedImage != null
+                          // Only show image preview for actual images
+                          image: selectedFile != null && isImage
                               ? DecorationImage(
-                                  image: FileImage(selectedImage!),
+                                  image: FileImage(selectedFile!),
                                   fit: BoxFit.cover,
                                 )
                               : null,
                         ),
-                        child: selectedImage == null
+                        child: selectedFile == null
                             ? isLoading
                                 ? const Center(
                                     child: CupertinoActivityIndicator(
@@ -130,9 +138,15 @@ class _ImageChooserWidgetState extends State<ImageChooserWidget> {
                                     color: Colors.white,
                                     size: 30,
                                   )
-                            : null,
+                            : (isVideo
+                                ? const Icon(
+                                    Icons.videocam,
+                                    color: Colors.white,
+                                    size: 30,
+                                  )
+                                : null),
                       ),
-                      if (selectedImage != null)
+                      if (selectedFile != null)
                         Positioned(
                           top: -20,
                           right: -17,
@@ -143,12 +157,12 @@ class _ImageChooserWidgetState extends State<ImageChooserWidget> {
                               child: Icon(
                                 Icons.close,
                                 size: 16,
-                                color: Colors.red,
+                                color: AppPallete.errorColor,
                                 weight: 800,
                               ),
                             ),
                             padding: EdgeInsets.zero,
-                            onPressed: removeImage,
+                            onPressed: removeFile,
                           ),
                         ),
                     ],

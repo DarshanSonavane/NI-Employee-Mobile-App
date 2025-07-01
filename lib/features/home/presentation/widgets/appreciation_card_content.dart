@@ -1,6 +1,6 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/custom_global_text.dart';
-import 'package:employee_ni_service/core/constants/constants.dart';
+import 'package:employee_ni_service/core/utils/get_image_path.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 
@@ -163,9 +163,10 @@ class _AppreciationCardContentState extends State<AppreciationCardContent>
               BoxShadow(color: Colors.black12, blurRadius: 5),
             ],
           ),
-          child: const CircleAvatar(
+          child: CircleAvatar(
             radius: 50,
-            backgroundImage: AssetImage(Constants.employee1),
+            backgroundImage:
+                AssetImage(getImagePathFromKey(widget.imageUrl ?? '')),
           ),
         ),
         const SizedBox(height: 16),

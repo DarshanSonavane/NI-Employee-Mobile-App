@@ -1,7 +1,7 @@
 import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:employee_ni_service/features/add_employee/presentation/pages/add_employee.dart';
-import 'package:employee_ni_service/features/add_notification_appreciation.dart/presentation/pages/add_notification_or_appreciation.dart';
-import 'package:employee_ni_service/features/appreciation_profile.dart/pages/appreciation_list.dart';
+import 'package:employee_ni_service/features/add_notification_appreciation/presentation/pages/add_notification_or_appreciation.dart';
+import 'package:employee_ni_service/features/appreciation_profile/presentation/pages/appreciation_list.dart';
 import 'package:employee_ni_service/features/notification_profile/presentation/pages/notifications_list.dart';
 import 'package:employee_ni_service/features/auth/presentation/pages/signin.dart';
 import 'package:employee_ni_service/features/add_customer/presentation/pages/add_customer.dart';
@@ -133,6 +133,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
+      centerTitle: true,
       leading: isBackButtonVisible
           ? IconButton(
               icon: const Icon(

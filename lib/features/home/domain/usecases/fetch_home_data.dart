@@ -10,3 +10,10 @@ class FetchHomeData implements UseCase<Either, NoParams> {
     return await sl<FetchHomeRepository>().getHomeDetails();
   }
 }
+
+class FetchLatestRewardData implements UseCase<Either, NoParams> {
+  @override
+  Future<Either> call({NoParams? params}) async {
+    return await sl<FetchLatestRewardRepository>().getLatestReward();
+  }
+}

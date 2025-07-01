@@ -41,4 +41,9 @@ class ApiUrls {
   static const getAllCustomers = '${baseUrl}get-all-customers-mobile';
   static const getAllStates = '${baseUrl}state-list';
   static const searchCustomer = '${baseUrl}search-customer';
+  static const saveNotification = '${baseUrl}save-notification';
+  static const fetchNotification = '${baseUrl}fetch-notification';
+  static const fetchAllAppreciation = '${baseUrl}get-all-rewards';
+  static const saveReward = '${baseUrl}save-reward';
+  static const getLatestReward = '${baseUrl}get-latest-reward';
 }

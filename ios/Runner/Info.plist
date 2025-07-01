@@ -52,7 +52,7 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 		<string>We need your location to provide location-based features.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-		<string>This app needs access to your photo library to pick images.</string>
+		<string>This app needs access to photos and videos to select media files.</string>
 
 
 </dict>

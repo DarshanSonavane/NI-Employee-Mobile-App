@@ -23,6 +23,53 @@ Future<void> initDependecies() async {
   _initDeleteEmployee();
   _initFetchCustomerProfile();
   _initAddCustomer();
+  _initAddNotificationAppreciation();
+  _initFetchNotification();
+  _initFetchAllAppreciation();
+}
+
+void _initFetchAllAppreciation() {
+  sl
+    ..registerSingleton<GetAllAppreciationService>(
+        GetAllAppreciationServiceImpl())
+    ..registerSingleton<GetAllAppreciationRepository>(
+        GetAllAppreciationRepositoryImpl())
+    ..registerSingleton<GetAllAppreciationUsecase>(
+      GetAllAppreciationUsecase(),
+    )
+    ..registerFactory<FetchAppriciationBloc>(
+        () => FetchAppriciationBloc(getAllAppreciationUsecase: sl()));
+}
+
+void _initFetchNotification() {
+  sl
+    ..registerSingleton<GetAllNotificationService>(
+        GetAllNotificationServiceImpl())
+    ..registerSingleton<GetAllNotificationRepository>(
+        GetAllNotificationRepositoryImpl())
+    ..registerSingleton<GetAllNotificationUsecase>(
+      GetAllNotificationUsecase(),
+    )
+    ..registerFactory<FetchNotificationBloc>(
+        () => FetchNotificationBloc(getAllNotificationUsecase: sl()));
+}
+
+void _initAddNotificationAppreciation() {
+  sl
+    ..registerSingleton<AddNotificationService>(AddNotificationServiceImpl())
+    ..registerSingleton<AddAppreciationService>(AddAppreciationServiceImpl())
+    ..registerSingleton<AddNotificationRepository>(
+        AddNotificationRepositoryImpl())
+    ..registerSingleton<AddAppreciationRepository>(
+        AddAppreciationRepositoryImpl())
+    ..registerSingleton<AddAppreciationUsecase>(AddAppreciationUsecase())
+    ..registerSingleton<AddNotificationUsecase>(AddNotificationUsecase())
+    ..registerFactory<AddNotificationAppreciationBloc>(
+      () => AddNotificationAppreciationBloc(
+        addNotificationUsecase: sl(),
+        addAppreciationUsecase: sl(),
+      ),
+    );
 }
 
 void _initMasterInventory() {
@@ -143,14 +190,19 @@ void _initDashBoardDetails() {
   sl.registerSingleton<FetchFsrListService>(
     FetchFsrListServiceImpl(),
   );
+  sl.registerSingleton<GetLatestRewardApiService>(
+    GetLatestRewardApiServiceImpl(),
+  );
 
   //Repository
   sl.registerSingleton<FetchHomeRepository>(
     FetchDashboardDataRepositoryImpl(),
   );
-
   sl.registerSingleton<RegisteredFsrRepository>(
     FetchFsrRepositoryImpl(),
+  );
+  sl.registerSingleton<FetchLatestRewardRepository>(
+    FetchLastetRewardRepositoryImpl(),
   );
 
   //UseCases
@@ -160,11 +212,15 @@ void _initDashBoardDetails() {
   sl.registerSingleton<FetchFsrUsecase>(
     FetchFsrUsecase(),
   );
+  sl.registerSingleton<FetchLatestRewardData>(
+    FetchLatestRewardData(),
+  );
 
   sl.registerFactory<HomeBloc>(
     () => HomeBloc(
       fetchHomeData: sl(),
       fetchFSRListUsecase: sl(),
+      fetchLatestRewardData: sl(),
     ),
   );
 }

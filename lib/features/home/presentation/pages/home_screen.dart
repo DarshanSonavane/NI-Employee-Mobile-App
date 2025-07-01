@@ -5,6 +5,8 @@ import 'package:employee_ni_service/core/constants/constants.dart';
 import 'package:employee_ni_service/core/utils/scaling_factor.dart';
 import 'package:employee_ni_service/features/home/data/model/response_fsr_model.dart';
 import 'package:employee_ni_service/features/home/data/model/response_home_details.dart';
+import 'package:employee_ni_service/features/home/data/model/response_latest_reward_model.dart';
+import 'package:employee_ni_service/features/home/domain/entities/latest_reward_entity.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
 import 'package:employee_ni_service/features/home/presentation/widgets/appreciation_card.dart';
 import 'package:employee_ni_service/features/home/presentation/widgets/build_home_details_card.dart';
@@ -27,13 +29,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   ResponseHomeDetails? homeDetailsValue;
   ResponseFsrModel? fsrList;
-  bool hasAppreciation = true;
-  final String appreciationMessage =
-      "We appreciate your incredible effort this week, John!";
-  final String description =
-      "John consistently demonstrated outstanding professionalism and team spirit. His contributions were critical to our success this week. We truly value your efforts!'";
+  LatestRewardData? latestRewardData;
+  bool hasAppreciation = false;
+  String? appreciationMessage;
+  String? description;
   @override
   void initState() {
+    context.read<HomeBloc>().add(GetLatestReward());
     context.read<HomeBloc>().add(GetAllHomeDetails());
     context.read<HomeBloc>().add(GetFSRList(
         employeeId: hiveStorageService.getUser()!.id,
@@ -60,6 +62,14 @@ class _HomeScreenState extends State<HomeScreen> {
               if (data.requestType == Constants.showLatestFSR) {
                 fsrList = data;
               }
+            } else if (state is HomeBlocSuccess<ResponseLatestRewardModel>) {
+              latestRewardData = state.data.latestRewardData;
+              final rawKey = latestRewardData?.key ?? '';
+              final keyName = rawKey.split(' ').first.toLowerCase();
+              final capitalizedName =
+                  keyName[0].toUpperCase() + keyName.substring(1);
+              appreciationMessage =
+                  '${Constants.appreciationMessage} $capitalizedName!';
             }
           },
           builder: (context, state) {
@@ -75,9 +85,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppreciationCard(
-                    hasData: hasAppreciation,
+                    hasData: latestRewardData != null &&
+                        latestRewardData!.id.isNotEmpty,
                     message: appreciationMessage,
-                    description: description,
+                    description: latestRewardData?.description ?? '',
+                    imageUrl: latestRewardData?.key ?? '',
                   ),
                   if (isAdmin) BuildHomeDetailsCard(homeDetailsValue),
                   if (isAdmin) BuildPieCharCard(homeDetailsValue),

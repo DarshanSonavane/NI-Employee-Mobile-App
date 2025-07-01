@@ -1,8 +1,12 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
-import 'package:employee_ni_service/core/utils/app_transition.dart';
+import 'package:employee_ni_service/core/common/widgets/loader.dart';
 import 'package:employee_ni_service/core/common/widgets/notification_appreciation_list_widget.dart';
+import 'package:employee_ni_service/core/utils/app_transition.dart';
+import 'package:employee_ni_service/core/utils/show_snackbar.dart';
+import 'package:employee_ni_service/features/notification_profile/presentation/bloc/fetch_notification_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NotificationsList extends StatefulWidget {
   static Route route() {
@@ -16,40 +20,134 @@ class NotificationsList extends StatefulWidget {
 }
 
 class _NotificationsListState extends State<NotificationsList> {
-  final List<Map<String, String>> dummyList = [
-    {
-      "text":
-          "Flutter is an open-source UI software development toolkit created by Google. It is used to develop applications for Android, iOS, Linux, Mac, Windows, and the web from a single codebase.",
-      "imgUrl": "https://picsum.photos/seed/pic1/200/300"
-    },
-    {
-      "text":
-          "React Native combines the best parts of native development with React, a best-in-class JavaScript library for building user interfaces.",
-      "imgUrl": "https://picsum.photos/seed/pic2/200/300"
-    },
-    {
-      "text":
-          "Dart is a client-optimized language for fast apps on any platform. It is optimized for UI, developed by Google, and used heavily in Flutter.",
-      "imgUrl": "https://picsum.photos/seed/pic3/200/300"
-    },
-    {
-      "text":
-          "The goal of cross-platform development is to create software that works on multiple operating systems with a single codebase, saving both time and resources.",
-    },
-    {
-      "text":
-          "A good UI design is not just about how the app looks, but also how it behaves and responds to user interaction, ensuring a smooth user experience.",
-      "imgUrl": "https://picsum.photos/seed/pic5/200/300"
-    },
-    {
-      "text":
-          "A good UI design is not just about how the app looks, but also how it behaves and responds to user interaction, ensuring a smooth user experience.",
-    },
-    {
-      "text":
-          "A good UI design is not just about how the app looks, but also how it behaves and responds to user interaction, ensuring a smooth user experience.",
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _fetchNotifications();
+  }
+
+  void _fetchNotifications() {
+    context.read<FetchNotificationBloc>().add(GetAllNotificationEvent());
+  }
+
+  Widget _buildNotificationItem(dynamic item) {
+    final hasFile = item?.file?.isNotEmpty ?? false;
+    return NotificationAppreciationListWidget(
+      itemNotification: item,
+      hasFile: hasFile,
+    );
+  }
+
+  Widget _buildSuccessState(FetchNotificationSuccess state) {
+    final notificationData =
+        state.modelAllNotificationResponse.notificationData;
+
+    if (notificationData.isEmpty) {
+      return _buildEmptyState();
+    }
+
+    final validNotifications = notificationData;
+
+    if (validNotifications.isEmpty) {
+      return _buildEmptyState();
+    }
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        _fetchNotifications();
+      },
+      child: ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        itemCount: validNotifications.length,
+        itemBuilder: (context, index) {
+          final item = validNotifications[index];
+          return _buildNotificationItem(item);
+        },
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.notifications_none,
+            size: 64,
+            color: Colors.grey[400],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            "No notifications found",
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Colors.grey[600],
+                ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            "Check back later for new notifications",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.grey[500],
+                ),
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            onPressed: _fetchNotifications,
+            icon: const Icon(Icons.refresh),
+            label: const Text("Refresh"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: 64,
+            color: Colors.red[400],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            "Something went wrong",
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Colors.red[600],
+                ),
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            onPressed: _fetchNotifications,
+            icon: const Icon(Icons.refresh),
+            label: const Text("Try Again"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleBlocListener(BuildContext context, FetchNotificationState state) {
+    if (state is FetchNotificationFailure) {
+      showSnackBar(context, state.errorMessage);
+    }
+  }
+
+  Widget _buildNotificationsList(
+      BuildContext context, FetchNotificationState state) {
+    if (state is FetchNotificationLoader) {
+      return const Center(child: Loader());
+    } else if (state is FetchNotificationSuccess) {
+      return _buildSuccessState(state);
+    } else if (state is FetchNotificationFailure) {
+      return _buildErrorState();
+    } else {
+      return _buildEmptyState();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +160,9 @@ class _NotificationsListState extends State<NotificationsList> {
         isFromMoreIcon: true,
         navigateTo: "addNotification",
       ),
-      body: ListView.builder(
-        itemCount: dummyList.length,
-        itemBuilder: (context, index) {
-          final item = dummyList[index];
-          final hasImage = item['imgUrl'] != null && item['imgUrl']!.isNotEmpty;
-          return NotificationAppreciationListWidget(
-              item: item, hasImage: hasImage);
-        },
+      body: BlocConsumer<FetchNotificationBloc, FetchNotificationState>(
+        listener: _handleBlocListener,
+        builder: _buildNotificationsList,
       ),
     );
   }
