@@ -1,15 +1,23 @@
 import 'package:employee_ni_service/core/app_theme/app_theme.dart';
+import 'package:employee_ni_service/core/utils/permissions.dart';
+import 'package:employee_ni_service/features/add_customer/presentation/bloc/add_customer_bloc.dart';
+import 'package:employee_ni_service/features/add_employee/presentation/bloc/add_employee_bloc.dart';
+import 'package:employee_ni_service/features/add_notification_appreciation/presentation/bloc/add_notification_appreciation_bloc.dart';
+import 'package:employee_ni_service/features/appreciation_profile/presentation/bloc/fetch_appriciation_bloc.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/presentation/bloc/assign_product_to_employee_bloc.dart';
 import 'package:employee_ni_service/features/auth/data/models/login_response_params.dart';
 import 'package:employee_ni_service/features/auth/presentation/bloc/sign_in_bloc.dart';
 import 'package:employee_ni_service/features/calibration/presentation/bloc/calibration_bloc.dart';
 import 'package:employee_ni_service/features/complaint/presentation/bloc/complaint_bloc.dart';
+import 'package:employee_ni_service/features/customer_profile/presentation/bloc/customer_profile_bloc.dart';
 import 'package:employee_ni_service/features/dashboard/provider/dashboard_state.dart';
+import 'package:employee_ni_service/features/employee_profile/presentation/bloc/employee_profile_bloc.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/bloc/fsr_bloc.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/provider/quantity_provider.dart';
 import 'package:employee_ni_service/features/f_service_request/presentation/provider/total_amount_provider.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
 import 'package:employee_ni_service/features/insert_update_master_admin/presentation/bloc/master_inventory_bloc.dart';
+import 'package:employee_ni_service/features/notification_profile/presentation/bloc/fetch_notification_bloc.dart';
 import 'package:employee_ni_service/features/products/presentation/bloc/product_bloc.dart';
 import 'package:employee_ni_service/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:employee_ni_service/features/set_reset_password/presentation/bloc/set_reset_password_bloc.dart';
@@ -25,6 +33,7 @@ import 'service_locator_dependecies.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Geolocator.requestPermission();
+  handleGalleryPermission();
   await initDependecies();
   await Hive.openBox<LoginResponseParams>(Constants.loginHiveBox);
   runApp(
@@ -59,7 +68,28 @@ void main() async {
         ),
         BlocProvider(
           create: (_) => sl<MasterInventoryBloc>(),
-        )
+        ),
+        BlocProvider(
+          create: (_) => sl<AddEmployeeBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<EmployeeProfileBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<CustomerProfileBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<AddCustomerBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<AddNotificationAppreciationBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<FetchNotificationBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<FetchAppriciationBloc>(),
+        ),
       ],
       child: MultiProvider(
         providers: [

@@ -22,6 +22,7 @@ class ApiUrls {
   static const assignComplaints = '${baseUrl}assign-complaint';
   static const getEmployeeDetails = '${baseUrl}get-employee-details';
   static const getAssignedComplaint = '${baseUrl}get-assigned-complaints';
+  static const getFSRListLatest = '${baseUrl}fetch-latest-fsrs';
   static const getFSRList = '${baseUrl}fsr-list';
   static const fetchMasterInventory = '${baseUrl}fetch-master-inventory';
   static const sendVerificationCode = '${baseUrl}send-verification-code';
@@ -32,4 +33,17 @@ class ApiUrls {
       '${baseUrl}employee-inventory-list';
   static const assignedProductToEmp =
       '${baseUrl}insert-update-employee-inventory';
+  static const createEmployee = '${baseUrl}create-employee';
+  static const createAndUpdateCustomer =
+      '${baseUrl}create-update-customer-details';
+  static const deleteEmployee = '${baseUrl}delete-employee';
+  static const deleteCustomer = '${baseUrl}delete-customer-by-id';
+  static const getAllCustomers = '${baseUrl}get-all-customers-mobile';
+  static const getAllStates = '${baseUrl}state-list';
+  static const searchCustomer = '${baseUrl}search-customer';
+  static const saveNotification = '${baseUrl}save-notification';
+  static const fetchNotification = '${baseUrl}fetch-notification';
+  static const fetchAllAppreciation = '${baseUrl}get-all-rewards';
+  static const saveReward = '${baseUrl}save-reward';
+  static const getLatestReward = '${baseUrl}get-latest-reward';
 }

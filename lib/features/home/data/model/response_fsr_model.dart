@@ -1,13 +1,14 @@
 import '../../domain/entities/entity_fsr_list.dart';
 
 class ResponseFsrModel extends FsrEntity {
-  ResponseFsrModel({
-    required super.message,
-    required super.code,
-    required List<FsrDataModel> super.fsrData,
-  });
+  ResponseFsrModel(
+      {required super.message,
+      required super.code,
+      required List<FsrDataModel> super.fsrData,
+      required super.requestType});
 
-  factory ResponseFsrModel.fromJson(Map<String, dynamic> json) {
+  factory ResponseFsrModel.fromJson(
+      Map<String, dynamic> json, String requestType) {
     return ResponseFsrModel(
       message: json['message'] ?? '',
       code: json['code'] ?? 0,
@@ -16,6 +17,7 @@ class ResponseFsrModel extends FsrEntity {
               (json['fsrData'] as List).map((x) => FsrDataModel.fromJson(x)),
             )
           : [],
+      requestType: requestType,
     );
   }
 
@@ -25,6 +27,18 @@ class ResponseFsrModel extends FsrEntity {
       'code': code,
       'fsrData': fsrData.map((x) => (x as FsrDataModel).toJson()).toList(),
     };
+  }
+
+  ResponseFsrModel copyWith({
+    List<FsrDataModel>? fsrData,
+    String? message,
+    int? code,
+  }) {
+    return ResponseFsrModel(
+        fsrData: fsrData ?? this.fsrData as List<FsrDataModel>,
+        message: message ?? this.message,
+        code: code ?? this.code,
+        requestType: requestType);
   }
 }
 

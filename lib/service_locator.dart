@@ -19,9 +19,73 @@ Future<void> initDependecies() async {
   _initAssignProductFromMasterInventory();
   _initFSRScreen();
   _initMasterInventory();
+  _initAddEmployee();
+  _initDeleteEmployee();
+  _initFetchCustomerProfile();
+  _initAddCustomer();
+  _initAddNotificationAppreciation();
+  _initFetchNotification();
+  _initFetchAllAppreciation();
+}
+
+void _initFetchAllAppreciation() {
+  sl
+    //Service
+    ..registerSingleton<GetAllAppreciationService>(
+        GetAllAppreciationServiceImpl())
+    //Repository
+    ..registerSingleton<GetAllAppreciationRepository>(
+        GetAllAppreciationRepositoryImpl())
+    //Usecase
+    ..registerSingleton<GetAllAppreciationUsecase>(
+      GetAllAppreciationUsecase(),
+    )
+    //Bloc
+    ..registerFactory<FetchAppriciationBloc>(
+        () => FetchAppriciationBloc(getAllAppreciationUsecase: sl()));
+}
+
+void _initFetchNotification() {
+  sl
+    //Service
+    ..registerSingleton<GetAllNotificationService>(
+        GetAllNotificationServiceImpl())
+    //Repository
+    ..registerSingleton<GetAllNotificationRepository>(
+        GetAllNotificationRepositoryImpl())
+    //Usecase
+    ..registerSingleton<GetAllNotificationUsecase>(
+      GetAllNotificationUsecase(),
+    )
+    //Bloc
+    ..registerFactory<FetchNotificationBloc>(
+        () => FetchNotificationBloc(getAllNotificationUsecase: sl()));
+}
+
+void _initAddNotificationAppreciation() {
+  sl
+    //Service
+    ..registerSingleton<AddNotificationService>(AddNotificationServiceImpl())
+    ..registerSingleton<AddAppreciationService>(AddAppreciationServiceImpl())
+    //Repository
+    ..registerSingleton<AddNotificationRepository>(
+        AddNotificationRepositoryImpl())
+    ..registerSingleton<AddAppreciationRepository>(
+        AddAppreciationRepositoryImpl())
+    //Usecase
+    ..registerSingleton<AddAppreciationUsecase>(AddAppreciationUsecase())
+    ..registerSingleton<AddNotificationUsecase>(AddNotificationUsecase())
+    //Bloc
+    ..registerFactory<AddNotificationAppreciationBloc>(
+      () => AddNotificationAppreciationBloc(
+        addNotificationUsecase: sl(),
+        addAppreciationUsecase: sl(),
+      ),
+    );
 }
 
 void _initMasterInventory() {
+  //Service
   sl.registerSingleton<UpdateProductsInventoryService>(
     UpdateProductsInventoryServiceImpl(),
   );
@@ -34,7 +98,7 @@ void _initMasterInventory() {
   sl.registerSingleton<InsertUpdateProductUsecase>(
     InsertUpdateProductUsecase(),
   );
-
+  //Bloc
   sl.registerFactory<MasterInventoryBloc>(
     () => MasterInventoryBloc(
       fetchMasterInventoryUsecase: sl(),
@@ -139,14 +203,19 @@ void _initDashBoardDetails() {
   sl.registerSingleton<FetchFsrListService>(
     FetchFsrListServiceImpl(),
   );
+  sl.registerSingleton<GetLatestRewardApiService>(
+    GetLatestRewardApiServiceImpl(),
+  );
 
   //Repository
   sl.registerSingleton<FetchHomeRepository>(
     FetchDashboardDataRepositoryImpl(),
   );
-
   sl.registerSingleton<RegisteredFsrRepository>(
     FetchFsrRepositoryImpl(),
+  );
+  sl.registerSingleton<FetchLatestRewardRepository>(
+    FetchLastetRewardRepositoryImpl(),
   );
 
   //UseCases
@@ -156,11 +225,15 @@ void _initDashBoardDetails() {
   sl.registerSingleton<FetchFsrUsecase>(
     FetchFsrUsecase(),
   );
+  sl.registerSingleton<FetchLatestRewardData>(
+    FetchLatestRewardData(),
+  );
 
   sl.registerFactory<HomeBloc>(
     () => HomeBloc(
       fetchHomeData: sl(),
       fetchFSRListUsecase: sl(),
+      fetchLatestRewardData: sl(),
     ),
   );
 }
@@ -356,23 +429,102 @@ void _initSetResetPassword() {
 }
 
 void _initGetProfileData() {
-  //Repository
-  sl.registerSingleton<EmployeeProfileRepository>(
-    EmployeeProfileRepositoryImpl(),
-  );
+  sl
+    //service
+    ..registerLazySingleton<EmployeeProfileDetailsService>(
+        () => EmployeeProfileDetailsServiceImpl())
+    //Repository
+    ..registerLazySingleton<EmployeeProfileRepository>(
+        () => EmployeeProfileRepositoryImpl())
+    //UseCase
+    ..registerLazySingleton<FetchEmployeeProfileUsecase>(
+        () => FetchEmployeeProfileUsecase())
+    //Bloc
+    ..registerFactory<ProfileBloc>(() => ProfileBloc(
+          fetchEmployeeProfileUseCase: sl(),
+        ));
+}
 
-  //service
-  sl.registerSingleton<EmployeeProfileDetailsService>(
-    EmployeeProfileDetailsServiceImpl(),
-  );
+void _initAddEmployee() {
+  sl
+    //service
+    ..registerLazySingleton<CreateEmployeeService>(
+        () => CreateEmployeeServiceImpl())
+    //Repository
+    ..registerLazySingleton<AddEmployeeRepository>(() => AddEmpRepostioryImpl())
+    //UseCase
+    ..registerLazySingleton<AddEmployeeUsecase>(() => AddEmployeeUsecase())
+    //Bloc
+    ..registerFactory<AddEmployeeBloc>(() => AddEmployeeBloc(
+          addEmployeeUsecase: sl(),
+        ));
+}
 
-  //UseCase
-  sl.registerSingleton<FetchEmployeeProfileUsecase>(
-    FetchEmployeeProfileUsecase(),
-  );
+void _initDeleteEmployee() {
+  sl
+    //service
+    ..registerLazySingleton<DeleteEmployeeService>(
+        () => DeleteEmployeeServiceImpl())
+    //Repository
+    ..registerLazySingleton<DeleteEmployeeProfileRepository>(
+        () => DeleteEmployeeProfileRepositoryImpl())
+    //UseCase
+    ..registerLazySingleton<DeleteProfileUsecase>(() => DeleteProfileUsecase())
+    //Bloc
+    ..registerFactory<EmployeeProfileBloc>(() => EmployeeProfileBloc(
+          deleteEmployeeUsecase: sl(),
+        ));
+}
 
-  //Bloc
-  sl.registerFactory<ProfileBloc>(
-    () => ProfileBloc(fetchEmployeeProfileUseCase: sl()),
-  );
+void _initFetchCustomerProfile() {
+  sl
+    //service
+    ..registerLazySingleton<FetchCustomerProfileService>(
+        () => FetchCustomerProfileServiceImpl())
+    ..registerLazySingleton<DeleteCustomerService>(
+        () => DeleteCustomerServiceImpl())
+    ..registerLazySingleton<SearchCustomerProfileService>(
+        () => SearchCustomerProfileServiceImpl())
+    //Repository
+    ..registerLazySingleton<FetchCustomerProfileRepository>(
+        () => FetchCustomerProfileRepositoryImpl())
+    ..registerLazySingleton<DeleteCustomerProfileRepository>(
+        () => DeleteCustomerProfileRepositoryImpl())
+    ..registerLazySingleton<SearchCustomerProfileRepository>(
+        () => SearchCustomerProfileRepositoryImpl())
+    //UseCase
+    ..registerLazySingleton<FetchCustomerUsecase>(() => FetchCustomerUsecase())
+    ..registerLazySingleton<DeleteCustomerUsecase>(
+        () => DeleteCustomerUsecase())
+    ..registerLazySingleton<SearchCustomerUsecase>(
+        () => SearchCustomerUsecase())
+    //Bloc
+    ..registerFactory<CustomerProfileBloc>(() => CustomerProfileBloc(
+          fetchCustomerUsecase: sl(),
+          deleteCustomerUsecase: sl(),
+          searchCustomerUsecase: sl(),
+        ));
+}
+
+void _initAddCustomer() {
+  sl
+    //service
+    ..registerLazySingleton<FetchStatesService>(() => FetchStatesServiceImpl())
+    ..registerLazySingleton<CreateCustomerService>(
+        () => CreateCustomerServiceImpl())
+    //Repository
+    ..registerLazySingleton<FetchStatesRepository>(
+        () => FetchStatesRepositoryImpl())
+    ..registerLazySingleton<CreateCustomerRepository>(
+        () => CreateCustomerRepositoryImpl())
+    //UseCase
+    ..registerLazySingleton<FetchStatesUsecase>(() => FetchStatesUsecase())
+    ..registerLazySingleton<AddCustomerUsecase>(() => AddCustomerUsecase())
+    //Bloc
+    ..registerFactory<AddCustomerBloc>(
+      () => AddCustomerBloc(
+        fetchStatesUsecase: sl(),
+        addCustomerUsecase: sl(),
+      ),
+    );
 }

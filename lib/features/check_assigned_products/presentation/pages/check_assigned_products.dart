@@ -5,7 +5,7 @@ import 'package:employee_ni_service/core/utils/show_snackbar.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/presentation/bloc/assign_product_to_employee_bloc.dart';
 import 'package:employee_ni_service/features/check_assigned_products/presentation/widgets/check_assigned_products_to_employee_widget.dart';
 import 'package:employee_ni_service/features/complaint/data/models/model_fetch_employee/response_employee_model.dart';
-import 'package:employee_ni_service/features/dashboard/widgets/app_bar_widget.dart';
+import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,6 +37,7 @@ class _CheckAssignedProductsState extends State<CheckAssignedProducts> {
       appBar: const AppBarWidget(
         title: "Employee Products",
         isBackButtonVisible: true,
+        isMoreButtonVisible: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

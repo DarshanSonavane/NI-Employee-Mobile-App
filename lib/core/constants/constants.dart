@@ -7,6 +7,7 @@ class Constants {
   static const nodata = 'assets/webp_image/nodata.webp';
   static const nodatafound = 'assets/webp_image/nodatafound.webp';
   static const pucServiceImage = 'assets/jpg_image/puc.jpeg';
+  static const employee1 = 'assets/jpg_image/employee1.jpg';
   static const locationIcon = 'assets/png_image/locationicon.png';
   static const login = 'Login';
   static const proceed = 'Proceed';
@@ -109,4 +110,14 @@ class Constants {
   static const noProductAvailable = 'No products available.';
   static const locationDeniedMessage =
       'Location permission is required to use this app. Please enable it from the app settings.';
+  static const addCustomer = "Add Customer";
+  static const updateCustomer = "Update Customer";
+  static const addEmployee = "Add Employee";
+  static const addNotification = "Add Notification";
+  static const addAppreciation = "Add Appreciation";
+  static const showLatestFSR = "ShowLatestFSR";
+  static const showAllFSR = "ShowAllFSR";
+  static const somethingWentWrong = "Something went wrong";
+  static const appreciationMessage =
+      "We appreciate your incredible effort this week,";
 }

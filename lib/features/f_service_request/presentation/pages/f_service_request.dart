@@ -6,7 +6,7 @@ import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:employee_ni_service/core/utils/machine_options.dart';
 import 'package:employee_ni_service/core/utils/show_snackbar.dart';
 import 'package:employee_ni_service/features/complaint/presentation/bloc/complaint_bloc.dart';
-import 'package:employee_ni_service/features/dashboard/widgets/app_bar_widget.dart';
+import 'package:employee_ni_service/core/common/widgets/app_bar_widget.dart';
 import 'package:employee_ni_service/features/f_service_request/data/model/request_create_fsr_model.dart';
 import 'package:employee_ni_service/features/f_service_request/data/model/response_verification_model.dart';
 import 'package:employee_ni_service/features/f_service_request/domain/entities/request_create_fsr_entity.dart';
@@ -22,7 +22,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/common/widgets/auth_gradient_button.dart';
 import '../../../../core/common/widgets/custom_text_field.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../core/utils/location_permission.dart';
+import '../../../../core/utils/permissions.dart';
 import '../../../calibration/presentation/widgets/machine_dropdown.dart';
 import '../widgets/add_details_widget.dart';
 import '../widgets/signature_display.dart';
@@ -273,8 +273,12 @@ class _FServiceRequestState extends State<FServiceRequest> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppPallete.screenBackground,
-        appBar:
-            const AppBarWidget(title: Constants.fsr, isBackButtonVisible: true),
+        appBar: const AppBarWidget(
+          title: Constants.fsr,
+          isBackButtonVisible: true,
+          isMoreButtonVisible: false,
+          isLogoutOptionVisible: false,
+        ),
         body: BlocListener<FsrBloc, FsrState>(
           listener: (context, state) {
             if (state is FsrFailure) {
