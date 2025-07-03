@@ -15,6 +15,8 @@ class DashboardState with ChangeNotifier {
   int _selectedIndex = 4;
   bool _isFabSelected = true;
   final hiveStorageService = sl<HiveStorageService>();
+  Key _homeKey = UniqueKey();
+  Key get homeKey => _homeKey;
 
   final Map<int, String> _titles = {
     0: Constants.complaints,
@@ -38,6 +40,7 @@ class DashboardState with ChangeNotifier {
   }
 
   void selectFab(BuildContext context) {
+    context.read<HomeBloc>().add(GetLatestReward());
     context.read<HomeBloc>().add(GetAllHomeDetails());
     context.read<HomeBloc>().add(GetFSRList(
         employeeId: hiveStorageService.getUser()!.id,
@@ -45,6 +48,7 @@ class DashboardState with ChangeNotifier {
         type: Constants.showLatestFSR));
     _selectedIndex = 4;
     _isFabSelected = true;
+    _homeKey = UniqueKey();
     notifyListeners();
   }
 

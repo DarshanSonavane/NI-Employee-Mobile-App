@@ -28,7 +28,7 @@ class BottomNavScreens extends StatelessWidget {
             fetchUserRole() == "0"
                 ? const FeatureProfile()
                 : const ProfileScreen(),
-            const HomeScreen(),
+            HomeScreen(key: dashboardState.homeKey),
           ],
         );
       },

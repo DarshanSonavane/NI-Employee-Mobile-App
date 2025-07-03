@@ -33,7 +33,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     this.navigateTo,
   });
 
-  void handleMenuOption(String option, BuildContext context) {
+  void handleMenuOption(String option, BuildContext context) async {
     switch (option) {
       case "customer":
         Navigator.push(context, CustomerProfilePage.route());
@@ -45,7 +45,11 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         Navigator.push(context, NotificationsList.route());
         break;
       case "appreciation":
-        Navigator.push(context, AppreciationList.route());
+        final result = await Navigator.push(context, AppreciationList.route());
+        if (context.mounted && result == true) {
+          Provider.of<DashboardState>(context, listen: false)
+              .selectFab(context);
+        }
         break;
       case "addEmployee":
         Navigator.push(context, AddEmployee.route());
@@ -141,7 +145,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                 color: AppPallete.gradientColor,
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(true);
               },
             )
           : null,
