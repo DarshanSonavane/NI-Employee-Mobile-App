@@ -170,14 +170,16 @@ class _ComplaintCardState extends State<ComplaintCard> {
                   AppPallete.label2Color,
                   AppPallete.label3Color),
               SizedBox(height: 8 * scalingFactor),
-              setHeadingText(
-                  null,
-                  '${widget.employee?.firstName ?? ''} ${widget.employee?.lastName ?? ''}',
-                  Constants.assignedTo,
-                  scalingFactor,
-                  22,
-                  AppPallete.label2Color,
-                  AppPallete.label3Color),
+              fetchUserRole() == "0"
+                  ? setHeadingText(
+                      null,
+                      '${widget.employee?.firstName ?? ''} ${widget.employee?.lastName ?? ''}',
+                      Constants.assignedTo,
+                      scalingFactor,
+                      22,
+                      AppPallete.label2Color,
+                      AppPallete.label3Color)
+                  : const SizedBox.shrink(),
               SizedBox(height: 8 * scalingFactor),
               Visibility(
                 visible: widget.status != '0',
