@@ -90,7 +90,7 @@ class _CalibrationCardState extends State<CalibrationCard> {
                           widget.name ?? "",
                           style: TextStyle(
                             color: AppPallete.label3Color,
-                            fontSize: 22 * scalingFactor,
+                            fontSize: 20 * scalingFactor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -111,15 +111,18 @@ class _CalibrationCardState extends State<CalibrationCard> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         setTextNormal('Code : ${widget.customerCode ?? ""}',
-                            scalingFactor),
+                            scalingFactor,
+                            fontSize: 16),
                         SizedBox(height: 4 * scalingFactor),
                         setTextNormal(
                             setDateFormat(widget.date!.substring(0, 10)),
-                            scalingFactor),
+                            scalingFactor,
+                            fontSize: 16),
                         SizedBox(height: 4 * scalingFactor),
                         setTextNormal(
                             '${widget.location ?? ""}, ${widget.state ?? ""}',
-                            scalingFactor),
+                            scalingFactor,
+                            fontSize: 16),
                       ],
                     ),
                   ),

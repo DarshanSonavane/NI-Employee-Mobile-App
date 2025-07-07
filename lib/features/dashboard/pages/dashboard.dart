@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import '../../../core/utils/app_transition.dart';
-import '../widgets/app_bar_widget.dart';
+import '../../../core/common/widgets/app_bar_widget.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/bottom_nav_screens.dart';
 import '../provider/dashboard_state.dart';

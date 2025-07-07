@@ -1,10 +1,14 @@
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/loader.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
+import 'package:employee_ni_service/core/constants/constants.dart';
 import 'package:employee_ni_service/core/utils/scaling_factor.dart';
 import 'package:employee_ni_service/features/home/data/model/response_fsr_model.dart';
 import 'package:employee_ni_service/features/home/data/model/response_home_details.dart';
+import 'package:employee_ni_service/features/home/data/model/response_latest_reward_model.dart';
+import 'package:employee_ni_service/features/home/domain/entities/latest_reward_entity.dart';
 import 'package:employee_ni_service/features/home/presentation/bloc/home_bloc.dart';
+import 'package:employee_ni_service/features/home/presentation/widgets/appreciation_card.dart';
 import 'package:employee_ni_service/features/home/presentation/widgets/build_home_details_card.dart';
 import 'package:employee_ni_service/features/home/presentation/widgets/build_pie_char_card.dart';
 import 'package:employee_ni_service/features/products/presentation/widgets/no_product_available.dart';
@@ -25,16 +29,24 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   ResponseHomeDetails? homeDetailsValue;
   ResponseFsrModel? fsrList;
+  LatestRewardData? latestRewardData;
+  bool hasAppreciation = false;
+  String? appreciationMessage;
+  String? description;
   @override
   void initState() {
+    context.read<HomeBloc>().add(GetLatestReward());
     context.read<HomeBloc>().add(GetAllHomeDetails());
     context.read<HomeBloc>().add(GetFSRList(
-        employeeId: hiveStorageService.getUser()!.id, role: fetchUserRole()));
+        employeeId: hiveStorageService.getUser()!.id,
+        role: fetchUserRole(),
+        type: Constants.showLatestFSR));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final isAdmin = fetchUserRole() == "0";
     return Scaffold(
       backgroundColor: AppPallete.screenBackground,
       body: Padding(
@@ -46,7 +58,18 @@ class _HomeScreenState extends State<HomeScreen> {
             } else if (state is HomeBlocSuccess<ResponseHomeDetails>) {
               homeDetailsValue = state.data;
             } else if (state is HomeBlocSuccess<ResponseFsrModel>) {
-              fsrList = state.data;
+              final data = state.data;
+              if (data.requestType == Constants.showLatestFSR) {
+                fsrList = data;
+              }
+            } else if (state is HomeBlocSuccess<ResponseLatestRewardModel>) {
+              latestRewardData = state.data.latestRewardData;
+              final rawKey = latestRewardData?.key ?? '';
+              final keyName = rawKey.split(' ').first.toLowerCase();
+              final capitalizedName =
+                  keyName[0].toUpperCase() + keyName.substring(1);
+              appreciationMessage =
+                  '${Constants.appreciationMessage} $capitalizedName!';
             }
           },
           builder: (context, state) {
@@ -61,12 +84,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  fetchUserRole() == "0"
-                      ? BuildHomeDetailsCard(homeDetailsValue)
-                      : const SizedBox.shrink(),
-                  fetchUserRole() == "0"
-                      ? BuildPieCharCard(homeDetailsValue)
-                      : const SizedBox.shrink(),
+                  AppreciationCard(
+                    hasData: latestRewardData != null &&
+                        latestRewardData!.id.isNotEmpty,
+                    message: appreciationMessage,
+                    description: latestRewardData?.description ?? '',
+                    imageUrl: latestRewardData?.key ?? '',
+                  ),
+                  if (isAdmin) BuildHomeDetailsCard(homeDetailsValue),
+                  if (isAdmin) BuildPieCharCard(homeDetailsValue),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),

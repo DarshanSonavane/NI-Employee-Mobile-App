@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'simple_dialog_with_message.dart';
 
 class DialogHelper {
@@ -33,6 +34,35 @@ class DialogHelper {
           message: message,
           onTextTap: onTextButtonPressed,
           onCloseTap: onCloseButtonPressed,
+        );
+      },
+    );
+  }
+
+  static void showPermissionDialog({
+    required BuildContext context,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Permission Required'),
+          content: const Text(
+            'This app needs access to your photo library to select images. Please grant permission in Settings.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                openAppSettings();
+              },
+              child: const Text('Open Settings'),
+            ),
+          ],
         );
       },
     );

@@ -10,7 +10,7 @@ import '../../data/models/model_master_inventory.dart';
 import '../../data/models/product_assignment_model.dart';
 import '../bloc/assign_product_to_employee_bloc.dart';
 import 'available_quantity_display.dart';
-import 'employee_selection_section.dart';
+import '../../../../core/common/widgets/employee_selection_section.dart';
 import 'master_inventory_section.dart';
 import 'quantity_adjuster_section.dart';
 

@@ -69,6 +69,7 @@ class _ComplaintAdminViewState extends State<ComplaintAdminView> {
                     feedback: complaint.employeeFeedback,
                     status: complaint.status,
                     complaintId: complaint.id,
+                    employee: complaint.assignedTo,
                     onClose: closeComplaint,
                     onGenerateFSR: (
                       String complaintId,
@@ -119,6 +120,7 @@ class _ComplaintAdminViewState extends State<ComplaintAdminView> {
                     feedback: complaint.employeeFeedback,
                     status: complaint.status,
                     complaintId: complaint.id,
+                    employee: complaint.assignedTo,
                   );
                 },
               );

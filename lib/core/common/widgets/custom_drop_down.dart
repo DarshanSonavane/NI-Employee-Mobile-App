@@ -22,9 +22,9 @@ class CustomDropdown<T> extends StatelessWidget {
     required this.onChanged,
     this.padding,
     this.borderColor = Colors.grey,
-    this.borderRadius = 8.0,
+    this.borderRadius = 14.0,
     this.iconColor = Colors.black,
-    this.textColor = Colors.black,
+    this.textColor = AppPallete.label3Color,
     this.dropdownColor = Colors.white,
     this.isEnabled,
   });
@@ -34,24 +34,26 @@ class CustomDropdown<T> extends StatelessWidget {
     final bool enabled = isEnabled ?? true;
     return Container(
       decoration: BoxDecoration(
+        color: AppPallete.backgroundColor,
         border: Border.all(
           color: enabled ? borderColor : AppPallete.label2Color,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: padding ??
+          const EdgeInsets.symmetric(horizontal: 12.0, vertical: 1.0),
       child: DropdownButton<T>(
         value: value,
         hint: Text(
           hintText,
           style: TextStyle(
             color: enabled ? textColor : AppPallete.label2Color,
-            fontSize: 16,
+            fontWeight: FontWeight.w600,
           ),
         ),
         isExpanded: true,
-        underline: const SizedBox(), // Remove the default underline
+        underline: const SizedBox(),
         icon: Icon(
           Icons.arrow_drop_down,
           color: enabled ? iconColor : AppPallete.label2Color,

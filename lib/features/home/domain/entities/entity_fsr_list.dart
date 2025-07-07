@@ -2,12 +2,13 @@ class FsrEntity {
   final String message;
   final int code;
   final List<FsrDataEntity> fsrData;
+  final String requestType;
 
-  FsrEntity({
-    required this.message,
-    required this.code,
-    required this.fsrData,
-  });
+  FsrEntity(
+      {required this.message,
+      required this.code,
+      required this.fsrData,
+      required this.requestType});
 }
 
 class FsrDataEntity {

@@ -1,5 +1,6 @@
 import 'package:employee_ni_service/features/home/data/model/response_fsr_model.dart';
 import 'package:employee_ni_service/features/home/data/model/response_home_details.dart';
+import 'package:employee_ni_service/features/home/data/model/response_latest_reward_model.dart';
 import 'package:employee_ni_service/features/home/domain/usecases/fetch_home_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,10 +15,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({
     required FetchHomeData fetchHomeData,
     required FetchFsrUsecase fetchFSRListUsecase,
+    required FetchLatestRewardData fetchLatestRewardData,
   }) : super(HomeBlocInitial()) {
     on<HomeEvent>((_, emit) => emit(HomeBlocLoader()));
     on<GetAllHomeDetails>(_onFetchHomeDetails);
     on<GetFSRList>(_onGetFSRList);
+    on<GetLatestReward>(_onFetchLatestRewardDetails);
+  }
+
+  void _onFetchLatestRewardDetails(
+    GetLatestReward event,
+    Emitter<HomeState> emit,
+  ) async {
+    final res = await sl<FetchLatestRewardData>().call();
+    res.fold(
+      (l) => emit(HomeBlocFailure(l)),
+      (r) => emit(HomeBlocSuccess<ResponseLatestRewardModel>(r)),
+    );
   }
 
   void _onFetchHomeDetails(
@@ -37,13 +51,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     final res = await sl<FetchFsrUsecase>().call(
         params: RequestFsrModel(
-      employeeId: event.employeeId,
-      role: event.role,
-    ));
+          employeeId: event.employeeId,
+          role: event.role,
+          type: event.type,
+        ),
+        page: event.page);
 
-    res.fold(
-      (failure) => emit(HomeBlocFailure(failure.toString())),
-      (success) => emit(HomeBlocSuccess<ResponseFsrModel>(success)),
-    );
+    res.fold((failure) => emit(HomeBlocFailure(failure.toString())),
+        (success) => emit(HomeBlocSuccess<ResponseFsrModel>(success)));
   }
 }

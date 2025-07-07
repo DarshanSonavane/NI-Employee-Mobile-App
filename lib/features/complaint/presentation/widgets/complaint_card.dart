@@ -2,6 +2,7 @@ import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/set_text_normal.dart';
 import 'package:employee_ni_service/core/utils/fetch_user_role.dart';
 import 'package:employee_ni_service/core/utils/fuel_utiles.dart';
+import 'package:employee_ni_service/features/complaint/domain/entities/complaint_list_entity/complaint_detail_entity.dart';
 import 'package:employee_ni_service/features/complaint/presentation/widgets/show_take_action_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +23,7 @@ class ComplaintCard extends StatefulWidget {
   final String? feedback;
   final String? status;
   final String? complaintId;
+  final Employee? employee;
   final Function(String)? onClose;
   final Function(String)? onAssign;
   final Function(String, String, String, String, String)? onGenerateFSR;
@@ -38,6 +40,7 @@ class ComplaintCard extends StatefulWidget {
     required this.feedback,
     required this.status,
     required this.complaintId,
+    this.employee,
     this.onClose,
     this.onAssign,
     this.onGenerateFSR,
@@ -97,7 +100,7 @@ class _ComplaintCardState extends State<ComplaintCard> {
                           widget.name!,
                           style: TextStyle(
                             color: AppPallete.label3Color,
-                            fontSize: 24 * scalingFactor,
+                            fontSize: 20 * scalingFactor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -162,6 +165,15 @@ class _ComplaintCardState extends State<ComplaintCard> {
                   null,
                   widget.feedback.toString().trim(),
                   Constants.feedbackHeader,
+                  scalingFactor,
+                  22,
+                  AppPallete.label2Color,
+                  AppPallete.label3Color),
+              SizedBox(height: 8 * scalingFactor),
+              setHeadingText(
+                  null,
+                  '${widget.employee?.firstName ?? ''} ${widget.employee?.lastName ?? ''}',
+                  Constants.assignedTo,
                   scalingFactor,
                   22,
                   AppPallete.label2Color,
