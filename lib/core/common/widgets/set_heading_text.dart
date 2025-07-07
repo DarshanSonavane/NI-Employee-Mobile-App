@@ -23,19 +23,22 @@ Row setHeadingText(
       Text(
         headerText,
         style: TextStyle(
-          fontSize: fontSize * scalingFactor,
+          fontSize: 18 * scalingFactor,
           color: labelcolor,
           fontWeight: FontWeight.w700,
         ),
       ),
       SizedBox(width: 8 * scalingFactor),
       Expanded(
-        child: Text(
-          value?.isNotEmpty == true ? value! : 'N/A',
-          style: TextStyle(
-            fontSize: fontSize * scalingFactor,
-            color: labelValueColor,
-            fontWeight: FontWeight.w500,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            value?.isNotEmpty == true ? value! : 'N/A',
+            style: TextStyle(
+              fontSize: 16 * scalingFactor,
+              color: labelValueColor,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
