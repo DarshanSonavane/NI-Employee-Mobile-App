@@ -118,6 +118,5 @@ class Constants {
   static const showLatestFSR = "ShowLatestFSR";
   static const showAllFSR = "ShowAllFSR";
   static const somethingWentWrong = "Something went wrong";
-  static const appreciationMessage =
-      "We appreciate your incredible effort this week,";
+  static const appreciationMessage = "We appreciate your incredible effort,";
 }
