@@ -1,6 +1,6 @@
+import 'package:employee_ni_service/core/common/widgets/searchable_dropdown.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/app_theme/app_pallete.dart';
-import '../../../../core/common/widgets/custom_drop_down.dart';
 import '../../../../core/common/widgets/custom_global_text.dart';
 import '../../data/models/model_master_inventory.dart';
 
@@ -28,21 +28,23 @@ class MasterInventorySection extends StatelessWidget {
           color: AppPallete.label3Color,
         ),
         const SizedBox(height: 16),
-        CustomDropdown<String>(
+        SearchableDropdown<String>(
           value: selectedProduct,
           hintText: "Choose Products",
-          items: masterInventory?.data
-                  .map((item) => DropdownMenuItem<String>(
-                        value: item.id,
-                        child: CustomGlolbalText(
-                          text: item.productName,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: AppPallete.deepNavy,
-                        ),
-                      ))
-                  .toList() ??
-              [],
+          items: [
+            ...masterInventory?.data.map((item) {
+                  return DropdownMenuItem<String>(
+                    value: item.id,
+                    child: CustomGlolbalText(
+                      text: item.productName,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: AppPallete.deepNavy,
+                    ),
+                  );
+                }).toList() ??
+                [],
+          ],
           onChanged: onProductSelected,
           borderColor: AppPallete.gradientColor,
           iconColor: AppPallete.deepNavy,

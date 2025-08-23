@@ -1,8 +1,8 @@
+import 'package:employee_ni_service/core/common/widgets/searchable_dropdown.dart';
 import 'package:employee_ni_service/core/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:employee_ni_service/core/app_theme/app_pallete.dart';
 import 'package:employee_ni_service/core/common/widgets/auth_gradient_button.dart';
-import 'package:employee_ni_service/core/common/widgets/custom_drop_down.dart';
 import 'package:employee_ni_service/core/common/widgets/custom_global_text.dart';
 import 'package:employee_ni_service/core/common/widgets/custom_text_field.dart';
 import 'package:employee_ni_service/features/assign_product_by_admin/data/models/model_master_inventory.dart';
@@ -133,25 +133,21 @@ class MasterInventoryFormState extends State<MasterInventoryForm> {
                     color: AppPallete.deepNavy,
                   ),
                   const SizedBox(height: 20),
-                  CustomDropdown<String>(
+                  SearchableDropdown<String>(
                     value: selectedProductId,
                     hintText: "Choose Products",
                     items: [
-                      const DropdownMenuItem<String>(
-                        value: "",
-                        child: Text("Choose Product"),
-                      ),
-                      ...widget.inventoryItems?.data
-                              .map((item) => DropdownMenuItem<String>(
-                                    value: item.id,
-                                    child: CustomGlolbalText(
-                                      text: item.productName,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppPallete.deepNavy,
-                                    ),
-                                  ))
-                              .toList() ??
+                      ...widget.inventoryItems?.data.map((item) {
+                            return DropdownMenuItem<String>(
+                              value: item.id,
+                              child: CustomGlolbalText(
+                                text: item.productName,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: AppPallete.deepNavy,
+                              ),
+                            );
+                          }).toList() ??
                           [],
                     ],
                     onChanged: onProductSelected,
