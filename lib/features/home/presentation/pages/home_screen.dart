@@ -66,8 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
               latestRewardData = state.data.latestRewardData;
               final rawKey = latestRewardData?.key ?? '';
               final keyName = rawKey.split(' ').first.toLowerCase();
-              final capitalizedName =
-                  keyName[0].toUpperCase() + keyName.substring(1);
+              final capitalizedName = keyName.isNotEmpty
+                  ? keyName[0].toUpperCase() + keyName.substring(1)
+                  : '';
               appreciationMessage =
                   '${Constants.appreciationMessage} $capitalizedName!';
             }
